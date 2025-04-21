@@ -126,7 +126,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
     lowerTeScore,
     upperTeScore,
     atarRange
-  } = useTeAtarCalculator(subjectRows, rangeMode, isScalingDataLoaded);
+  } = useTeAtarCalculator(subjectRows, isScalingDataLoaded);
   
   const clearSubjectsAndResults = useCallback(() => {
     resetSubjectRows();

@@ -174,7 +174,7 @@ const SETPlanCalculator = () => {
     atar,
     atarRange,
     scaledScoresMap
-  } = useTeAtarCalculator(subjectRows, false, isScalingDataLoaded);
+  } = useTeAtarCalculator(subjectRows, isScalingDataLoaded);
   
   const clearSubjectsAndResults = useCallback(() => {
     resetBaseSubjectRows();

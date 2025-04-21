@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import FrontPage from './components/FrontPage';
@@ -193,14 +193,16 @@ const AppRoutes = () => {
             stripePromise={stripePromise}
           />
         )}>
-          <Route path="/" element={( // Root path within protected routes
-            <Layout
+          {/* Apply Layout to all nested protected routes */}
+          <Route element={( 
+            <Layout 
               session={session}
               userProfile={userProfile}
               isLoadingAuth={isLoadingAuth}
               stripePromise={stripePromise}
-            />
+            /> 
           )}>
+            {/* Original root path for layout children is now implicit */}
             {/* Define the main app page route */}
             <Route path="app" element={<FrontPage />} />
             {/* Other protected child routes */}
@@ -209,6 +211,8 @@ const AppRoutes = () => {
             <Route path="scaling-graphs" element={<ScalingGraphs />} />
             <Route path="equivalent" element={<EquivalentCalculator />} />
             <Route path="setplan" element={<SETPlanCalculator />} />
+            {/* Add index route if needed for `/` within protected layout */}
+            <Route index element={<Navigate to="/app" replace />} /> 
           </Route>
         </Route>
       </Routes>
