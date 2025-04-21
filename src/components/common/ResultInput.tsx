@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 interface ResultInputProps {
   value: string | null;
-  onChange: (value: string) => void;
   onBlur: (value: string | null) => void;
   validationRule: string | null;
   rangeMode?: boolean;
@@ -11,12 +10,10 @@ interface ResultInputProps {
 // Define the grade order for increment/decrement
 const gradeOrder: string[] = ['E', 'D', 'C', 'B', 'A'];
 
-const ResultInput: React.FC<ResultInputProps> = ({ value, onChange, onBlur, validationRule, rangeMode = false }) => {
+const ResultInput: React.FC<ResultInputProps> = ({ value, onBlur, validationRule, rangeMode = false }) => {
   // Internal state to manage the input value during typing
   const [inputValue, setInputValue] = useState<string>(value ?? '');
   const [isValid, setIsValid] = useState(true);
-  const [internalValue, setInternalValue] = useState<string | null>(value);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Effect to sync internal state when the external value prop changes
   useEffect(() => {
