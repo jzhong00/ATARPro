@@ -86,7 +86,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                     <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-[60px]">
                       <ResultInput
                         value={row.lowerResult}
-                        onChange={() => {}} // No-op for onChange regarding rubber band
                         onBlur={(val) => onLowerResultChange(row.id, val)} // Use onBlur
                         validationRule={row.validationRule}
                         rangeMode={true}
@@ -96,7 +95,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                     <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-[60px]">
                       <ResultInput
                         value={row.rawResult}
-                        onChange={() => {}} // No-op for onChange
                         onBlur={(val) => onResultChange(row.id, val)} // Use onBlur
                         validationRule={row.validationRule}
                         rangeMode={true}
@@ -106,7 +104,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                     <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-[60px]">
                       <ResultInput
                         value={row.upperResult}
-                        onChange={() => {}} // No-op for onChange
                         onBlur={(val) => onUpperResultChange(row.id, val)} // Use onBlur
                         validationRule={row.validationRule}
                         rangeMode={true}
@@ -119,7 +116,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                     <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-[160px]">
                       <ResultInput
                         value={row.rawResult}
-                        onChange={() => {}} // No-op for onChange
                         onBlur={(val) => onResultChange(row.id, val)} // Use onBlur
                         validationRule={row.validationRule}
                         rangeMode={false}

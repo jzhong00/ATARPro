@@ -1,4 +1,4 @@
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link /*, useNavigate*/ } from 'react-router-dom'; // Removed unused useNavigate
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import { supabase } from '../../services/supabaseClient'; // Import Supabase client for logout
 

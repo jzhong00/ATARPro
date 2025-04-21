@@ -1,7 +1,7 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
 import type { SubjectRow } from '../types/calculator';
-import type { TeAtarResult } from '../hooks/useTeAtarCalculator'; // Assuming this will be exported
+import type { ScalingResult } from '../utils/scaling';
 
 // Utilities called by the service
 import { preparePdfSubjectData } from '../utils/calculatorUtils';
@@ -11,7 +11,11 @@ import { generateStudentPDF } from '../utils/exportUtils';
 export interface SetPlanPdfData {
   pdfStudentName: string;
   subjectRows: SubjectRow[];
-  scaledScoresMap: Map<string, TeAtarResult>;
+  scaledScoresMap: Map<string, { 
+    lower: ScalingResult | null; 
+    result: ScalingResult | null; 
+    upper: ScalingResult | null 
+  }>;
   atarRange: string | number | null;
   teScoreRange: string | number | null;
   chartContainerElement: HTMLDivElement | null;
@@ -71,17 +75,16 @@ const generateSetPlanPdf = async (data: SetPlanPdfData): Promise<boolean> => {
     // Format TE Score range (already should be in "lower - upper" or single value format)
     const formattedTeScore = teScoreRange;
 
-    // Ensure range/score values are string or null for the utility function
-    const atarString = formattedAtarRange === null ? null : String(formattedAtarRange);
-    const teScoreString = formattedTeScore === null ? null : String(formattedTeScore);
+    // Keep atarRange as string | number | null. Convert TE score to string or null for the utility function.
+    const teScoreForPdf = formattedTeScore === null ? null : String(formattedTeScore);
 
     // Generate PDF with SET Plan specific data using the utility
     const success = await generateStudentPDF(
       pdfStudentName,
       pdfSubjectResults,
       true, // Always use range mode for SET Plan Calculator
-      atarString, // Pass string or null
-      teScoreString, // Pass string or null
+      formattedAtarRange, // Pass string | number | null directly
+      teScoreForPdf,      // Pass string | null
       null, // Pass null for warningText (6th argument)
       chartContainerElement, // Pass chart container (7th argument)
       // Pass special options for SET Plan Calculator (8th argument)

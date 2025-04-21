@@ -5,14 +5,13 @@ import type { Stripe } from '@stripe/stripe-js';
 import { UserProfile } from '../../types';
 
 interface LayoutProps {
-  children: React.ReactNode;
   session: Session | null;
   stripePromise: Promise<Stripe | null>;
   userProfile: UserProfile | null;
   isLoadingAuth: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, session /*, stripePromise, userProfile, isLoadingAuth*/ }) => {
+const Layout: React.FC<LayoutProps> = ({ session /*, stripePromise, userProfile, isLoadingAuth*/ }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header session={session} />
