@@ -352,7 +352,6 @@ export const generatePDF = async ({
   if (warningText) {
     const warningFontSize = 9;
     const warningPadding = 5;
-    const textWidth = font.widthOfTextAtSize(warningText, warningFontSize);
     const lines = [];
     let currentLine = '';
 
