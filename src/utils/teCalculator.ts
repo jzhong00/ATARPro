@@ -1,23 +1,9 @@
 // import type { TableRow } from '../components/cohort/views/StudentResultsView';
 // import subjectMappingService from '../services/subjectMappingService';
-import { loadTeToAtarData } from '../services/dataLoader';
+// loadTeToAtarData import removed (unused and not exported)
 import type { StudentScore, SubjectType /*, TableRow*/ } from '../types/cohort'; // Removed unused TableRow
 
-interface TableRow {
-  id: number;
-  studentName: string;
-  subjectOriginal: string;
-  subjectDisplay: string;
-  result: string | number;
-  lowerResult: number | null;
-  upperResult: number | null;
-  lowerScaled: number | null;
-  scaled: number | null;
-  upperScaled: number | null;
-  lowerTE: string;
-  te: string;
-  upperTE: string;
-}
+// Unused TableRow interface removed
 
 export type SubjectType = 'General' | 'Applied' | 'VET';
 
