@@ -33,7 +33,7 @@ const CohortCalculator = () => {
 
   const selectedNames = useSelector((state: RootState) => state.cohort.filters.selectedStudentNames);
   const cohortData = useSelector((state: RootState) => state.cohort.data);
-  const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
+  // const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation); // Removed unused resultVariation
   // const [rangeMode, setRangeMode] = useState(false); // Removed unused rangeMode
 
   const [inputValue, setInputValue] = useState('');
