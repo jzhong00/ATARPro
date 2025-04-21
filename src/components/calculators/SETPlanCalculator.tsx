@@ -1,7 +1,7 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../store';
+// import { useSelector } from 'react-redux'; // Removed unused useSelector
+// import type { RootState } from '../../store'; // Removed unused RootState
 import type { SubjectRow } from '../../types/calculator';
 
 // Services
