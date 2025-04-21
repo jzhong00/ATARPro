@@ -1,9 +1,8 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 import type { SubjectRow } from '../types/calculator';
-import type { TeAtarResult, ScaledScoresMap } from '../hooks/useTeAtarCalculator';
+import type { ScaledScoresMap } from '../hooks/useTeAtarCalculator';
 // Using 'any' as placeholder for the service instance type
 // import type { SubjectMapping } from './subjectMappingService'; 
-import { calculateScaledScore } from '../utils/scaling';
 import type { ScalingResult } from '../utils/scaling';
 
 // Import the service instead of the utility
@@ -56,51 +55,11 @@ const parseResultRange = (resultRange: string): { lower: string, upper: string }
 };
 
 /**
- * Calculate and format scaled score range string for Applied and VET subjects.
- * Note: This specific formatting function might become redundant if formatDisplayScaledScore handles all cases.
- * Keeping it for now as it was directly moved, but review in Phase 3.
- */
-const getAppliedVetScaledRange = (subject: string, resultRange: string): string => {
-    // For result ranges like "A-B", split and calculate each part
-  const parts = resultRange.split('-');
-  
-  if (parts.length === 2) {
-    // Applied subjects with ranges like "A-B"
-    const firstResult = parts[0].trim();
-    const secondResult = parts[1].trim();
-    
-    // Use the service's own getScaledScoreForResult
-    const firstScaled = getScaledScoreForResult(subject, firstResult); 
-    const secondScaled = getScaledScoreForResult(subject, secondResult);
-    
-    if (firstScaled.error || secondScaled.error) {
-      return 'Calculation Error';
-    }
-    
-    // Returns a simple string range
-    return `${firstScaled.scaledScore} - ${secondScaled.scaledScore}`;
-  } else if (parts.length === 1) {
-    // VET subjects with single result like "Pass"
-    const result = parts[0].trim();
-    // Use the service's own getScaledScoreForResult
-    const scaled = getScaledScoreForResult(subject, result); 
-    
-    if (scaled.error) {
-      return 'Calculation Error';
-    }
-    
-    return `${scaled.scaledScore}`;
-  }
-  
-  return 'Invalid Range';
-};
-
-/**
  * Calculate and format the scaled score string for display purposes in the table.
  */
 const formatDisplayScaledScore = (
   row: SubjectRow, 
-  scaledScoresMap: ScaledScoresMap,
+  _scaledScoresMap: ScaledScoresMap,
   subjectMappingService: any // TEMPORARY: Use actual service instance type when available
 ): string | null => {
   // const rowScaledScore = scaledScoresMap.get(row.id);
