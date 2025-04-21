@@ -1,11 +1,10 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 import type { SubjectRow } from '../types/calculator';
-import type { TeAtarResult } from '../hooks/useTeAtarCalculator';
+import type { TeAtarResult, ScaledScoresMap } from '../hooks/useTeAtarCalculator';
 // Using 'any' as placeholder for the service instance type
 // import type { SubjectMapping } from './subjectMappingService'; 
-import { calculateScaledScore, SubjectType } from '../utils/scaling';
+import { calculateScaledScore } from '../utils/scaling';
 import type { ScalingResult } from '../utils/scaling';
-import { getAppliedVetScaledRange } from '../utils/scaling';
 
 // Import the service instead of the utility
 import scalingService from './scalingService';
@@ -101,10 +100,10 @@ const getAppliedVetScaledRange = (subject: string, resultRange: string): string 
  */
 const formatDisplayScaledScore = (
   row: SubjectRow, 
-  scaledScoresMap: Map<string, TeAtarResult>, // Pass the map
+  scaledScoresMap: ScaledScoresMap,
   subjectMappingService: any // TEMPORARY: Use actual service instance type when available
 ): string | null => {
-  const rowScaledScore = scaledScoresMap.get(row.id);
+  // const rowScaledScore = scaledScoresMap.get(row.id);
   // Use row data directly, don't rely on rowScaledScore.result as it might be middle value
   // We need to recalculate based on lower/upper for ranges.
 
@@ -155,12 +154,6 @@ const formatDisplayScaledScore = (
     return `${lowerScaled.scaledScore.toFixed(1)} - ${upperScaled.scaledScore.toFixed(1)}`;
   }
   
-  // Fallback if none of the above conditions are met, 
-  // try using the single scaled score if available from the main calculator hook
-  if (rowScaledScore && rowScaledScore.result && !rowScaledScore.result.error) {
-      return rowScaledScore.result.scaledScore.toFixed(1);
-  }
-
   // If no conditions match and no fallback score, return null or an indicator
   return null; 
 };

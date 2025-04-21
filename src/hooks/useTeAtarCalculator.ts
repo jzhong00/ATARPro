@@ -5,6 +5,12 @@ import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAta
 import subjectMappingService from '../services/subjectMappingService';
 import { parseAndScale } from '../utils/calculatorUtils';
 
+export type ScaledScoresMap = Map<string, { 
+  lower: ScalingResult | null; 
+  result: ScalingResult | null; 
+  upper: ScalingResult | null 
+}>;
+
 export type TeAtarResult = {
   te: string;
   lowerTE: string;
@@ -12,12 +18,6 @@ export type TeAtarResult = {
   atar: string | number;
   atarRange: string;
 };
-
-type ScaledScoresMap = Map<string, { 
-  lower: ScalingResult | null; 
-  result: ScalingResult | null; 
-  upper: ScalingResult | null 
-}>;
 
 /**
  * Hook to handle TE and ATAR calculations based on subject rows
