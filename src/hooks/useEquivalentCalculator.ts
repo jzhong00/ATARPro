@@ -1,9 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { SubjectData, EquivalentScore, ScoreComparison } from '../types/equivalent';
-import { SubjectRow } from '../types/calculator';
-import { calculateScaledScore, ScalingResult } from '../utils/scaling';
 // import { calculateEquivalentScore, scoreValues } from '../utils/equivalentScoreCalculator'; // Removed unused scoreValues
-import subjectMappingService from '../services/subjectMappingService';
+// import { calculateScaledScore, ScalingResult } from '../utils/scaling'; // Removed unused ScalingResult
+// import subjectMappingService from '../services/subjectMappingService'; // Removed unused subjectMappingService
 
 export const useEquivalentCalculator = () => {
   const [subjects, setSubjects] = useState<string[]>([]);
@@ -23,9 +22,6 @@ export const useEquivalentCalculator = () => {
         const response = await fetch('/data/Equivalent_score_calculator_data.csv');
         const text = await response.text();
         const lines = text.split('\n');
-        
-        // Get header - these are the scores (0-100)
-        const scoreValues = lines[0].split(',').slice(1).map(Number);
         
         // Process each subject's data
         const data: SubjectData = {};
