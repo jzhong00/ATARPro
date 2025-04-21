@@ -54,7 +54,6 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
 
 // New component to hold the core app logic and routing
 const AppRoutes = () => {
-  const [, setScalingDataLoaded] = useState(false);
   const [scalingError, setScalingError] = useState<string | null>(null);
   const authSubscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>['data']['subscription'] | null>(null);
 
