@@ -15,6 +15,8 @@ const ResultInput: React.FC<ResultInputProps> = ({ value, onChange, onBlur, vali
   // Internal state to manage the input value during typing
   const [inputValue, setInputValue] = useState<string>(value ?? '');
   const [isValid, setIsValid] = useState(true);
+  const [internalValue, setInternalValue] = useState<string | null>(value);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Effect to sync internal state when the external value prop changes
   useEffect(() => {

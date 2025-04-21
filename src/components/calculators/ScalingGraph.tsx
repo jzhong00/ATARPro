@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Selection, ScalingRow, DataPoint } from '../../utils/scalingDataUtils'; // Import types from utils
 import CustomTooltip from './CustomTooltip';

@@ -1,6 +1,6 @@
 import type { SubjectRow } from '../types/calculator';
 import type { Student, SubjectType as CohortSubjectType, StudentResult } from '../types/cohort';
-import { calculateScaledScore, ScalingResult } from './scaling';
+import { calculateScaledScore } from './scaling';
 import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAtarRange, StudentScore, AtarRangeResult } from './teCalculator';
 import { generatePDF } from './generateStudentReport';
 import { prepareChartData } from './calculatorUtils';

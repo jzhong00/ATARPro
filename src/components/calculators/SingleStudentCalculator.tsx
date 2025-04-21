@@ -24,9 +24,9 @@ import { ScaledScoreChart } from './ScaledScoreChart';
 import ScaledScoreChartContainer from './ScaledScoreChartContainer';
 import ConfirmationModal from '../common/ConfirmationModal';
 import ActionButtonsBar from './panels/ActionButtonsBar';
-import ControlsPanel from './panels/ControlsPanel';
+// import ControlsPanel from './panels/ControlsPanel'; // Removed unused ControlsPanel
 import SubjectTable from './panels/SubjectTable';
-import ResultsPanel from './panels/ResultsPanel';
+// import ResultsPanel from './panels/ResultsPanel'; // Removed unused ResultsPanel
 import ProgressDisplay from '../common/ProgressDisplay';
 
 /**

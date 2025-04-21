@@ -17,7 +17,6 @@ import { useSetPlanSubjects } from '../../hooks/useSetPlanSubjects';
 import { useSetPlanData } from '../../hooks/useSetPlanData';
 
 // UI Components
-import { ScaledScoreChart } from './ScaledScoreChart';
 import ScaledScoreChartContainer from './ScaledScoreChartContainer';
 import SETPlanSubjectTable from './panels/SETPlanSubjectTable';
 import ActionButtonsBar from './panels/ActionButtonsBar';
@@ -30,8 +29,8 @@ const SETPlanCalculator = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
   // Get cohort data from Redux
-  const cohortData = useSelector((state: RootState) => state.cohort.data);
-  const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
+  // const cohortData = useSelector((state: RootState) => state.cohort.data);
+  // const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
   
   const {
     setPlanSubjects: allSubjects,
@@ -45,7 +44,7 @@ const SETPlanCalculator = () => {
     isLoaded: isPlanDataLoaded,
     error: planDataError,
     getResultRange,
-    getScaledRange
+    // getScaledRange // Removed unused getScaledRange
   } = useSetPlanData();
   
   // Combine errors
@@ -58,7 +57,7 @@ const SETPlanCalculator = () => {
     handleDeleteRow,
     handleSubjectChange: handleSubjectChangeBase,
     resetSubjectRows: resetBaseSubjectRows,
-    setRowsFromData
+    // setRowsFromData // Removed unused setRowsFromData
   } = useSubjectRows(6);
   
   // State for subject rows with added rank

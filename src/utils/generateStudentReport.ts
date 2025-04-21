@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb, degrees } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 /**
  * Helper function to get base64 data from an image URL
@@ -170,7 +170,6 @@ export const generatePDF = async ({
   }
 
   // --- Results Table ---
-  const tableTop = y;
   const tableHeaderSize = 10;
   const tableBodySize = 9;
   const rowHeight = 15;

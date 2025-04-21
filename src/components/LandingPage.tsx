@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 // import Header from './common/Header'; // Remove Header import
 import { Session } from '@supabase/supabase-js'; // Import Session type
 
@@ -8,7 +8,7 @@ interface LandingPageProps {
   session: Session | null;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ session }) => {
+const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
   // const navigate = useNavigate(); // No longer needed here
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 

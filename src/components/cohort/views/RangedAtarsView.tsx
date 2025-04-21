@@ -1,12 +1,13 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react'; // Added useEffect
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store';
-import { setResultVariation } from '../../../store/slices/cohortSlice';
-import { setDownloadableData, ColumnDefinition } from '../../../store/slices/downloadableDataSlice';
-import { useCohortCalculatedData, StudentProcessedScores } from '../../../hooks/useCohortCalculatedData';
+// import { setResultVariation } from '../../../store/slices/cohortSlice'; // Removed unused setResultVariation
+import { useCohortCalculatedData } from '../../../hooks/useCohortCalculatedData';
+// import { StudentProcessedScores } from '../../../types'; // Removed unused StudentProcessedScores
 import { useSortableTable } from '../../../hooks/useSortableTable';
+import { setDownloadableData, ColumnDefinition } from '../../../store/slices/downloadableDataSlice'; // Import setDownloadableData & ColumnDefinition
 
 // Updated row type
 interface RangedAtarRow {
@@ -32,18 +33,20 @@ const RANGED_ATARS_COLUMNS: ColumnDefinition[] = [
 
 const RangedAtarsView = ({ mappingsLoaded }: RangedAtarsViewProps) => {
   const dispatch: AppDispatch = useDispatch();
-  const { data, loading, error, filters } = useSelector((state: RootState) => state.cohort);
+  const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
+  // Select loading and error states from cohort slice
+  const { data: cohortData, loading, error } = useSelector((state: RootState) => state.cohort);
+  // const filters = useSelector((state: RootState) => state.cohort.filters); // Removed unused filters
+
+  // Pass Redux state and mappingsLoaded to the hook
+  const { processedStudentScores } = useCohortCalculatedData({
+    data: cohortData,
+    mappingsLoaded,
+    variation: resultVariation.toString(),
+  });
+
   // Get selectedStudentNames array from redux
   const selectedNames = useSelector((state: RootState) => state.cohort.filters.selectedStudentNames);
-  // Get resultVariation directly from redux filters
-  const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
-
-  // Use the updated custom hook - Pass resultVariation directly from Redux
-  const { processedStudentScores } = useCohortCalculatedData({
-    data,
-    mappingsLoaded,
-    variation: resultVariation.toString(), // Use redux value directly
-  });
 
   // Map processedStudentScores to RangedAtarRow structure
   const rangedAtarRowsData: RangedAtarRow[] = useMemo(() => {
@@ -102,17 +105,17 @@ const RangedAtarsView = ({ mappingsLoaded }: RangedAtarsViewProps) => {
   }, [sortedUniqueStudentRangedAtars, resultVariation, dispatch]); // Dependencies: sortedData and resultVariation
 
   // --- Loading and Error States --- 
-  if (loading) {
+  if (loading) { // Use loading from Redux
     return <div className="text-center p-4">Loading Student Data...</div>;
   }
   if (!mappingsLoaded) {
       return <div className="text-center p-4">Loading Subject Mappings...</div>;
   }
-  if (error) {
+  if (error) { // Use error from Redux
     return <div className="text-red-600 p-4">Error loading cohort data: {error}</div>;
   }
   // Adjust empty state message based on whether data exists and if a search is active
-  if (!data || !data.students.length) {
+  if (!cohortData || !cohortData.students.length) {
     return (
       <div className="text-center p-4">
         No student data available. Please upload a file first.

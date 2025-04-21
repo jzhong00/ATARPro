@@ -2,7 +2,7 @@ import { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store';
 import { setDownloadableData, ColumnDefinition } from '../../../store/slices/downloadableDataSlice';
-import { useCohortCalculatedData, StudentProcessedScores } from '../../../hooks/useCohortCalculatedData';
+import { useCohortCalculatedData } from '../../../hooks/useCohortCalculatedData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface AtarDistributionRow {

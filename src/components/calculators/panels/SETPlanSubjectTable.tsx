@@ -3,7 +3,6 @@ import type { SubjectRow } from '../../../types/calculator';
 import type { ScalingResult } from '../../../utils/scaling';
 import SubjectInput from '../../common/SubjectInput';
 import type { SubjectMapping } from '../../../services/subjectMappingService';
-import Papa from 'papaparse';
 
 interface ScaledScoresMap {
   get: (id: string) => {
@@ -114,14 +113,6 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
     if (!subject) return null;
     
     return subject.Type as 'General' | 'Applied' | 'VET';
-  };
-
-  // Get rank options for a specific subject
-  const getRankOptionsForSubject = (subjectName: string | null): string[] => {
-    const type = getSubjectType(subjectName);
-    if (!type) return [];
-    
-    return rankOptions[type] || [];
   };
 
   // Helper to format result range display

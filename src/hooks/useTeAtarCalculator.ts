@@ -1,9 +1,8 @@
 import { useMemo, useEffect, useState } from 'react';
 import { SubjectRow } from '../types/calculator'; 
-import { calculateScaledScore, ScalingResult, SubjectType } from '../utils/scaling';
-import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAtarRange, StudentScore, AtarRangeResult } from '../utils/teCalculator';
+import { ScalingResult, SubjectType } from '../utils/scaling';
+import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAtarRange } from '../utils/teCalculator';
 import subjectMappingService from '../services/subjectMappingService';
-import type { SubjectType as CohortSubjectType } from '../types/cohort';
 import { parseAndScale } from '../utils/calculatorUtils';
 
 export type TeAtarResult = {
@@ -25,7 +24,6 @@ type ScaledScoresMap = Map<string, {
  */
 export const useTeAtarCalculator = (
   subjectRows: SubjectRow[],
-  rangeMode: boolean,
   isScalingDataLoaded: boolean
 ) => {
   // State for TE score and ATAR

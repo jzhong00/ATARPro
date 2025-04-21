@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import FrontPage from './components/FrontPage';
 import SingleStudentCalculator from './components/calculators/SingleStudentCalculator';
 import CohortCalculator from './components/calculators/CohortCalculator';
@@ -54,7 +54,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
 
 // New component to hold the core app logic and routing
 const AppRoutes = () => {
-  const [scalingDataLoaded, setScalingDataLoaded] = useState(false);
+  const [, setScalingDataLoaded] = useState(false);
   const [scalingError, setScalingError] = useState<string | null>(null);
   const authSubscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>['data']['subscription'] | null>(null);
 
@@ -69,11 +69,9 @@ const AppRoutes = () => {
     const loadData = async () => {
       try {
         await loadScalingData();
-        setScalingDataLoaded(true);
       } catch (error) {
         console.error('App: useEffect 1 - Failed to load scaling data:', error);
         setScalingError('Failed to load scaling data. Some features may not work correctly.');
-        setScalingDataLoaded(true); // Still set loaded to true to unblock UI
       }
     };
     loadData();

@@ -1,4 +1,4 @@
-import React from 'react';
+// Removed unused React import
 
 // Type Definition for props
 export interface CustomTooltipProps {
@@ -15,13 +15,12 @@ const CustomTooltip = ({ active, payload, label, coordinate }: CustomTooltipProp
   if (!active || !payload || payload.length === 0 || !coordinate) return null;
 
   // Find the closest point(s) to the mouse
-  const { x, y } = coordinate;
+  const { y } = coordinate;
   
   // Get the chart's container to calculate the scale
   const chartContainer = document.querySelector('.recharts-wrapper');
   if (!chartContainer) return null;
   
-  const chartWidth = chartContainer.clientWidth - 40; // Subtract margins
   const chartHeight = chartContainer.clientHeight - 40; // Subtract margins
   
   const closePoints = payload.filter(entry => {

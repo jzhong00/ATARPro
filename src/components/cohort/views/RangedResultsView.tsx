@@ -1,9 +1,8 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store';
-import { setResultVariation } from '../../../store/slices/cohortSlice';
 import { setDownloadableData, ColumnDefinition } from '../../../store/slices/downloadableDataSlice';
 import { useCohortCalculatedData, CalculatedTableRow } from '../../../hooks/useCohortCalculatedData';
 import { useSortableTable } from '../../../hooks/useSortableTable';
@@ -35,7 +34,7 @@ const RANGED_RESULTS_COLUMNS: ColumnDefinition[] = [
 
 const RangedResultsView = ({ mappingsLoaded }: RangedResultsViewProps) => {
   const dispatch: AppDispatch = useDispatch();
-  const { data, loading, error, filters } = useSelector((state: RootState) => state.cohort);
+  const { data, loading, error /*, filters*/ } = useSelector((state: RootState) => state.cohort); // Removed unused filters
   // Get selectedStudentNames array from redux
   const selectedNames = useSelector((state: RootState) => state.cohort.filters.selectedStudentNames);
   // Get resultVariation directly from redux filters

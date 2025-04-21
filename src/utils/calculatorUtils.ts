@@ -1,5 +1,5 @@
 import { SubjectMapping } from '../services/subjectMappingService';
-import { calculateScaledScore, ScalingResult, SubjectType } from './scaling';
+import { calculateScaledScore, ScalingResult } from './scaling';
 import type { SubjectRow } from '../types/calculator';
 import type { StudentResult } from '../types/cohort';
 

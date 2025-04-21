@@ -15,10 +15,10 @@ import ResultVariationInput from '../cohort/ResultVariationInput';
 import DownloadCsvButton from '../cohort/DownloadCsvButton';
 import { loadScalingData } from '../../utils/scaling';
 
-// Placeholder components for other views
-const StudentRangedResultsView = () => <div>Student Ranged Results View</div>;
-const StudentATARsView = () => <div>Student ATARs View</div>;
-const StudentRangedATARsView = () => <div>Student Ranged ATARs View</div>;
+// Placeholder components for other views - Removed unused placeholders
+// const StudentRangedResultsView = () => <div>Student Ranged Results View</div>;
+// const StudentATARsView = () => <div>Student ATARs View</div>;
+// const StudentRangedATARsView = () => <div>Student Ranged ATARs View</div>;
 
 const CohortCalculator = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const CohortCalculator = () => {
   const selectedNames = useSelector((state: RootState) => state.cohort.filters.selectedStudentNames);
   const cohortData = useSelector((state: RootState) => state.cohort.data);
   const resultVariation = useSelector((state: RootState) => state.cohort.filters.resultVariation);
-  const [rangeMode, setRangeMode] = useState(false);
+  // const [rangeMode, setRangeMode] = useState(false); // Removed unused rangeMode
 
   const [inputValue, setInputValue] = useState('');
 
@@ -42,9 +42,9 @@ const CohortCalculator = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
 
-  useEffect(() => {
-    setRangeMode(resultVariation !== null && resultVariation > 0);
-  }, [resultVariation]);
+  // useEffect(() => {
+  //   setRangeMode(resultVariation !== null && resultVariation > 0);
+  // }, [resultVariation]);
 
   const uniqueStudentNames = useMemo(() => {
     if (!cohortData?.students) return [];
@@ -85,7 +85,7 @@ const CohortCalculator = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const inputElement = e.target as HTMLInputElement;
+    // const inputElement = e.target as HTMLInputElement; // Removed unused inputElement
 
     if (e.key === 'Backspace' && inputValue === '' && selectedNames.length > 0) {
         handleRemoveStudent(selectedNames[selectedNames.length - 1]);

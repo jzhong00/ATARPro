@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { SubjectData, EquivalentScore, ScoreComparison } from '../types/equivalent';
+import { SubjectRow } from '../types/calculator';
+import { calculateScaledScore, ScalingResult } from '../utils/scaling';
+// import { calculateEquivalentScore, scoreValues } from '../utils/equivalentScoreCalculator'; // Removed unused scoreValues
+import subjectMappingService from '../services/subjectMappingService';
 
 export const useEquivalentCalculator = () => {
   const [subjects, setSubjects] = useState<string[]>([]);

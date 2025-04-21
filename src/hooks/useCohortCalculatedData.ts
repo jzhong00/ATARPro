@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+// import { useSelector } from 'react-redux'; // Removed unused useSelector
+// import { RootState } from '../store'; // Removed unused RootState
 import subjectMappingService from '../services/subjectMappingService';
 import { calculateScaledScore } from '../utils/scaling';
 import {
   calculateStudentTEScores,
   calculateAndFormatAtar,
   calculateAndFormatAtarRange,
-  AtarRangeResult
+  // AtarRangeResult // Removed unused AtarRangeResult
 } from '../utils/teCalculator';
 import { SubjectType } from '../types/cohort';
 import { CohortData } from '../types/cohort';

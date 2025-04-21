@@ -1,5 +1,7 @@
 // import type { TableRow } from '../components/cohort/views/StudentResultsView';
-import subjectMappingService from '../services/subjectMappingService';
+// import subjectMappingService from '../services/subjectMappingService';
+import { loadTeToAtarData } from '../services/dataLoader';
+import type { StudentScore, SubjectType /*, TableRow*/ } from '../types/cohort'; // Removed unused TableRow
 
 interface TableRow {
   id: number;

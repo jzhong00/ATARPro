@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Papa from 'papaparse';
 import setPlanDataService from '../services/setPlanDataService';
-import type { SubjectPercentileData } from '../services/setPlanDataService';
 
 /**
  * Custom hook to load and manage SET Plan Calculator data

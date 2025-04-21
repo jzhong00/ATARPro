@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import { supabase } from '../../services/supabaseClient'; // Import Supabase client for logout
 
@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ session, showNavLinks = true, hideAuthButtons = false }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Removed unused navigate
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();

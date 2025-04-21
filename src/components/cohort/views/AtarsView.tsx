@@ -1,11 +1,10 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store';
 import { setDownloadableData, ColumnDefinition } from '../../../store/slices/downloadableDataSlice';
-// Updated import - StudentTEScores is now StudentProcessedScores
-import { useCohortCalculatedData, StudentProcessedScores } from '../../../hooks/useCohortCalculatedData';
+import { useCohortCalculatedData } from '../../../hooks/useCohortCalculatedData';
 // No longer need TE_to_ATAR_conversion here
 import { useSortableTable } from '../../../hooks/useSortableTable';
 

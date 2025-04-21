@@ -3,7 +3,9 @@ import type { SubjectRow } from '../types/calculator';
 import type { TeAtarResult } from '../hooks/useTeAtarCalculator';
 // Using 'any' as placeholder for the service instance type
 // import type { SubjectMapping } from './subjectMappingService'; 
-import type { ScalingResult } from '../utils/scaling'; // Import ScalingResult type
+import { calculateScaledScore, SubjectType } from '../utils/scaling';
+import type { ScalingResult } from '../utils/scaling';
+import { getAppliedVetScaledRange } from '../utils/scaling';
 
 // Import the service instead of the utility
 import scalingService from './scalingService';
