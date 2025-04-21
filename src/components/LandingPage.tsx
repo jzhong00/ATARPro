@@ -228,7 +228,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
       <section className="py-16 px-6 sm:px-10 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Calculate Your ATAR?</h2>
-          <p className="text-blue-100 mb-8">Get accurate predictions in less than a minute.</p>
+          <p className="text-blue-100 mb-8">Get accurate ATAR calculations for your entire cohort instantly.</p>
           <Link
             to="/auth?view=sign_up"
             className="inline-block bg-white text-blue-700 hover:bg-blue-50 font-medium py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
