@@ -1,7 +1,7 @@
 // import type { TableRow } from '../components/cohort/views/StudentResultsView';
 // import subjectMappingService from '../services/subjectMappingService';
 // loadTeToAtarData import removed (unused and not exported)
-import type { StudentScore, SubjectType /*, TableRow*/ } from '../types/cohort'; // Removed unused TableRow
+// Import from ../types/cohort removed as StudentScore is not exported and SubjectType conflicts with local definition
 
 // Unused TableRow interface removed
 
