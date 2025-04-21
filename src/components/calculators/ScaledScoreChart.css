@@ -1,0 +1,62 @@
+/* Container for the chart */
+.scaled-score-chart-container {
+  width: 100%;
+  height: 100%; /* Ensure container takes up space */
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Chart Title */
+.scaled-score-chart-container h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.1em;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Custom tooltip styles */
+.scaled-score-chart-tooltip {
+  background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.scaled-score-chart-tooltip p {
+  margin: 2px 0;
+  color: #333;
+}
+
+.scaled-score-chart-tooltip .tooltip-subject {
+  font-weight: 600; /* Bold subject */
+  margin-bottom: 6px;
+  color: #000;
+}
+
+.scaled-score-chart-tooltip .tooltip-lower,
+.scaled-score-chart-tooltip .tooltip-upper {
+  color: #555; /* Slightly darker grey for bounds */
+}
+
+.scaled-score-chart-tooltip .tooltip-middle {
+  color: #1f77b4; /* Match bar color */
+}
+
+.scaled-score-chart-tooltip .tooltip-middle strong {
+    font-weight: 600;
+}
+
+/* Recharts overrides (optional, adjust as needed) */
+.scaled-score-chart-container .recharts-cartesian-grid-horizontal line,
+.scaled-score-chart-container .recharts-cartesian-grid-vertical line {
+  stroke: #ddd; /* Adjusted grid line color */
+}
+
+.scaled-score-chart-container .recharts-yAxis .recharts-text,
+.scaled-score-chart-container .recharts-xAxis .recharts-text {
+  fill: #666; /* Axis text color */
+} 
