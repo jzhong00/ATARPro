@@ -1,7 +1,7 @@
 import type { SubjectRow } from '../types/calculator';
 import type { Student, SubjectType as CohortSubjectType, StudentResult } from '../types/cohort';
 import { calculateScaledScore, ScalingResult } from './scaling';
-import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAtarRange, StudentScore } from './teCalculator';
+import { calculateStudentTEScores, calculateAndFormatAtar, calculateAndFormatAtarRange, StudentScore, AtarRangeResult } from './teCalculator';
 import { generatePDF } from './generateStudentReport';
 import { prepareChartData } from './calculatorUtils';
 import React from 'react';
@@ -301,9 +301,19 @@ export const generateCohortExport = async (
           ? `${teResult.lowerTE} - ${teResult.upperTE}`
           : teResult.te;
           
-        const finalAtarText = exportRangeMode
+        const atarCalcResult = exportRangeMode
           ? calculateAndFormatAtarRange(teResult)
           : calculateAndFormatAtar(teResult.te);
+
+        // Prepare the text for the PDF (ensure it's string or null)
+        let atarTextForPdf: string | number | null = null;
+        if (exportRangeMode) {
+          // We know atarCalcResult is AtarRangeResult here
+          atarTextForPdf = (atarCalcResult as AtarRangeResult).displayString;
+        } else {
+          // We know atarCalcResult is string | number here
+          atarTextForPdf = atarCalcResult as string | number;
+        }
           
         // Generate individual PDF
         const pdfSubjectResults = subjectRows
@@ -325,7 +335,7 @@ export const generateCohortExport = async (
           studentName: student.name,
           subjectResults: pdfSubjectResults,
           rangeMode: exportRangeMode,
-          atarText: finalAtarText,
+          atarText: atarTextForPdf,
           teText: finalTeText,
           chartImageBase64: chartImageBase64,
           warningText: studentWarningText

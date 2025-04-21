@@ -51,6 +51,7 @@ export const usePrintFunctionality = ({
         rangeMode,
         atar,
         teScore,
+        null,
         chartContainerRef.current
       );
       

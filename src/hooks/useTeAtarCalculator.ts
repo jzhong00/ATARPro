@@ -6,7 +6,7 @@ import subjectMappingService from '../services/subjectMappingService';
 import type { SubjectType as CohortSubjectType } from '../types/cohort';
 import { parseAndScale } from '../utils/calculatorUtils';
 
-type TeAtarResult = {
+export type TeAtarResult = {
   te: string;
   lowerTE: string;
   upperTE: string;

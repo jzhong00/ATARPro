@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 // Type Definitions
 export interface Selection {
   subject: string;
