@@ -1,7 +1,7 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
-import type { SubjectRow } from '../../types/calculator';
-import type { ScaledScoreChartDataPoint } from '../../types/chart';
+import type { SubjectRow } from '../types/calculator';
+import type { ScaledScoreChartDataPoint } from '../types/chart';
 import { calculateScaledScore, ScalingResult } from '../utils/scaling';
 import subjectMappingService from './subjectMappingService';
 
