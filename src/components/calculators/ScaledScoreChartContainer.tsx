@@ -47,7 +47,8 @@ const ScaledScoreChartContainer: React.FC<ScaledScoreChartContainerProps> = ({
   return (
     <>
       <div className="bg-white rounded-lg shadow-md p-2 min-h-96">
-        <h3 className="text-base font-medium text-gray-700 mb-2 text-center">Scaled Score Distribution</h3>
+        {/* REMOVED Title */}
+        {/* <h3 className="text-base font-medium text-gray-700 mb-2 text-center">Scaled Score Distribution</h3> */}
         {loadingError || scalingDataError ? (
           <div className="text-center text-red-600 py-10 min-h-72 flex items-center justify-center">
             Error: Could not load necessary data for the chart. ({loadingError || scalingDataError})
