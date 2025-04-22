@@ -1,7 +1,7 @@
 import { NavLink, Link /*, useNavigate*/ } from 'react-router-dom'; // Removed unused useNavigate
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import { supabase } from '../../services/supabaseClient'; // Import Supabase client for logout
-import React, { useState } from 'react'; // Import useState
+import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import { UserProfile } from '../../types'; // Import UserProfile type
 
 // Define props type for Header
@@ -16,8 +16,32 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
   // const navigate = useNavigate(); // Removed unused navigate
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [manageSubscriptionLoading, setManageSubscriptionLoading] = useState(false);
+  const [manageSubscriptionError, setManageSubscriptionError] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown visibility
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown container
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const handleLogout = async () => {
+    setIsDropdownOpen(false); // Close dropdown on action
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error logging out:', error);
@@ -33,9 +57,9 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
       setError("You must be logged in.");
       return;
     }
-
-    setIsLoading(true);
-    setError(null);
+    setManageSubscriptionLoading(true);
+    setManageSubscriptionError(null);
+    // No need to close dropdown here, page will navigate away
 
     try {
       const response = await fetch('/api/create-customer-portal-session', {
@@ -61,9 +85,10 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
       }
     } catch (err: any) {
       console.error('Error creating customer portal session:', err);
-      setError(err.message || 'An unexpected error occurred.');
+      setManageSubscriptionError(err.message || 'An unexpected error occurred.');
+      // Keep dropdown open to show error ? Or close? Let's keep it open for now.
     } finally {
-      setIsLoading(false);
+      setManageSubscriptionLoading(false);
     }
   };
 
@@ -113,34 +138,47 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
           {!hideAuthButtons && (
             <div className="flex items-center space-x-3">
               {session ? (
-                // User is logged in
-                <>
-                  {/* Show Go to App button ONLY if logged in AND nav links are hidden (i.e., on LandingPage) */}
-                  {!showNavLinks && (
-                     <Link to="/app" className={primaryButtonStyle}>
-                       Go to App
-                     </Link>
-                  )}
-                  {/* Manage Subscription Button (Conditionally Rendered) */}
-                  {showNavLinks && userProfile?.is_subscribed && (
-                    <button 
-                      onClick={handleManageSubscription} 
-                      className={secondaryButtonStyle} 
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Loading...' : 'Manage Subscription'}
-                    </button>
-                  )}
-                  <span className="text-sm text-gray-600 hidden sm:inline">
-                    {/* Display user email if available */}
+                // User is logged in - Use Dropdown
+                <div className="relative" ref={dropdownRef}> {/* Added relative positioning + ref */}
+                  {/* Email as dropdown trigger */}
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none flex items-center"
+                  >
                     {session.user?.email}
-                  </span>
-                  <button onClick={handleLogout} className={secondaryButtonStyle}>
-                    Logout
+                    {/* Dropdown Arrow Icon */}
+                    <svg className={`ml-1 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
                   </button>
-                  {/* Display error message if handleManageSubscription fails */}
-                  {error && <p className="text-sm text-red-600 ml-3">Error: {error}</p>}
-                </>
+
+                  {/* Dropdown Menu */}
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
+                      {/* Manage Subscription Item (Conditionally Rendered) */}
+                      {userProfile?.is_subscribed && (
+                        <button
+                          onClick={handleManageSubscription}
+                          disabled={manageSubscriptionLoading}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                        >
+                          {manageSubscriptionLoading ? 'Loading...' : 'Manage Subscription'}
+                        </button>
+                      )}
+                      {/* Logout Item */}
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                      {/* Display error message inside dropdown */}
+                      {manageSubscriptionError && (
+                          <p className="px-4 py-2 text-xs text-red-600">Error: {manageSubscriptionError}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
               ) : (
                 // User is not logged in
                 <>
