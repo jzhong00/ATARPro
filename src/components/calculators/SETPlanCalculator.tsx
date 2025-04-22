@@ -211,18 +211,15 @@ const SETPlanCalculator = () => {
       };
 
       // Call the export service
-      const success = await exportService.generateSetPlanPdf(pdfData);
+      // const success = await exportService.generateSetPlanPdf(pdfData); // Removed unused variable
+      await exportService.generateSetPlanPdf(pdfData);
 
-      // if (!success) { // Removed logs
-      //   console.error("PDF generation failed (reported by exportService).");
-      // } else {
-      //   console.log("PDF generated and downloaded successfully (via exportService).");
-      // }
+      // Removed logs that previously used 'success'
     } catch (error) {
-      // console.error("Error calling exportService for PDF generation:", error); // Removed
+      // Removed log
     } finally {
       setIsPrinting(false);
-      // console.log("Print process finished in component."); // Removed
+      // Removed log
     }
   };
 

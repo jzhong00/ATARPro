@@ -279,7 +279,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
         ? `Note: ${warningSubjects.join(', ')} scaling data is not available. Instead, the average of all subjects scaling data has been applied to this subject. This will decrease the accuracy of this ATAR calculation.`
         : null;
 
-      const success = await generateStudentPDF(
+      await generateStudentPDF(
         pdfStudentName,
         pdfSubjectResults,
         rangeMode,

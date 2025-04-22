@@ -1,6 +1,6 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   BarChart,
   Bar,
