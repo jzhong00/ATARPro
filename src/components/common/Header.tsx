@@ -1,16 +1,21 @@
 import { NavLink, Link /*, useNavigate*/ } from 'react-router-dom'; // Removed unused useNavigate
 import { Session } from '@supabase/supabase-js'; // Import Session type
 import { supabase } from '../../services/supabaseClient'; // Import Supabase client for logout
+import React, { useState } from 'react'; // Import useState
+import { UserProfile } from '../../types'; // Import UserProfile type
 
 // Define props type for Header
 interface HeaderProps {
   session: Session | null;
+  userProfile?: UserProfile | null; // Add userProfile prop
   showNavLinks?: boolean; // Add optional prop, defaults to true if not provided
   hideAuthButtons?: boolean; // New prop to hide auth buttons
 }
 
-const Header: React.FC<HeaderProps> = ({ session, showNavLinks = true, hideAuthButtons = false }) => {
+const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = true, hideAuthButtons = false }) => {
   // const navigate = useNavigate(); // Removed unused navigate
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -19,6 +24,46 @@ const Header: React.FC<HeaderProps> = ({ session, showNavLinks = true, hideAuthB
     } else {
       // Navigation is now handled by onAuthStateChange in App.tsx
       console.log('Logout successful, navigation handled by auth state change.');
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    if (!session?.user?.id) {
+      console.error("User not logged in, cannot manage subscription.");
+      setError("You must be logged in.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/create-customer-portal-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Include Authorization header if your API needs it (depends on API implementation)
+          // 'Authorization': `Bearer ${session.access_token}` 
+        },
+        body: JSON.stringify({ userId: session.user.id }), // Pass userId
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create portal session.');
+      }
+
+      if (data.url) {
+        window.location.href = data.url; // Redirect to Stripe Portal
+      } else {
+        throw new Error('Portal URL not received.');
+      }
+    } catch (err: any) {
+      console.error('Error creating customer portal session:', err);
+      setError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,6 +121,16 @@ const Header: React.FC<HeaderProps> = ({ session, showNavLinks = true, hideAuthB
                        Go to App
                      </Link>
                   )}
+                  {/* Manage Subscription Button (Conditionally Rendered) */}
+                  {showNavLinks && userProfile?.is_subscribed && (
+                    <button 
+                      onClick={handleManageSubscription} 
+                      className={secondaryButtonStyle} 
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Loading...' : 'Manage Subscription'}
+                    </button>
+                  )}
                   <span className="text-sm text-gray-600 hidden sm:inline">
                     {/* Display user email if available */}
                     {session.user?.email}
@@ -83,6 +138,8 @@ const Header: React.FC<HeaderProps> = ({ session, showNavLinks = true, hideAuthB
                   <button onClick={handleLogout} className={secondaryButtonStyle}>
                     Logout
                   </button>
+                  {/* Display error message if handleManageSubscription fails */}
+                  {error && <p className="text-sm text-red-600 ml-3">Error: {error}</p>}
                 </>
               ) : (
                 // User is not logged in
