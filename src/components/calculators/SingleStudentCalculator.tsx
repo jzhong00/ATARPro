@@ -409,12 +409,12 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
 
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="lg:w-3/5 flex flex-col gap-4">
-            <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200 flex flex-col flex-1">
               {/* Conditionally render the Range Mode controls section */} 
               {!isGuestMode && (
-                <div className="mb-3 flex items-center justify-between">
+                <div className="mb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 bg-blue-50 px-3 py-2 rounded border border-blue-100 hover:bg-blue-100 transition-colors">
+                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 bg-blue-50 px-3 py-2 rounded border border-blue-100 hover:bg-blue-100 transition-colors mb-2 sm:mb-0">
                       <input
                         type="checkbox"
                         checked={rangeMode}
@@ -441,6 +441,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
                       <button
                         onClick={onQuickRangeApply}
                         className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        disabled={!rangeValue || rangeValue < 1 || rangeValue > 10}
                       >
                         Apply
                       </button>
@@ -449,18 +450,20 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
                 </div>
               )}
               
-              <SubjectTable
-                subjectRows={subjectRows}
-                rangeMode={rangeMode}
-                scaledScoresMap={scaledScoresMap}
-                allSubjects={allSubjects}
-                onAddRow={handleAddRow}
-                onDeleteRow={handleDeleteRow}
-                onSubjectChange={handleSubjectChange}
-                onResultChange={handleResultChange}
-                onLowerResultChange={handleLowerResultChange}
-                onUpperResultChange={handleUpperResultChange}
-              />
+              <div className="flex-1 min-h-0">
+                <SubjectTable
+                  subjectRows={subjectRows}
+                  rangeMode={rangeMode}
+                  scaledScoresMap={scaledScoresMap}
+                  allSubjects={allSubjects}
+                  onAddRow={handleAddRow}
+                  onDeleteRow={handleDeleteRow}
+                  onSubjectChange={handleSubjectChange}
+                  onResultChange={handleResultChange}
+                  onLowerResultChange={handleLowerResultChange}
+                  onUpperResultChange={handleUpperResultChange}
+                />
+              </div>
             </div>
 
             {/* Conditionally rendered Warning Container */}
@@ -512,7 +515,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             
             {/* Chart Container - Conditionally render based on isGuestMode */}
             {!isGuestMode && (
-              <div className="bg-white rounded-lg shadow-sm p-2 border border-gray-200">
+              <div className="bg-white rounded-lg shadow-sm p-2 border border-gray-200 flex flex-col flex-1">
                 <ScaledScoreChartContainer
                   subjectRows={subjectRows}
                   rangeMode={rangeMode}
@@ -526,7 +529,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             )}
             {/* Guest Mode Promo Container */}
             {isGuestMode && (
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg shadow-md p-6 border border-blue-200 text-center">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg shadow-md p-6 border border-blue-200 text-center flex flex-col flex-1">
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Unlock Advanced Features</h3>
                 <p className="text-gray-600 mb-4">
                   Are you a school leader or educator? Subscribe to access powerful tools for in-depth ATAR analysis and student planning:

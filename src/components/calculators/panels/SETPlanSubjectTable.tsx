@@ -135,21 +135,21 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
   return (
     <>
       <div className="overflow-x-auto bg-white rounded-lg shadow-md border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 table-fixed">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/5">Subject</th>
-              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[120px]">Rank</th>
-              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[120px]">Result Range</th>
-              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[70px]">Scaled Range</th>
-              <th scope="col" className="px-1 py-3 w-[40px]"></th>
+              <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-5/12">Subject</th>
+              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Rank</th>
+              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Result Range</th>
+              <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Scaled Range</th>
+              <th scope="col" className="px-1 py-3 w-1/12"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {subjectRows.map((row) => (
               <tr key={row.id}>
                 {/* Subject Input */}
-                <td className="px-4 py-2 whitespace-nowrap border border-gray-200 w-2/5">
+                <td className="px-4 py-2 whitespace-nowrap border border-gray-200 w-5/12">
                   <SubjectInput
                     value={row.subject}
                     subjects={allSubjects}
@@ -158,7 +158,7 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
                 </td>
                 
                 {/* Rank Input */}
-                <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-[120px]">
+                <td className="px-3 py-2 whitespace-nowrap border border-gray-200 w-2/12">
                   <select
                     className="w-full px-2 py-1 border border-gray-300 rounded shadow-sm text-sm"
                     value={row.rank || ''}
@@ -194,12 +194,12 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
                 </td>
                 
                 {/* Result Range (Output) */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200 w-[120px]">
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200 w-2/12">
                   {getFormattedResultRange(row)}
                 </td>
 
                 {/* Scaled Score Range (Output) */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200 w-[70px]">
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500 text-center border border-gray-200 w-2/12">
                   {getFormattedScaledScore ? (
                     getFormattedScaledScore(row) || '-'
                   ) : (
@@ -222,7 +222,7 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
                 </td>
                 
                 {/* Delete Button */}
-                <td className="px-1 py-2 whitespace-nowrap text-center text-sm font-medium border border-gray-200 w-[40px]">
+                <td className="px-1 py-2 whitespace-nowrap text-center text-sm font-medium border border-gray-200 w-1/12">
                   <button
                     onClick={() => onDeleteRow(row.id)}
                     className="text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-100"

@@ -71,7 +71,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/Single_Student_Screenshot.png" 
                   alt="Single Student Calculator" 
@@ -89,7 +89,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/CohortCalculator1.png" 
                   alt="Cohort Calculator" 
@@ -107,7 +107,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/SETPlanningCalculator.png" 
                   alt="SET Planning Calculator" 
@@ -125,7 +125,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/ScalingGraphs.png" 
                   alt="Scaling Graphs" 
@@ -143,7 +143,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/EquivalentSubjectCalculator.png" 
                   alt="Equivalent Subject Calculator"
@@ -161,7 +161,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-[240px] flex items-center justify-center">
+              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/Printout_example.png" 
                   alt="PDF Export Example"

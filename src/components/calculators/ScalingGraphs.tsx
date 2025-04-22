@@ -164,11 +164,11 @@ const ScalingGraphs = () => {
         
         {/* Render Sidebar/Table Component */} 
         {isLoading ? (
-           <div className="flex-none w-[500px] bg-white rounded-xl shadow-md p-4 flex items-center justify-center">Loading subject data...</div>
+           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4 flex items-center justify-center">Loading subject data...</div>
         ) : error ? (
-           <div className="flex-none w-[500px] bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
+           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
         ) : subjects.length === 0 && !error ? (
-           <div className="flex-none w-[500px] bg-white rounded-xl shadow-md p-4">No subjects available.</div>
+           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
         ) : (
           <SubjectSelectionTable
             subjects={subjects}
@@ -182,7 +182,7 @@ const ScalingGraphs = () => {
         )}
         
         {/* Render Graph Component */}
-        <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[500px] flex items-center justify-center">
+        <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[32rem] flex items-center justify-center">
           {/* Pass necessary props to ScalingGraph */}
           <ScalingGraph selections={selections} allScalingData={data} /> 
         </div>

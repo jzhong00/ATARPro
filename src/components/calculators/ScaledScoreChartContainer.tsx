@@ -45,35 +45,36 @@ const ScaledScoreChartContainer: React.FC<ScaledScoreChartContainerProps> = ({
 
   // Render the chart component or error/loading states
   return (
-    <div className="bg-white rounded-lg shadow-md p-2 min-h-[400px]">
-      {(loadingError || scalingDataError) ? (
-        <div className="text-center text-red-600 py-10 min-h-[300px] flex items-center justify-center">
-          <p>{loadingError || scalingDataError}</p>
-        </div>
-      ) : (!isScalingDataLoaded ? (
-        <div className="text-center text-gray-500 py-10 min-h-[300px] flex items-center justify-center">
-          <p>Loading scaling data for chart...</p>
-        </div>
-      ) : (
-        // Attach ref here, to the div that directly contains the chart
-        <div ref={effectiveRef} className="min-h-[300px] relative"> 
-          {/* Conditional Chart Rendering */}
-          {chartData && chartData.length > 0 ? (
-            <ScaledScoreChart
-              chartData={chartData}
-              rangeMode={rangeMode}
-              xAxisMin={xAxisMin}
-              xAxisMax={xAxisMax}
-              skipMiddleValue={skipMiddleValue}
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-center text-gray-500">
-              <p>Enter subject results to view the scaled score chart.</p>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="bg-white rounded-lg shadow-md p-2 min-h-96">
+        <h3 className="text-base font-medium text-gray-700 mb-2 text-center">Scaled Score Distribution</h3>
+        {loadingError || scalingDataError ? (
+          <div className="text-center text-red-600 py-10 min-h-72 flex items-center justify-center">
+            Error: Could not load necessary data for the chart. ({loadingError || scalingDataError})
+          </div>
+        ) : !subjectRows.some(row => row.subject && (row.rawResult || rangeMode)) ? (
+          <div className="text-center text-gray-500 py-10 min-h-72 flex items-center justify-center">
+            Enter subject results to view the scaled score chart.
+          </div>
+        ) : (
+          <div ref={effectiveRef} className="min-h-72 relative">
+            {isScalingDataLoaded ? (
+              <ScaledScoreChart
+                chartData={chartData}
+                rangeMode={rangeMode}
+                xAxisMin={xAxisMin}
+                xAxisMax={xAxisMax}
+                skipMiddleValue={skipMiddleValue}
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center text-center text-gray-500">
+                <p>Loading scaling data for chart...</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -229,7 +229,7 @@ const CohortCalculator = () => {
             <div className="flex flex-wrap justify-between items-center gap-4">
               {showSearchBar ? (
                 <div className="flex items-center flex-shrink-0">
-                  <div ref={searchContainerRef} className="relative sm:w-[350px]">
+                  <div ref={searchContainerRef} className="relative sm:w-96">
                     <div className="flex flex-wrap items-center p-2 border border-gray-300 rounded-md shadow-sm focus-within:ring-1 focus-within:ring-blue-500 focus-within:border-blue-500">
                       {selectedNames.map(name => (
                         <span key={name} className="flex items-center bg-blue-100 text-blue-800 text-sm font-medium mr-2 mb-1 px-2.5 py-0.5 rounded">
@@ -250,7 +250,7 @@ const CohortCalculator = () => {
                           value={inputValue}
                           onChange={handleInputChange}
                           onKeyDown={handleKeyDown}
-                          className="flex-grow p-1 mb-1 bg-transparent focus:outline-none focus:ring-blue-500 focus:border-blue-500 min-w-[200px]"
+                          className="flex-grow p-1 mb-1 bg-transparent focus:outline-none focus:ring-blue-500 focus:border-blue-500 min-w-52"
                           autoComplete='off'
                       />
                     </div>
