@@ -331,7 +331,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto p-3 lg:p-4">
+      <div className="container mx-auto p-2 lg:p-4">
         {exportProgressMessage && (
           <ProgressDisplay 
             progressMessage={exportProgressMessage} 
@@ -346,7 +346,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
         )}
 
         {!isGuestMode && (
-          <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-2 lg:p-3 border border-gray-200 mb-3">
+          <div className="flex items-center justify-between bg-white rounded-lg shadow-sm p-1.5 lg:p-3 border border-gray-200 mb-3">
             <div className="flex-grow" ref={searchContainerRef}>
               <div className="flex items-center">
                 <div className="relative w-3/4 mr-2">
@@ -407,9 +407,9 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row gap-3 lg:gap-4">
-          <div className="lg:w-3/5 flex flex-col gap-3 lg:gap-4">
-            <div className="bg-white rounded-lg shadow-sm p-3 lg:p-4 border border-gray-200 flex flex-col flex-1">
+        <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
+          <div className="lg:w-3/5 flex flex-col gap-2 lg:gap-4">
+            <div className="bg-white rounded-lg shadow-sm p-2 lg:p-4 border border-gray-200 flex flex-col flex-1">
               {/* Conditionally render the Range Mode controls section */} 
               {!isGuestMode && (
                 <div className="mb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -469,7 +469,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             {/* Conditionally rendered Warning Container */}
             {warningSubjects.length > 0 && (
               <div 
-                className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 lg:p-4 rounded-md shadow-sm" 
+                className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-2 lg:p-4 rounded-md shadow-sm" 
                 role="alert"
               >
                 <p className="font-semibold">Note:</p>
@@ -482,9 +482,9 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             )}
           </div>
 
-          <div className="lg:w-2/5 flex flex-col gap-3 lg:gap-4">
+          <div className="lg:w-2/5 flex flex-col gap-2 lg:gap-4">
             {(teScore !== null || atar !== null || lowerTeScore !== null || upperTeScore !== null || atarRange !== null) && (
-              <div className="bg-white rounded-xl shadow-sm p-3 lg:p-4 border border-gray-200">
+              <div className="bg-white rounded-xl shadow-sm p-2 lg:p-4 border border-gray-200">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">
@@ -515,7 +515,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             
             {/* Chart Container - Conditionally render based on isGuestMode */}
             {!isGuestMode && (
-              <div className="bg-white rounded-lg shadow-sm p-2 lg:p-3 border border-gray-200 flex flex-col flex-1">
+              <div className="bg-white rounded-lg shadow-sm p-1.5 lg:p-3 border border-gray-200 flex flex-col flex-1">
                 <ScaledScoreChartContainer
                   subjectRows={subjectRows}
                   rangeMode={rangeMode}
@@ -529,7 +529,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             )}
             {/* Guest Mode Promo Container */}
             {isGuestMode && (
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg shadow-md p-4 lg:p-6 border border-blue-200 text-center flex flex-col flex-1">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg shadow-md p-3 lg:p-6 border border-blue-200 text-center flex flex-col flex-1">
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Unlock Advanced Features</h3>
                 <p className="text-gray-600 mb-4">
                   Are you a school leader or educator? Subscribe to access powerful tools for in-depth ATAR analysis and student planning:
