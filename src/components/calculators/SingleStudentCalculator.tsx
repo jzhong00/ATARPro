@@ -319,23 +319,17 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto p-2 xl:p-4">
         {exportProgressMessage && (
-          <ProgressDisplay 
-            progressMessage={exportProgressMessage} 
-            hasFinished={exportHasFinished} 
-          />
-        )}
-
-        {/* Cohort Export Progress */}
-        {isCohortExporting && (
-          <div className="fixed bottom-4 right-4 z-50">
+          <>
             <ProgressDisplay 
               progressMessage={exportProgressMessage} 
-              hasFinished={false}
+              hasFinished={exportHasFinished} 
             />
-            <p className="text-xs text-yellow-700 bg-yellow-100 p-1 rounded mt-1 text-center">
-              Keep this window active to continue generation.
-            </p>
-          </div>
+            {isCohortExporting && (
+              <p className="text-center text-sm text-yellow-700 bg-yellow-100 p-1 rounded mt-1">
+                Keep this window active to continue generation.
+              </p>
+            )}
+          </>
         )}
 
         {loadingError && (
