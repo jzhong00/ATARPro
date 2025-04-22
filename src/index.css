@@ -1,8 +1,7 @@
-html {
-  /* Set base font size to effectively scale rem units down by 10% */
-  /* Default is typically 16px, 16 * 0.9 = 14.4px */
+/* REMOVED Base font size override */
+/* html {
   font-size: 14.4px; 
-}
+} */
 
 @tailwind base;
 @tailwind components;

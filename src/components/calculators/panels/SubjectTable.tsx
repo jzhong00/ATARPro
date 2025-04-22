@@ -52,7 +52,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
             <tr>
               {rangeMode ? (
                 <>
-                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-5/12">Subject</th>
+                  <th scope="col" className="px-2 lg:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-5/12">Subject</th>
                   <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Lower result</th>
                   <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Result</th>
                   <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Upper result</th>
@@ -60,8 +60,8 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                 </>
               ) : (
                 <>
-                  <th scope="col" className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-7/12">Subject</th>
-                  <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Result</th>
+                  <th scope="col" className="px-2 lg:px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-6/12">Subject</th>
+                  <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-3/12">Result</th>
                   <th scope="col" className="px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-2/12">Scaled</th>
                 </>
               )}
@@ -72,7 +72,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
             {subjectRows.map((row) => (
               <tr key={row.id}>
                 {/* Subject Input */}
-                <td className={`px-3 py-1.5 whitespace-nowrap border border-gray-200 ${!rangeMode ? "w-7/12" : "w-5/12"}`}>
+                <td className={`px-2 lg:px-3 py-1.5 whitespace-nowrap border border-gray-200 ${!rangeMode ? "w-6/12" : "w-5/12"}`}>
                   <SubjectInput
                     value={row.subject}
                     subjects={allSubjects}
@@ -113,7 +113,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                 ) : (
                   <>
                     {/* Single Result Input */}
-                    <td className="px-2 py-1.5 whitespace-nowrap border border-gray-200 w-2/12">
+                    <td className="px-2 py-1.5 whitespace-nowrap border border-gray-200 w-3/12">
                       <ResultInput
                         value={row.rawResult}
                         onBlur={(val) => onResultChange(row.id, val)} // Use onBlur
