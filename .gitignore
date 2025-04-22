@@ -30,3 +30,10 @@ pnpm-debug.log*
 *.sw?
 .DS_Store
 .vercel
+
+# Locally stored notes/docs (not for remote repo)
+.internal_notes/
+
+# Cursor AI specific files
+.cursor/rules/
+.cursor-context
