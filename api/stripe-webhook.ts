@@ -92,42 +92,51 @@ export default async function handler(
     // Retrieve the user ID we stored earlier
     const userId = session.client_reference_id;
 
+    // --- Extract Stripe Customer ID ---
+    const customerId = session.customer as string;
+    if (!customerId) {
+        console.warn(`⚠️ Webhook Warning: checkout.session.completed event for user ${userId || 'UNKNOWN'} missing customer ID. Session ID: ${session.id}. Cannot store customer ID.`);
+        // Potentially handle this case differently if needed
+    }
+
     if (userId) {
       console.log(`✅ Payment successful for User ID: ${userId}. Attempting profile update...`);
 
+      // --- Include customerId in update payload ---
+      const updatePayload: { is_subscribed: boolean; stripe_customer_id?: string } = {
+          is_subscribed: true
+      };
+      if (customerId) {
+          updatePayload.stripe_customer_id = customerId;
+      }
+
       try {
-        // Update the user's profile in Supabase using the admin client
+        // Update the user's profile in Supabase
         const { data, error } = await supabaseAdmin
-          .from('users') // Use the correct table name: public.users
-          .update({ is_subscribed: true }) // Set the flag to true
-          .eq('id', userId) // Match the user ID from Stripe session
-          .select('id, is_subscribed') // Optionally select the updated data to confirm/log
-          .single(); // Expect only one row to be updated
+          .from('users')
+          .update(updatePayload) // Use the payload with is_subscribed and potentially stripe_customer_id
+          .eq('id', userId)
+          .select('id, is_subscribed, stripe_customer_id') // Select the updated fields
+          .single();
 
         if (error) {
           console.error(`❌ DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
-          // NOTE: Still return 200 to Stripe, but log the DB error for investigation.
-          // In production, you might add monitoring/alerting here.
         } else {
           console.log(`✅ DB Success: Successfully updated profile for user ${userId}. Profile data:`, data);
         }
       } catch (updateError) {
         console.error(`❌ Exception during profile update for user ${userId}:`, updateError);
-        // NOTE: Still return 200 to Stripe.
       }
 
     } else {
-      // This shouldn't happen if client_reference_id was set correctly
+      // Handle case where userId is missing (shouldn't happen with client_reference_id set)
       console.warn(`⚠️ Webhook Warning: Payment successful but no userId found in client_reference_id. Session ID: ${session.id}. Cannot update profile.`);
     }
   } else {
-    // Log other events received (optional, good for debugging)
+    // Log other unhandled events
     console.log(`🪵 Received unhandled event type: ${event.type}`);
   }
 
   // --- Acknowledge Receipt ---
-
-  // Send a 200 OK response back to Stripe to acknowledge receipt.
-  // If Stripe doesn't receive this quickly, it will retry sending the event.
-  res.status(200).json({ received: true });
-} 
+  res.status(200).end('Webhook received and processed');
+}
