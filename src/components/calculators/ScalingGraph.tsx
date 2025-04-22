@@ -59,7 +59,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
 
       setChartData(points);
     } catch (error) {
-      console.error('Error processing graph data:', error); // Changed log message slightly
+      // console.error('Error processing graph data:', error); // Removed
       setChartData([]); // Clear data on error
     } finally {
       setIsLoading(false); // Finish loading state

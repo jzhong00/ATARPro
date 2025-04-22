@@ -57,14 +57,11 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
         }
 
         const csvText = await response.text();
-        console.log('Raw CSV text:', csvText);
         
         // Use a simple line-by-line approach to parse the CSV
         const lines = csvText.split('\n')
           .map(line => line.trim())
           .filter(line => line.length > 0);
-        
-        console.log('Parsed CSV lines:', lines);
         
         const options: RankOptions = {
           General: [],
@@ -77,22 +74,18 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
           const parts = line.split(',').map(part => part.trim());
           if (parts[0] === 'General') {
             options.General = parts.slice(1).filter(val => val !== '');
-            console.log('General options:', options.General);
           } else if (parts[0] === 'Applied') {
             // For Applied subjects, get the values exactly as they appear in the CSV
             // without any modification or reordering
             options.Applied = parts.slice(1).filter(val => val !== '');
-            console.log('Applied options:', options.Applied);
           } else if (parts[0] === 'VET') {
             options.VET = parts.slice(1).filter(val => val !== '');
-            console.log('VET options:', options.VET);
           }
         }
         
         setRankOptions(options);
-        console.log('Final rank options set:', options);
       } catch (error) {
-        console.error('Failed to load rank options:', error);
+        // Consider better error handling
       }
     };
 

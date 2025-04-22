@@ -1,6 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useEquivalentCalculator } from '../../hooks/useEquivalentCalculator';
 
+/**
+ * Equivalent Calculator Component
+ * 
+ * Allows users to input a score for a specific subject and see the 
+ * equivalent scores required in other subjects to achieve the same scaled score.
+ * Also provides options to compare against randomly selected subjects and 
+ * navigate to view the selected subjects on the scaling graphs.
+ */
 const EquivalentCalculator = () => {
   const navigate = useNavigate();
   
@@ -45,7 +53,7 @@ const EquivalentCalculator = () => {
     );
   }
 
-  // Check if we have at least one valid subject selected
+  // Check if we have at least one valid subject selected for enabling actions
   const hasSelectedSubjects = selectedSubject || comparisonSubjects.some(subject => subject);
 
   return (
@@ -59,7 +67,8 @@ const EquivalentCalculator = () => {
         )}
         
         <div className="bg-white rounded-xl shadow-sm p-6">
-          {/* Main input row */}
+          {/* ==== Main Input Row ==== */}
+          {/* Allows selection of the source score and subject */}
           <div className="bg-white border-b border-gray-200 pb-4 mb-4">
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-gray-700 text-sm font-medium">A score of</span>
@@ -93,10 +102,12 @@ const EquivalentCalculator = () => {
             </div>
           </div>
           
+          {/* ==== Comparison Section ==== */}
           <div className="pt-2">
             <div className="flex justify-between items-center mb-3">
               <p className="text-gray-700 text-sm font-medium">Equivalent to:</p>
               
+              {/* Action Buttons */}
               <div className="flex gap-2">
                 <button
                   onClick={navigateToScalingGraphs}
@@ -122,13 +133,14 @@ const EquivalentCalculator = () => {
               </div>
             </div>
             
-            {/* Column headers */}
+            {/* Column headers for comparison results */}
             <div className="grid grid-cols-3 gap-3 text-xs font-medium text-gray-500 px-2 mb-2">
               <div>Score</div>
               <div>Subject</div>
               <div>Scaled</div>
             </div>
             
+            {/* Comparison Subject Rows */}
             <div className="space-y-2">
               {comparisonSubjects.map((subject, index) => {
                 const sourceScoreNum = Number(score);
@@ -138,7 +150,7 @@ const EquivalentCalculator = () => {
                   getScaledScoreDisplay(subject, equivalentScore) : '';
                 const isRowInactive = !subject;
                 
-                // Determine classes based on score comparison
+                // Determine classes based on score comparison for visual feedback
                 const resultBoxClasses = `flex items-center justify-center rounded-md px-3 py-1 text-sm font-mono text-center transition-colors duration-200 ${
                   equivalentScore === 'Not\nPossible' 
                     ? 'text-sm font-medium text-red-700 text-center bg-red-50 border border-red-500' 

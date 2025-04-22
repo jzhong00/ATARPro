@@ -195,7 +195,6 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
       cohortData &&
       !exportTriggeredRef.current
     ) {
-      console.log('Triggering cohort export from URL parameter...');
       exportTriggeredRef.current = true;
       handleCohortExport();
       navigate('/student', { replace: true });
@@ -216,19 +215,16 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
       preloadingStudentRef.current !== preloadStudent
     ) {
       const decodedName = decodeURIComponent(preloadStudent);
-      console.log(`Preloading student: ${decodedName}`);
       
       // Check if student exists in cohort data
       const studentExists = cohortData.students.some(s => s.name === decodedName);
       
       if (studentExists) {
-        console.log(`Student found in cohort data, setting selected student: ${decodedName}`);
         // Set ref to prevent duplicate processing
         preloadingStudentRef.current = preloadStudent;
         // Just set the search value, import will happen in the effect below
         handleSuggestionClick(decodedName);
       } else {
-        console.error(`Student "${decodedName}" not found in cohort data.`);
         // Clear URL parameter if student not found
         navigate('/student', { replace: true });
       }
@@ -239,7 +235,8 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
     isScalingDataLoaded, 
     selectedStudentName, 
     handleSuggestionClick, 
-    navigate
+    navigate,
+    isGuestMode
   ]);
 
   // Effect to handle import after selectedStudentName is updated
@@ -250,15 +247,12 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
       preloadingStudentRef.current && 
       decodeURIComponent(preloadingStudentRef.current) === selectedStudentName
     ) {
-      console.log(`Selected student name set, importing data for: ${selectedStudentName}`);
-      
       // Give a tiny delay just to be safe
       setTimeout(() => {
         handleImportStudentData();
         // Clear URL parameter and ref after import
         navigate('/student', { replace: true });
         preloadingStudentRef.current = null;
-        console.log('Student data import completed');
       }, 50);
     }
   }, [selectedStudentName, handleImportStudentData, navigate]);
@@ -275,7 +269,6 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
     if (isPrinting) return;
 
     setIsPrinting(true);
-    console.log("Print process started...");
 
     try {
       const pdfStudentName = selectedStudentName || '';
@@ -297,16 +290,9 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
         // Note: Options object would go here if used
       );
       
-      if (success) {
-        console.log("PDF generated successfully.");
-      } else {
-        console.error("PDF generation failed.");
-      }
     } catch (error) {
-      console.error("Error during PDF generation:", error);
     } finally {
       setIsPrinting(false);
-      console.log("Print process finished.");
     }
   };
 

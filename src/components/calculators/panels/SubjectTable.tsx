@@ -71,7 +71,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
           <tbody className="bg-white divide-y divide-gray-200">
             {subjectRows.map((row) => (
               <tr key={row.id}>
-                {/* Subject Input */}
                 <td className={`px-1.5 xl:px-3 py-1 xl:py-1.5 whitespace-nowrap border border-gray-200 ${!rangeMode ? "w-6/12" : "w-5/12"}`}>
                   <SubjectInput
                     value={row.subject}
@@ -82,7 +81,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                 {/* === Conditional Result Inputs === */}
                 {rangeMode ? (
                   <>
-                    {/* Lower Result Input */}
                     <td className="px-1.5 xl:px-2 py-1 xl:py-1.5 whitespace-nowrap border border-gray-200 w-1/12">
                       <ResultInput
                         value={row.lowerResult}
@@ -91,7 +89,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                         rangeMode={true}
                       />
                     </td>
-                    {/* Result Input */}
                     <td className="px-1.5 xl:px-2 py-1 xl:py-1.5 whitespace-nowrap border border-gray-200 w-1/12">
                       <ResultInput
                         value={row.rawResult}
@@ -100,7 +97,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                         rangeMode={true}
                       />
                     </td>
-                    {/* Upper Result Input */}
                     <td className="px-1.5 xl:px-2 py-1 xl:py-1.5 whitespace-nowrap border border-gray-200 w-1/12">
                       <ResultInput
                         value={row.upperResult}
@@ -112,7 +108,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                   </>
                 ) : (
                   <>
-                    {/* Single Result Input */}
                     <td className="px-1.5 xl:px-2 py-1 xl:py-1.5 whitespace-nowrap border border-gray-200 w-3/12">
                       <ResultInput
                         value={row.rawResult}
@@ -124,7 +119,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                   </>
                 )}
 
-                {/* Scaled Score / Range Column - Apply 3-step responsive font size */}
                 <td className={`px-1.5 xl:px-2 py-1 xl:py-1.5 whitespace-nowrap text-sm xl:text-base text-gray-500 text-center border border-gray-200 ${rangeMode ? "w-2/12" : "w-2/12"}`}>
                   {(() => {
                     const scaledRange = scaledScoresMap.get(row.id);
@@ -147,7 +141,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                     }
                   })()}
                 </td>
-                {/* Delete Button */}
                 <td className="px-1 py-1 xl:py-1.5 whitespace-nowrap text-center text-sm font-medium border border-gray-200 w-1/12">
                   <button
                     onClick={() => onDeleteRow(row.id)}
@@ -162,7 +155,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
           </tbody>
         </table>
       </div>
-      {/* Apply 3-step responsive font size */}
       <button
         onClick={onAddRow}
         className="text-sm xl:text-base text-blue-600 hover:text-blue-800 self-start"
@@ -173,4 +165,4 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
   );
 };
 
-export default SubjectTable; 
+export default SubjectTable;

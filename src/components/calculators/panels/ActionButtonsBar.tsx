@@ -62,7 +62,6 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
         </button>
       )}
       
-      {/* Clear Button */}
       <button
         onClick={onClear}
         disabled={isCohortExporting || isPrinting}
@@ -76,4 +75,4 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
   );
 };
 
-export default ActionButtonsBar; 
+export default ActionButtonsBar;

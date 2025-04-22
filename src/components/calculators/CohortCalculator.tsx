@@ -153,7 +153,6 @@ const CohortCalculator = () => {
         setIsScalingDataLoaded(true);
         setScalingDataError(null);
       } catch (error) {
-        console.error('Failed to load initial data:', error);
         const message = error instanceof Error ? error.message : String(error);
         if (message.includes('mapping')) {
             setMappingError('Failed to load subject mappings. Some features might be affected.');

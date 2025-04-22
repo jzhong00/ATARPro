@@ -187,16 +187,16 @@ const SETPlanCalculator = () => {
     if (isPrinting) return;
 
     setIsPrinting(true);
-    console.log("Print process started via component...");
+    // console.log("Print process started via component..."); // Removed
 
     try {
       const pdfStudentName = '';
       const explanatoryText = "Imagine a class of 100 students from across QLD who have selected the same subject.\nWhere would you place yourself?";
       const imagePath = "/images/single_student_mock_up.png";
 
-      // --- DEBUGGING: Log values used for PDF ranges ---
-      console.log('Debug PDF Data - Raw Values:', { atarRange, atar, lowerTeScore, upperTeScore, teScore }); 
-      // --- END DEBUGGING ---
+      // --- DEBUGGING REMOVED ---
+      // console.log('Debug PDF Data - Raw Values:', { atarRange, atar, lowerTeScore, upperTeScore, teScore }); 
+      // --- END DEBUGGING REMOVED ---
 
       // Consolidate data for the export service
       const pdfData: SetPlanPdfData = {
@@ -213,19 +213,16 @@ const SETPlanCalculator = () => {
       // Call the export service
       const success = await exportService.generateSetPlanPdf(pdfData);
 
-      if (!success) {
-        console.error("PDF generation failed (reported by exportService).");
-        // Optionally show a user-facing error message here
-      } else {
-        console.log("PDF generated and downloaded successfully (via exportService).");
-      }
+      // if (!success) { // Removed logs
+      //   console.error("PDF generation failed (reported by exportService).");
+      // } else {
+      //   console.log("PDF generated and downloaded successfully (via exportService).");
+      // }
     } catch (error) {
-      // Catch potential errors from the service call itself (e.g., network errors if service was remote)
-      console.error("Error calling exportService for PDF generation:", error);
-      // Optionally show a user-facing error message here
+      // console.error("Error calling exportService for PDF generation:", error); // Removed
     } finally {
       setIsPrinting(false);
-      console.log("Print process finished in component.");
+      // console.log("Print process finished in component."); // Removed
     }
   };
 

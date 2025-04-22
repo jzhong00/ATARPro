@@ -67,27 +67,23 @@ export const ScaledScoreChart: React.FC<InternalChartProps> = ({
   skipMiddleValue = false 
 }) => {
 
-  // --- DEBUG LOGGING ---
-  useEffect(() => {
-    console.log("ScaledScoreChart Mounted");
-  }, []);
+  // --- DEBUG LOGGING REMOVED ---
+  // useEffect(() => {
+  //   console.log("ScaledScoreChart Mounted");
+  // }, []);
 
-  useEffect(() => {
-    // Log when props influencing the visual output change
-    console.log("ScaledScoreChart Props Updated:", 
-      { 
-        dataLength: chartData?.length,
-        rangeMode: rangeMode, 
-        xAxisMin: xAxisMin, 
-        xAxisMax: xAxisMax,
-        skipMiddleValue: skipMiddleValue
-      }
-    );
-    // We assume Recharts handles its internal rendering after these props update.
-    // A more robust solution might involve a callback from Recharts if available,
-    // but for now, logging the prop update is the first step.
-  }, [chartData, rangeMode, xAxisMin, xAxisMax, skipMiddleValue]);
-  // --- END DEBUG LOGGING ---
+  // useEffect(() => {
+  //   console.log("ScaledScoreChart Props Updated:", 
+  //     { 
+  //       dataLength: chartData?.length,
+  //       rangeMode: rangeMode, 
+  //       xAxisMin: xAxisMin, 
+  //       xAxisMax: xAxisMax,
+  //       skipMiddleValue: skipMiddleValue
+  //     }
+  //   );
+  // }, [chartData, rangeMode, xAxisMin, xAxisMax, skipMiddleValue]);
+  // --- END DEBUG LOGGING REMOVED ---
 
   // Generate ticks for the X-axis based on xAxisMin and xAxisMax
   const xAxisTicks = React.useMemo(() => {
