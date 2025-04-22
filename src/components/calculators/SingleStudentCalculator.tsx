@@ -591,6 +591,9 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
           },
         ]}
       />
+      
+      {/* Temporary Indicator */}
+      <p className="text-xs text-gray-400 text-center p-4">Attempting to fix zoom</p>
     </div>
   );
 };
