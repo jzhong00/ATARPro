@@ -337,14 +337,6 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             </p>
           </div>
         )}
-        {exportHasFinished && (
-          <div className="fixed bottom-4 right-4 z-50 bg-green-100 text-green-800 p-3 rounded-md shadow-lg">
-            <ProgressDisplay 
-              progressMessage="Export completed successfully!"
-              hasFinished={true}
-            />
-          </div>
-        )}
 
         {loadingError && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
