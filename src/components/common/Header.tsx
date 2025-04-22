@@ -136,47 +136,65 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
           {!hideAuthButtons && (
             <div className="flex items-center space-x-3">
               {session ? (
-                // User is logged in - Use Dropdown
-                <div className="relative" ref={dropdownRef}> {/* Added relative positioning + ref */}
-                  {/* Email as dropdown trigger */}
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none flex items-center"
-                  >
-                    {session.user?.email}
-                    {/* Dropdown Arrow Icon */}
-                    <svg className={`ml-1 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </button>
+                // User is logged in
+                <>
+                  {/* Restore Go to App button ONLY if logged in AND nav links are hidden (e.g., on LandingPage) */}
+                  {!showNavLinks && (
+                     <Link to="/app" className={primaryButtonStyle}>
+                       Go to App
+                     </Link>
+                  )}
 
-                  {/* Dropdown Menu */}
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
-                      {/* Manage Subscription Item (Conditionally Rendered) */}
-                      {userProfile?.is_subscribed && (
-                        <button
-                          onClick={handleManageSubscription}
-                          disabled={manageSubscriptionLoading}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                        >
-                          {manageSubscriptionLoading ? 'Loading...' : 'Manage Subscription'}
-                        </button>
-                      )}
-                      {/* Logout Item */}
+                  {/* User Dropdown (only shown if nav links ARE visible, usually) */}
+                  {showNavLinks && (
+                    <div className="relative" ref={dropdownRef}> 
+                      {/* Email as dropdown trigger */}
                       <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none flex items-center"
                       >
-                        Logout
+                        {session.user?.email}
+                        {/* Dropdown Arrow Icon */}
+                        <svg className={`ml-1 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
                       </button>
-                      {/* Display error message inside dropdown */}
-                      {manageSubscriptionError && (
-                          <p className="px-4 py-2 text-xs text-red-600">Error: {manageSubscriptionError}</p>
+
+                      {/* Dropdown Menu */}
+                      {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
+                          {/* Manage Subscription Item */}
+                          {userProfile?.is_subscribed && (
+                            <button
+                              onClick={handleManageSubscription}
+                              disabled={manageSubscriptionLoading}
+                              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                            >
+                              {manageSubscriptionLoading ? 'Loading...' : 'Manage Subscription'}
+                            </button>
+                          )}
+                          {/* Logout Item */}
+                          <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Logout
+                          </button>
+                          {/* Error Message */}
+                          {manageSubscriptionError && (
+                              <p className="px-4 py-2 text-xs text-red-600">Error: {manageSubscriptionError}</p>
+                          )}
+                        </div>
                       )}
                     </div>
                   )}
-                </div>
+                  {/* If nav links are hidden (Landing Page), show Logout button directly */}
+                  {!showNavLinks && (
+                    <button onClick={handleLogout} className={secondaryButtonStyle}>
+                      Logout
+                    </button>
+                  )}
+                </>
               ) : (
                 // User is not logged in
                 <>
