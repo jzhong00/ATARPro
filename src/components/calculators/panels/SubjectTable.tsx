@@ -124,8 +124,8 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                   </>
                 )}
 
-                {/* Scaled Score / Range Column - Apply responsive font size */}
-                <td className={`px-1.5 lg:px-2 py-1 lg:py-1.5 whitespace-nowrap text-sm lg:text-base text-gray-500 text-center border border-gray-200 ${rangeMode ? "w-2/12" : "w-2/12"}`}>
+                {/* Scaled Score / Range Column - Apply 3-step responsive font size */}
+                <td className={`px-1.5 lg:px-2 py-1 lg:py-1.5 whitespace-nowrap text-sm md:text-base lg:text-base text-gray-500 text-center border border-gray-200 ${rangeMode ? "w-2/12" : "w-2/12"}`}>
                   {(() => {
                     const scaledRange = scaledScoresMap.get(row.id);
                     if (!scaledRange) return '-';
@@ -162,10 +162,10 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
           </tbody>
         </table>
       </div>
-      {/* Apply responsive font size */}
+      {/* Apply 3-step responsive font size */}
       <button
         onClick={onAddRow}
-        className="text-sm lg:text-base text-blue-600 hover:text-blue-800 self-start"
+        className="text-sm md:text-base lg:text-base text-blue-600 hover:text-blue-800 self-start"
       >
         + Click to add extra subject
       </button>

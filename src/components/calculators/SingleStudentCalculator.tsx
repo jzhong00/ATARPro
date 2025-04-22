@@ -485,7 +485,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
           <div className="lg:w-2/5 flex flex-col gap-2 lg:gap-4">
             {(teScore !== null || atar !== null || lowerTeScore !== null || upperTeScore !== null || atarRange !== null) && (
               <div className="bg-white rounded-xl shadow-sm p-2 lg:p-4 border border-gray-200">
-                <div className="space-y-2 text-sm lg:text-base">
+                <div className="space-y-2 text-sm md:text-base lg:text-base">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">
                       {rangeMode ? 'TE Score Range:' : 'TE Score:'}
@@ -530,11 +530,11 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
             {/* Guest Mode Promo Container */}
             {isGuestMode && (
               <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg shadow-md p-3 lg:p-6 border border-blue-200 text-center flex flex-col flex-1">
-                <h3 className="text-lg lg:text-xl font-semibold text-gray-800 mb-3">Unlock Advanced Features</h3>
-                <p className="text-gray-600 mb-4 text-sm lg:text-base">
+                <h3 className="text-base md:text-lg lg:text-xl font-semibold text-gray-800 mb-3">Unlock Advanced Features</h3>
+                <p className="text-gray-600 mb-4 text-sm md:text-base lg:text-base">
                   Are you a school leader or educator? Subscribe to access powerful tools for in-depth ATAR analysis and student planning:
                 </p>
-                <ul className="list-disc list-inside text-left text-gray-600 mb-5 space-y-1 pl-4 text-sm lg:text-base">
+                <ul className="list-disc list-inside text-left text-gray-600 mb-5 space-y-1 pl-4 text-sm md:text-base lg:text-base">
                   <li>Search and import individual student results.</li>
                   <li>Utilize Range Mode for prediction variations.</li>
                   <li>Print individual student reports with scaled score charts.</li>
