@@ -14,8 +14,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = true, hideAuthButtons = false }) => {
   // const navigate = useNavigate(); // Removed unused navigate
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [manageSubscriptionLoading, setManageSubscriptionLoading] = useState(false);
   const [manageSubscriptionError, setManageSubscriptionError] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown visibility
@@ -54,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
   const handleManageSubscription = async () => {
     if (!session?.user?.id) {
       console.error("User not logged in, cannot manage subscription.");
-      setError("You must be logged in.");
+      setManageSubscriptionError("You must be logged in.");
       return;
     }
     setManageSubscriptionLoading(true);
