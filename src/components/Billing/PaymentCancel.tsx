@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Displays a message to the user indicating that the payment process was not completed.
+ * This page is typically shown when the user cancels the Stripe checkout.
+ * Provides a link back to the main application.
+ */
 const PaymentCancel: React.FC = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center bg-gray-50 p-6">
     <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">

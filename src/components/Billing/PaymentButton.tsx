@@ -7,6 +7,13 @@ interface PaymentButtonProps {
   stripePromise: Promise<Stripe | null>; // Pass stripePromise via props
 }
 
+/**
+ * Renders a button that initiates the Stripe checkout process.
+ * - Requires a valid user session.
+ * - Calls the backend API (`/api/create-checkout-session`) to create a Stripe session.
+ * - Redirects the user to Stripe Checkout upon success.
+ * - Handles loading states and displays errors.
+ */
 // Explicitly type the functional component with its props
 const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise }) => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +31,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise })
     const userId = session.user.id;
 
     try {
-      // 1. Call backend API
+      // 1. Call backend API to create a checkout session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -39,7 +46,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise })
         throw new Error(apiError || responseData.message || response.statusText || 'Failed to create checkout session.');
       }
       if (!sessionId) {
-        console.error('API Response Data:', responseData); // Log unexpected response
         throw new Error('No session ID returned from backend.');
       }
 
@@ -49,16 +55,13 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise })
         throw new Error('Stripe.js failed to load. Check configuration.');
       }
 
-      console.log(`Redirecting to Stripe Checkout with Session ID: ${sessionId}`);
       const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
 
       // This point is only reached if redirectToCheckout fails immediately (e.g., network error)
       if (stripeError) {
-        console.error('Stripe redirect error:', stripeError);
         setError(`Payment Error: ${stripeError.message}`);
       }
     } catch (err: any) {
-      console.error('Checkout process error:', err);
       setError(err.message || 'An unexpected error occurred during checkout.');
     } finally {
       setLoading(false);

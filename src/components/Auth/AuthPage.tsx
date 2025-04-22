@@ -6,14 +6,14 @@ import { useEffect } from 'react';
 
 const AuthPage = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Get location object
+  const location = useLocation();
 
   // Determine initial view from query parameter
   const params = new URLSearchParams(location.search);
   const initialView = params.get('view') === 'sign_up' ? 'sign_up' : 'sign_in';
 
   useEffect(() => {
-    // Listen for authentication state changes
+    // Listen for authentication state changes (e.g., SIGNED_IN, SIGNED_OUT)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         // Navigate to the app dashboard *after* successful sign-in
@@ -30,7 +30,7 @@ const AuthPage = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [navigate]); // Dependency array includes navigate
+  }, [navigate]);
 
   return (
     <div className="container mx-auto max-w-md mt-12 p-6 bg-white rounded shadow-md">
@@ -43,7 +43,7 @@ const AuthPage = () => {
         view={initialView} // Set the initial view based on query param
         // redirectTo property is removed; navigation is handled by onAuthStateChange
         // theme="minimal" // Alternative appearance
-        socialLayout="horizontal" // Layout for social providers
+        socialLayout="horizontal"
       />
     </div>
   );

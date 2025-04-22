@@ -10,13 +10,18 @@ interface PaymentPromptProps {
   stripePromise: Promise<Stripe | null>; // Add stripePromise prop
 }
 
+/**
+ * Displays a prompt to the user when their access is restricted (e.g., due to lack of subscription).
+ * Shows a message explaining the restriction and provides a PaymentButton component
+ * to allow the user to proceed with payment. Also includes a logout button.
+ */
 const PaymentPrompt: React.FC<PaymentPromptProps> = ({ session, stripePromise }) => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      console.error('Error logging out:', error);
+      // console.error('Error logging out:', error); // Removed
     } else {
       // Navigate to home page after successful logout
       navigate('/');

@@ -8,13 +8,21 @@ import type { Stripe } from '@stripe/stripe-js';
 interface ProtectedRouteProps {
   session: Session | null;
   userProfile: UserProfile | null;
-  isLoading: boolean;
+  isLoading: boolean; // Indicates if session/profile data is still loading
   stripePromise: Promise<Stripe | null>;
 }
 
+/**
+ * Component to guard routes that require authentication and an active subscription.
+ * It checks for loading state, session existence, and user subscription status.
+ * - If loading, shows a loading indicator.
+ * - If no session, redirects to the authentication page.
+ * - If session exists but user is not subscribed, shows the payment prompt.
+ * - If session exists and user is subscribed, renders the child routes (Outlet).
+ */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, isLoading, stripePromise }) => {
-  console.log('ProtectedRoute Check:', { isLoading, session, userProfile });
 
+  // Show loading indicator while session/profile data is being fetched
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -23,17 +31,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
     );
   }
 
+  // If no active session exists, redirect the user to the login page
   if (!session) {
-    console.log('ProtectedRoute: No session, navigating to /auth');
     return <Navigate to="/auth" replace />;
   }
 
+  // If the user profile isn't loaded or the user doesn't have an active subscription,
+  // show the payment prompt component instead of the intended route.
   if (!userProfile || !userProfile.is_subscribed) {
-    console.log('ProtectedRoute: Session exists, but userProfile indicates not subscribed. Showing PaymentPrompt.');
     return <PaymentPrompt session={session} stripePromise={stripePromise} />;
   }
 
-  console.log('ProtectedRoute: Session exists and user is subscribed. Rendering Outlet.');
+  // If session exists and user is subscribed, render the intended child route
   return <Outlet />;
 };
 
