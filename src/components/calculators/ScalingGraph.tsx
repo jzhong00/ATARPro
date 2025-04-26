@@ -120,7 +120,9 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
             wrapperStyle={{ 
               right: 10,
               width: 'auto',
-              maxWidth: '120px'
+              maxWidth: '120px',
+              maxHeight: '300px',
+              overflowY: 'auto'
             }}
           />
           {selections.map((selection, index) => {
