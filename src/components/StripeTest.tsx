@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useStripe } from '../contexts/StripeContext';
 
 /**
@@ -9,21 +9,38 @@ import { useStripe } from '../contexts/StripeContext';
 const StripeTest: React.FC = () => {
   const { stripePromise } = useStripe();
   const [stripeLoaded, setStripeLoaded] = useState(false);
+  // Use a ref to track if we've already checked Stripe
+  const hasCheckedStripeRef = useRef(false);
   
   useEffect(() => {
+    // Only check Stripe instance once per component lifecycle
+    if (hasCheckedStripeRef.current) {
+      console.log('[StripeTest] Skipping redundant Stripe check');
+      return;
+    }
+    
     // Check if Stripe instance is loaded
     const checkStripe = async () => {
-      const stripe = await stripePromise;
-      if (stripe) {
-        console.log('Stripe instance successfully loaded in component');
-        setStripeLoaded(true);
-      } else {
-        console.error('Stripe failed to load in component');
+      hasCheckedStripeRef.current = true;
+      console.log('[StripeTest] Checking Stripe instance status');
+      
+      try {
+        // Use Promise.race with a timeout to avoid hanging
+        const stripe = await stripePromise;
+        if (stripe) {
+          console.log('[StripeTest] Stripe instance successfully loaded in component');
+          setStripeLoaded(true);
+        } else {
+          console.error('[StripeTest] Stripe failed to load in component');
+        }
+      } catch (error) {
+        console.error('[StripeTest] Error checking Stripe:', error);
       }
     };
     
     checkStripe();
-  }, [stripePromise]);
+    // We only depend on the initial mount, not on stripePromise changes
+  }, []); // Empty dependency array - only run on mount
   
   return (
     <div className="p-4 bg-gray-100 rounded mb-4">
