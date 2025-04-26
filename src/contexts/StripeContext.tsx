@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useContext, ReactNode, useEffect, useState } from 'react';
 import { Stripe } from '@stripe/stripe-js';
 import { logConnectionAttempt } from '../utils/stripeMonitor';
 
@@ -13,18 +13,31 @@ interface StripeProviderProps {
   children: ReactNode;
 }
 
+// Keep track of whether we've already logged this session
+let hasLoggedInitialization = false;
+
 export function StripeProvider({ stripePromise, children }: StripeProviderProps) {
-  // Log Stripe initialization in development environment
+  // Use state to track initialization to prevent duplicate log entries
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  // Log Stripe initialization only once per session
   useEffect(() => {
-    // Log connection attempt
-    logConnectionAttempt();
-    
-    if (process.env.NODE_ENV === 'development') {
-      stripePromise.then(stripe => {
-        if (stripe) {
-          console.log('✅ Stripe initialized successfully');
-        }
-      });
+    if (!hasLoggedInitialization) {
+      // Log connection attempt
+      logConnectionAttempt();
+      hasLoggedInitialization = true;
+      
+      if (process.env.NODE_ENV === 'development') {
+        stripePromise.then(stripe => {
+          if (stripe) {
+            console.log('✅ Stripe initialized successfully');
+            setIsInitialized(true);
+          }
+        });
+      } else {
+        // In production, just mark as initialized without logging
+        setIsInitialized(true);
+      }
     }
   }, [stripePromise]);
 
