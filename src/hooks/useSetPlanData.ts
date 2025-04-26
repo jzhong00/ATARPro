@@ -78,7 +78,25 @@ export const useSetPlanData = () => {
       return null;
     }
     
-    return setPlanDataService.calculateScaledRange(subjectName, rank);
+    try {
+      // Get the result range directly from CSV data service
+      const resultRange = getResultRange(subjectName, rank);
+      if (!resultRange) return null;
+      
+      // Parse the range (format: "80-90")
+      const parts = resultRange.split('-');
+      if (parts.length !== 2) return null;
+      
+      const lower = parseFloat(parts[0]);
+      const upper = parseFloat(parts[1]);
+      
+      if (isNaN(lower) || isNaN(upper)) return null;
+      
+      return [lower, upper];
+    } catch (error) {
+      console.error('Error calculating scaled range:', error);
+      return null;
+    }
   };
   
   return {

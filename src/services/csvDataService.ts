@@ -1,6 +1,5 @@
 // ATAR Calculator – Centralized CSV data loading service
 import Papa from 'papaparse';
-import { loadStripe } from '@stripe/stripe-js';
 import { ScalingResult, GeneralScalingParameters, AppliedVetScalingMapping, SubjectType } from '../utils/scaling';
 import { ScalingRow } from '../utils/scalingDataUtils';
 

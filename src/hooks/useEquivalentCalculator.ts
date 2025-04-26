@@ -6,6 +6,26 @@ import csvDataService from '../services/csvDataService';
  */
 type SubjectData = Record<string, number[]>;
 
+// Add return type interface
+interface EquivalentCalculatorResult {
+  subjects: string[];
+  score: string;
+  selectedSubject: string;
+  comparisonSubjects: string[];
+  isLoading: boolean;
+  error: string | null;
+  equivalentScores: (number | 'Not\nPossible' | null)[];
+  sourceScaledScore: number;
+  handleScoreChange: (value: string) => void;
+  handleSubjectChange: (value: string) => void;
+  handleComparisonSubjectChange: (index: number, value: string) => void;
+  handleRandomSubjects: () => void;
+  handleClearComparisons: () => void;
+  formatScore: (value: number | 'Not\nPossible') => string;
+  getScaledScoreDisplay: (subject: string, rawScore: number | 'Not\nPossible') => string;
+  getScoreClasses: (score: number | 'Not\nPossible' | null, sourceScore: number) => { better: boolean; worse: boolean };
+}
+
 /**
  * Helper Functions
  */
@@ -80,7 +100,7 @@ const findNearestWholeScore = (targetScaled: number, values: number[]): number |
 /**
  * Custom hook for the Equivalent Calculator
  */
-export const useEquivalentCalculator = () => {
+export const useEquivalentCalculator = (): EquivalentCalculatorResult => {
   const [subjects, setSubjects] = useState<string[]>([]);
   const [score, setScore] = useState<string>('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
@@ -213,7 +233,7 @@ export const useEquivalentCalculator = () => {
     }
     
     // For Not\nPossible, find the max possible scaled score
-    if (rawScore === 'Not\nPossible') {
+    if (typeof rawScore === 'string') {
       const maxScaled = Math.max(...subjectData[subject]);
       return `max: ${maxScaled.toFixed(2)}`;
     }

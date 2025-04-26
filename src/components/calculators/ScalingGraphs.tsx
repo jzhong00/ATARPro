@@ -118,32 +118,6 @@ const ScalingGraphs = () => {
     setSelections(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Handle adding a subject with all available years
-  const handleAddSubjectWithAllYears = (subject: string) => {
-    // Get all valid years for this subject
-    const validYears = YEARS.filter(year => 
-      hasDataForSubjectAndYear(data, subject, year)
-    );
-    
-    // Create a new selection for each valid year
-    const newSelections = validYears.map(year => ({ subject, year }));
-    
-    // Add the new selections, avoiding duplicates
-    setSelections(prev => {
-      const combined = [...prev];
-      
-      for (const newSelection of newSelections) {
-        if (!combined.some(s => 
-          s.subject === newSelection.subject && s.year === newSelection.year
-        )) {
-          combined.push(newSelection);
-        }
-      }
-      
-      return combined;
-    });
-  };
-
   // Clear all current selections
   const handleClearSelections = () => {
     setSelections([]);
@@ -163,15 +137,50 @@ const ScalingGraphs = () => {
         <div className="lg:w-1/3 bg-white rounded-xl shadow-sm p-6 h-min">
           <SubjectSelectionTable
             subjects={subjects}
-            years={YEARS}
+            allScalingData={data}
             selections={selections}
-            data={data}
-            onAddSelection={handleAddSelection}
-            onRemoveSelection={handleRemoveSelection}
-            onAddSubjectWithAllYears={handleAddSubjectWithAllYears}
-            onClearSelections={handleClearSelections}
-            isLoading={isLoading}
-            hasDataForSubjectAndYear={hasDataForSubjectAndYear}
+            onClearAll={handleClearSelections}
+            onToggleSelection={(subject, year) => {
+              // If already selected, remove it, otherwise add it
+              const index = selections.findIndex(s => s.subject === subject && s.year === year);
+              if (index >= 0) {
+                handleRemoveSelection(index);
+              } else {
+                handleAddSelection(subject, year);
+              }
+            }}
+            onToggleYear={(year) => {
+              // For each subject, toggle selection for this year
+              subjects.forEach(subject => {
+                if (hasDataForSubjectAndYear(data, subject, year)) {
+                  const isSelected = selections.some(s => s.subject === subject && s.year === year);
+                  if (!isSelected) {
+                    handleAddSelection(subject, year);
+                  } else {
+                    const index = selections.findIndex(s => s.subject === subject && s.year === year);
+                    if (index >= 0) {
+                      handleRemoveSelection(index);
+                    }
+                  }
+                }
+              });
+            }}
+            onToggleSubject={(subject) => {
+              // For each year, toggle selection for this subject
+              YEARS.forEach(year => {
+                if (hasDataForSubjectAndYear(data, subject, year)) {
+                  const isSelected = selections.some(s => s.subject === subject && s.year === year);
+                  if (!isSelected) {
+                    handleAddSelection(subject, year);
+                  } else {
+                    const index = selections.findIndex(s => s.subject === subject && s.year === year);
+                    if (index >= 0) {
+                      handleRemoveSelection(index);
+                    }
+                  }
+                }
+              });
+            }}
           />
         </div>
         
