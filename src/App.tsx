@@ -1,3 +1,4 @@
+// Force new deployment
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -197,7 +198,6 @@ const AppRoutes = () => {
             <Layout 
               session={session}
               userProfile={userProfile}
-              isLoadingAuth={isLoadingAuth}
             /> 
           )}>
             {/* Original root path for layout children is now implicit */}
