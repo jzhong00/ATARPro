@@ -306,6 +306,11 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
     }
   }, [clearSubjectsAndResults, clearSearchState, isGuestMode]);
 
+  const hasValidData = useMemo(() => {
+    // Check if there's at least one subject with a valid result
+    return subjectRows.some(row => row.subject && row.rawResult);
+  }, [subjectRows]);
+
   // Restore Render Logic checks
   if (loadingError || scalingDataError) {
     return <div className="error-message">Error loading necessary data. Please try refreshing the page.</div>;
@@ -395,6 +400,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
                 loadingError={loadingError || scalingDataError}
                 onClear={handleClearAll}
                 isGuestMode={isGuestMode}
+                hasValidData={hasValidData}
               />
             </div>
           </div>

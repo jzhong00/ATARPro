@@ -1,5 +1,5 @@
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 // import { useSelector } from 'react-redux'; // Removed unused useSelector
 // import type { RootState } from '../../store'; // Removed unused RootState
 import type { SubjectRow } from '../../types/calculator';
@@ -237,6 +237,11 @@ const SETPlanCalculator = () => {
     );
   }, [scaledScoresMap]);
 
+  const hasValidData = useMemo(() => {
+    // Check if there's at least one subject with a valid rank
+    return subjectRows.some(row => row.subject && row.rank);
+  }, [subjectRows]);
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto p-4">
@@ -271,6 +276,7 @@ const SETPlanCalculator = () => {
               onExport={() => {}} // Empty function as this button is hidden
               onClear={handleClearAll}
               hideExport={true}
+              hasValidData={hasValidData}
             />
           </div>
         </div>

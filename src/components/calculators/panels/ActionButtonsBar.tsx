@@ -11,6 +11,7 @@ interface ActionButtonsBarProps {
   onClear: () => void;
   hideExport?: boolean;
   isGuestMode?: boolean;
+  hasValidData?: boolean;
 }
 
 /**
@@ -26,7 +27,8 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
   onExport,
   onClear,
   hideExport = false,
-  isGuestMode = false
+  isGuestMode = false,
+  hasValidData = false
 }) => {
   return (
     <div className="flex items-center space-x-2">
@@ -34,13 +36,13 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
       {!isGuestMode && (
         <button
           onClick={onPrint}
-          disabled={isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null}
+          disabled={isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData}
           className={`px-4 py-2 text-sm font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 ${
-            (isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null)
+            (isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData)
               ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
               : 'bg-green-500 text-white hover:bg-green-600'
           }`}
-          title={loadingError ? "Cannot print due to loading error" : (!isScalingDataLoaded ? "Scaling data not loaded" : (isPrinting ? "Printing..." : (isCohortExporting ? "Cohort export running..." : "Print single report")))}
+          title={loadingError ? "Cannot print due to loading error" : (!isScalingDataLoaded ? "Scaling data not loaded" : (!hasValidData ? "Enter subject data to enable printing" : (isPrinting ? "Printing..." : (isCohortExporting ? "Cohort export running..." : "Print single report"))))}
         >
           {isPrinting ? 'Generating...' : 'Print'}
         </button>
