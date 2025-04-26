@@ -1,15 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 /**
  * Displays a confirmation message to the user after a successful payment.
  * This page is typically the redirect target from Stripe upon successful checkout completion.
  */
 const PaymentSuccess: React.FC = () => {
-  const location = useLocation();
-  // Extract session_id from URL query parameters for backend verification
-  const sessionId = new URLSearchParams(location.search).get('session_id');
-
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center bg-gray-50 p-6">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
