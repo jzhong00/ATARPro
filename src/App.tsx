@@ -11,7 +11,6 @@ import SETPlanCalculator from './components/calculators/SETPlanCalculator';
 import Layout from './components/layout/Layout';
 import PublicLayout from './components/layout/PublicLayout';
 import LandingPage from './components/LandingPage';
-import { loadScalingData } from './utils/scaling';
 import AuthPage from './components/Auth/AuthPage';
 import { supabase } from './services/supabaseClient';
 import { Session, User } from '@supabase/supabase-js';
@@ -20,6 +19,7 @@ import PaymentSuccess from './components/Billing/PaymentSuccess';
 import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
 import { StripeProvider } from './contexts/StripeContext';
+import csvDataService from './services/csvDataService';
 
 // Initialize Stripe once at app startup, outside of any component
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
@@ -78,21 +78,51 @@ const AppRoutes = () => {
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
   const [session, setSession] = useState<Session | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isLoadingCoreData, setIsLoadingCoreData] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  // Effect for loading scaling data
+  // Effect for loading core data when logged in or when accessing guest calculator
   useEffect(() => {
-    const loadData = async () => {
+    const loadCoreDataIfNeeded = async () => {
+      // If data is already loaded, skip
+      if (csvDataService.isCoreDataLoaded()) return;
+      
       try {
-        await loadScalingData();
+        setIsLoadingCoreData(true);
+        await csvDataService.loadCoreData();
+        setScalingError(null);
       } catch (error) {
-        console.error('App: useEffect 1 - Failed to load scaling data:', error);
-        setScalingError('Failed to load scaling data. Some features may not work correctly.');
+        console.error('App: Failed to load core data:', error);
+        setScalingError('Failed to load core data. Some features may not work correctly.');
+      } finally {
+        setIsLoadingCoreData(false);
       }
     };
-    loadData();
-  }, []);
+
+    // Load core data if user is authenticated
+    if (session) {
+      loadCoreDataIfNeeded();
+    }
+    
+    // Also set up a path listener for the guest calculator
+    const handleRouteChange = () => {
+      const path = window.location.pathname;
+      if (path === '/guest-calculator' && !csvDataService.isCoreDataLoaded()) {
+        loadCoreDataIfNeeded();
+      }
+    };
+    
+    // Call it once on mount
+    handleRouteChange();
+    
+    // Set up listener for future route changes
+    window.addEventListener('popstate', handleRouteChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, [session]);
 
   // Effect for handling authentication and profile fetching (Final Cleaned Version)
   useEffect(() => {
@@ -150,7 +180,7 @@ const AppRoutes = () => {
 
   }, []);
 
-  const isLoadingApp = isLoadingAuth;
+  const isLoadingApp = isLoadingAuth || isLoadingCoreData;
 
   // Loading state for the entire app
   if (isLoadingApp) {
