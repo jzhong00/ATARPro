@@ -4,7 +4,7 @@
  */
 
 // For frontend usage with Vite, we need to use import.meta.env format
-const SITE_URL = import.meta.env.VITE_NEXT_PUBLIC_SITE_URL || 'https://atar-pro.vercel.app';
+const SITE_URL = import.meta.env.VITE_NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
 
 /**
  * Ensures a URL doesn't have trailing slashes for consistent path joining

@@ -13,7 +13,7 @@ import SchoolSummaryView from '../cohort/views/SchoolSummaryView';
 import subjectMappingService from '../../services/subjectMappingService';
 import ResultVariationInput from '../cohort/ResultVariationInput';
 import DownloadCsvButton from '../cohort/DownloadCsvButton';
-import csvDataService from '../../services/csvDataService';
+import { loadScalingData } from '../../utils/scaling';
 
 // Placeholder components for other views - Removed unused placeholders
 // const StudentRangedResultsView = () => <div>Student Ranged Results View</div>;
@@ -146,20 +146,10 @@ const CohortCalculator = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Load mappings (this still needs to be loaded separately)
         await subjectMappingService.loadMappings();
         setMappingsLoaded(true);
         setMappingError(null);
-        
-        // Check if scaling data is already loaded through the centralized service
-        if (csvDataService.isScalingDataLoaded()) {
-          setIsScalingDataLoaded(true);
-          setScalingDataError(null);
-          return;
-        }
-        
-        // Otherwise, load the core data which includes scaling data
-        await csvDataService.loadCoreData();
+        await loadScalingData();
         setIsScalingDataLoaded(true);
         setScalingDataError(null);
       } catch (error) {
@@ -167,7 +157,7 @@ const CohortCalculator = () => {
         if (message.includes('mapping')) {
             setMappingError('Failed to load subject mappings. Some features might be affected.');
             setMappingsLoaded(false);
-        } else if (message.includes('scaling') || message.includes('core data')) {
+        } else if (message.includes('scaling')) {
             setScalingDataError('Failed to load scaling data. Calculations may be inaccurate.');
             setIsScalingDataLoaded(false);
         } else {

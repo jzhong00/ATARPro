@@ -2,11 +2,12 @@ import React from 'react';
 import PaymentButton from './PaymentButton';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '../../services/supabaseClient'; // Import supabase client for logout
+import type { Stripe } from '@stripe/stripe-js'; // Import Stripe type
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 interface PaymentPromptProps {
   session: Session | null;
-  // Remove stripePromise prop
+  stripePromise: Promise<Stripe | null>; // Add stripePromise prop
 }
 
 /**
@@ -14,7 +15,7 @@ interface PaymentPromptProps {
  * Shows a message explaining the restriction and provides a PaymentButton component
  * to allow the user to proceed with payment. Also includes a logout button.
  */
-const PaymentPrompt: React.FC<PaymentPromptProps> = ({ session }) => {
+const PaymentPrompt: React.FC<PaymentPromptProps> = ({ session, stripePromise }) => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLogout = async () => {
@@ -34,8 +35,8 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ session }) => {
         <p className="mb-6 text-gray-600">
           Please complete your purchase to access the full features of the ATAR Calculator suite.
         </p>
-        {/* No longer need to pass stripePromise */}
-        <PaymentButton session={session} />
+        {/* Pass stripePromise down */}
+        <PaymentButton session={session} stripePromise={stripePromise} />
         <button
           onClick={handleLogout}
           className="mt-4 text-sm text-gray-500 hover:underline focus:outline-none"

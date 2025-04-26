@@ -1,4 +1,3 @@
-// Force new deployment
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
@@ -11,6 +10,7 @@ import SETPlanCalculator from './components/calculators/SETPlanCalculator';
 import Layout from './components/layout/Layout';
 import PublicLayout from './components/layout/PublicLayout';
 import LandingPage from './components/LandingPage';
+import { loadScalingData } from './utils/scaling';
 import AuthPage from './components/Auth/AuthPage';
 import { supabase } from './services/supabaseClient';
 import { Session, User } from '@supabase/supabase-js';
@@ -18,30 +18,12 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import PaymentSuccess from './components/Billing/PaymentSuccess';
 import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
-import { StripeProvider } from './contexts/StripeContext';
-import csvDataService from './services/csvDataService';
 
-// Initialize Stripe once at app startup, outside of any component
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-let stripePromiseInstance: ReturnType<typeof loadStripe> | null = null;
-
-// This function ensures we only create a single Stripe instance
-const getStripePromise = (): ReturnType<typeof loadStripe> => {
-  if (!stripePromiseInstance) {
-    console.log('Creating Stripe instance for the first time');
-    if (!stripePublishableKey) {
-      console.error('Stripe Publishable Key is missing. Check your .env file');
-      stripePromiseInstance = Promise.resolve(null);
-    } else {
-      // Create the Stripe promise only once
-      stripePromiseInstance = loadStripe(stripePublishableKey);
-    }
-  }
-  return stripePromiseInstance;
-};
-
-// Use this global stripe promise throughout the app
-const stripePromise = getStripePromise();
+if (!stripePublishableKey) {
+  console.error('Stripe Publishable Key is missing. Check your .env file and ensure it starts with VITE_');
+}
+const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : Promise.resolve(null);
 
 const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>) => {
   if (!user) {
@@ -78,51 +60,21 @@ const AppRoutes = () => {
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
   const [session, setSession] = useState<Session | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [isLoadingCoreData, setIsLoadingCoreData] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  // Effect for loading core data when logged in or when accessing guest calculator
+  // Effect for loading scaling data
   useEffect(() => {
-    const loadCoreDataIfNeeded = async () => {
-      // If data is already loaded, skip
-      if (csvDataService.isCoreDataLoaded()) return;
-      
+    const loadData = async () => {
       try {
-        setIsLoadingCoreData(true);
-        await csvDataService.loadCoreData();
-        setScalingError(null);
+        await loadScalingData();
       } catch (error) {
-        console.error('App: Failed to load core data:', error);
-        setScalingError('Failed to load core data. Some features may not work correctly.');
-      } finally {
-        setIsLoadingCoreData(false);
+        console.error('App: useEffect 1 - Failed to load scaling data:', error);
+        setScalingError('Failed to load scaling data. Some features may not work correctly.');
       }
     };
-
-    // Load core data if user is authenticated
-    if (session) {
-      loadCoreDataIfNeeded();
-    }
-    
-    // Also set up a path listener for the guest calculator
-    const handleRouteChange = () => {
-      const path = window.location.pathname;
-      if (path === '/guest-calculator' && !csvDataService.isCoreDataLoaded()) {
-        loadCoreDataIfNeeded();
-      }
-    };
-    
-    // Call it once on mount
-    handleRouteChange();
-    
-    // Set up listener for future route changes
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, [session]);
+    loadData();
+  }, []);
 
   // Effect for handling authentication and profile fetching (Final Cleaned Version)
   useEffect(() => {
@@ -180,7 +132,7 @@ const AppRoutes = () => {
 
   }, []);
 
-  const isLoadingApp = isLoadingAuth || isLoadingCoreData;
+  const isLoadingApp = isLoadingAuth;
 
   // Loading state for the entire app
   if (isLoadingApp) {
@@ -237,6 +189,7 @@ const AppRoutes = () => {
             session={session}
             userProfile={userProfile}
             isLoading={isLoadingAuth}
+            stripePromise={stripePromise}
           />
         )}>
           {/* Apply Layout to all nested protected routes */}
@@ -244,6 +197,8 @@ const AppRoutes = () => {
             <Layout 
               session={session}
               userProfile={userProfile}
+              isLoadingAuth={isLoadingAuth}
+              stripePromise={stripePromise}
             /> 
           )}>
             {/* Original root path for layout children is now implicit */}
@@ -267,11 +222,9 @@ const AppRoutes = () => {
 // The main App component now just sets up the Router
 function App() {
   return (
-    <StripeProvider stripePromise={stripePromise}>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </StripeProvider>
+    <Router>
+      <AppRoutes />
+    </Router>
   );
 }
 

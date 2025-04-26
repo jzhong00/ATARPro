@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import subjectMappingService, { SubjectMapping, DatalistOption } from '../services/subjectMappingService';
-import csvDataService from '../services/csvDataService';
+import { loadScalingData } from '../utils/scaling';
 
 /**
  * Custom hook to load subject mapping and scaling data
@@ -47,43 +47,28 @@ export const useSubjectMappingLoader = () => {
     loadAndSetSubjects();
   }, []); // Run once on mount
 
-  // Check if scaling data is already loaded through the centralized service
+  // Load scaling data on mount
   useEffect(() => {
-    const checkScalingData = async () => {
+    const loadData = async () => {
       try {
-        // First check if data is already loaded from App component
-        if (csvDataService.isScalingDataLoaded()) {
-          setIsScalingDataLoaded(true);
-          setScalingDataError(null);
-          return;
-        }
-        
-        // If not loaded yet, wait for it to load (the App component should handle this)
-        setIsScalingDataLoaded(csvDataService.isScalingDataLoaded());
+        // Load scaling data
+        await loadScalingData();
+        setIsScalingDataLoaded(true);
         setScalingDataError(null);
       } catch (error) {
-        console.error("Error checking scaling data status:", error);
+        console.error("Error loading scaling data:", error);
         const message = error instanceof Error ? error.message : String(error);
-        setScalingDataError(`Error loading scaling data: ${message}`);
+        if (error instanceof Error && error.message.includes('scaling data')) {
+          setScalingDataError(`Error loading scaling data: ${message}`);
+        } else {
+          setScalingDataError(`Error loading initial data: ${message}`);
+        }
         setIsScalingDataLoaded(false);
       }
     };
     
-    checkScalingData();
-    
-    // Set up a periodic check to see if data has been loaded
-    const intervalId = setInterval(() => {
-      if (csvDataService.isScalingDataLoaded()) {
-        setIsScalingDataLoaded(true);
-        setScalingDataError(null);
-        clearInterval(intervalId);
-      }
-    }, 500); // Check every 500ms
-    
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+    loadData();
+  }, []); // Run once on mount
 
   return {
     allSubjects,

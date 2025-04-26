@@ -1,5 +1,3 @@
-<!-- Updated: April 26, 2025 -->
-
 # ATAR Calculator
 
 A modern, type-safe ATAR calculator application built with React, TypeScript, and Redux Toolkit.

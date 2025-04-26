@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import APITest from './APITest';
 
 const FrontPage = () => {
   const navigate = useNavigate();
@@ -45,11 +44,6 @@ const FrontPage = () => {
             <p className="text-gray-600">{calculator.description}</p>
           </div>
         ))}
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Developer Tools</h2>
-        <APITest />
       </div>
     </div>
   );
