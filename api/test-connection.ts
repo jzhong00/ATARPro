@@ -1,4 +1,5 @@
 // api/test-connection.ts
+// Updated: April 26, 2025
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(
