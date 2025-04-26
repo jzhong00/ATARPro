@@ -4,7 +4,7 @@ import { getStripeClient } from './utils/stripeClient';
 
 // Load Price ID from environment variables
 const priceId = process.env.STRIPE_PRICE_ID;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://atar-pro.vercel.app'; // Default to production
 
 if (!priceId) {
   console.error('Stripe price ID is missing from environment variables.');

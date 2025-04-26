@@ -17,7 +17,7 @@ export function getStripeClient(): Stripe {
     }
     
     stripeInstance = new Stripe(stripeSecretKey, {
-      apiVersion: '2025-03-31.basil',
+      apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
       typescript: true,
       appInfo: {
         name: 'ATAR Calculator',
