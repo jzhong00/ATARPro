@@ -31,16 +31,16 @@ const EquivalentCalculator = () => {
     getScoreClasses
   } = useEquivalentCalculator();
 
-  // Function to navigate to scaling graphs with selected subjects
-  const navigateToScalingGraphs = () => {
+  // Function to prepare URL for scaling graphs with selected subjects
+  const getScalingGraphsUrl = () => {
     // Collect all selected subjects (primary + comparisons)
     const allSelectedSubjects = [selectedSubject, ...comparisonSubjects].filter(Boolean);
     
     // Create a URL-friendly string of selected subjects
     const subjectParam = encodeURIComponent(JSON.stringify(allSelectedSubjects));
     
-    // Navigate to scaling graphs with the subjects as a query parameter
-    navigate(`/scaling-graphs?subjects=${subjectParam}`);
+    // Return the URL with the subjects as a query parameter
+    return `/scaling-graphs?subjects=${subjectParam}`;
   };
 
   if (isLoading) {
@@ -109,13 +109,16 @@ const EquivalentCalculator = () => {
               
               {/* Action Buttons */}
               <div className="flex gap-2">
-                <button
-                  onClick={navigateToScalingGraphs}
-                  className="px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={!hasSelectedSubjects}
+                <a
+                  href={hasSelectedSubjects ? getScalingGraphsUrl() : '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed inline-block text-center"
+                  onClick={(e) => !hasSelectedSubjects && e.preventDefault()}
+                  style={{ opacity: hasSelectedSubjects ? 1 : 0.5, cursor: hasSelectedSubjects ? 'pointer' : 'not-allowed' }}
                 >
                   View in Scaling Graphs
-                </button>
+                </a>
                 <button 
                   onClick={handleRandomSubjects}
                   className="px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
