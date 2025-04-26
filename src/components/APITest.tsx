@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../services/siteConfig';
-import { useStripe } from '../contexts/StripeContext';
 import { supabase } from '../services/supabaseClient';
 
 const APITest: React.FC = () => {
-  const { stripePromise } = useStripe();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
