@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { Stripe } from '@stripe/stripe-js';
 import { logConnectionAttempt } from '../utils/stripeMonitor';
 

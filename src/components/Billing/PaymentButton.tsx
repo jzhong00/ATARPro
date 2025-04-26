@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
-import type { Stripe } from '@stripe/stripe-js'; // Import Stripe type
 import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
 import { useStripe } from '../../contexts/StripeContext';
 

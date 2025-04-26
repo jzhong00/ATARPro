@@ -7,10 +7,9 @@ import StripeTest from '../StripeTest';
 interface LayoutProps {
   session: Session | null;
   userProfile: UserProfile | null;
-  isLoadingAuth: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ session, userProfile, isLoadingAuth }) => {
+const Layout: React.FC<LayoutProps> = ({ session, userProfile }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header session={session} userProfile={userProfile} />
