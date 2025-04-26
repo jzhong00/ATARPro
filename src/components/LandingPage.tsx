@@ -50,10 +50,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div className="md:w-1/2 mt-12 md:mt-0">
               <div className="bg-white rounded-lg shadow-md p-2 border border-gray-200">
                 <img 
-                  src="/images/Single_Student_Screenshot.png" 
+                  src="/images/Single_Student_Screenshot.avif" 
                   alt="ATAR Calculator Interface" 
                   className="rounded-md w-full cursor-pointer"
-                  onClick={() => openLightbox('/images/Single_Student_Screenshot.png')}
+                  onClick={() => openLightbox('/images/Single_Student_Screenshot.avif')}
                 />
               </div>
             </div>
@@ -73,10 +73,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/Single_Student_Screenshot.png" 
+                  src="/images/Single_Student_Screenshot.avif" 
                   alt="Single Student Calculator" 
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/Single_Student_Screenshot.png')}
+                  onClick={() => openLightbox('/images/Single_Student_Screenshot.avif')}
                 />
               </div>
               <div className="p-4">
@@ -91,10 +91,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/CohortCalculator1.png" 
+                  src="/images/CohortCalculator1.avif" 
                   alt="Cohort Calculator" 
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/CohortCalculator1.png')}
+                  onClick={() => openLightbox('/images/CohortCalculator1.avif')}
                 />
               </div>
               <div className="p-4">
@@ -109,10 +109,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/SETPlanningCalculator.png" 
+                  src="/images/SetPlanningCalculator.avif" 
                   alt="SET Planning Calculator" 
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/SETPlanningCalculator.png')}
+                  onClick={() => openLightbox('/images/SetPlanningCalculator.avif')}
                 />
               </div>
               <div className="p-4">
@@ -127,10 +127,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/ScalingGraphs.png" 
+                  src="/images/ScalingGraphs.avif" 
                   alt="Scaling Graphs" 
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/ScalingGraphs.png')}
+                  onClick={() => openLightbox('/images/ScalingGraphs.avif')}
                 />
               </div>
               <div className="p-4">
@@ -145,10 +145,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/EquivalentSubjectCalculator.png" 
+                  src="/images/EquivalentSubjectCalculator.avif" 
                   alt="Equivalent Subject Calculator"
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/EquivalentSubjectCalculator.png')}
+                  onClick={() => openLightbox('/images/EquivalentSubjectCalculator.avif')}
                 />
               </div>
               <div className="p-4">
@@ -163,10 +163,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             >
               <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
-                  src="/images/Printout_example.png" 
+                  src="/images/Printout_example.avif" 
                   alt="PDF Export Example"
                   className="rounded-md w-full h-full object-contain cursor-pointer"
-                  onClick={() => openLightbox('/images/Printout_example.png')}
+                  onClick={() => openLightbox('/images/Printout_example.avif')}
                 />
               </div>
               <div className="p-4">

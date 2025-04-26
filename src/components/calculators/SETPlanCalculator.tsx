@@ -192,7 +192,7 @@ const SETPlanCalculator = () => {
     try {
       const pdfStudentName = '';
       const explanatoryText = "Imagine a class of 100 students from across QLD who have selected the same subject.\nWhere would you place yourself?";
-      const imagePath = "/images/single_student_mock_up.png";
+      const imagePath = "/images/single_student_mock_up.avif";
 
       // --- DEBUGGING REMOVED ---
       // console.log('Debug PDF Data - Raw Values:', { atarRange, atar, lowerTeScore, upperTeScore, teScore }); 
@@ -258,7 +258,7 @@ const SETPlanCalculator = () => {
               Where would you place yourself?
             </p>
             <img 
-              src="/images/single_student_mock_up.png" 
+              src="/images/single_student_mock_up.avif" 
               alt="SET Plan ATAR Calculator Ruler" 
               className="max-w-full mt-2" 
               style={{ maxHeight: "80px", maxWidth: "66%" }}
