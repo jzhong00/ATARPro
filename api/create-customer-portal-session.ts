@@ -1,7 +1,7 @@
 // api/create-customer-portal-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { getStripeClient } from './utils/stripeClient';
+import { getStripeClient } from './utils/stripeClient.js';
 
 // Ensure required environment variables are loaded
 const supabaseUrl = process.env.SUPABASE_URL;

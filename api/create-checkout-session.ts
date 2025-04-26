@@ -1,6 +1,6 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripeClient } from './utils/stripeClient';
+import { getStripeClient } from './utils/stripeClient.js';
 
 // Load Price ID from environment variables
 const priceId = process.env.STRIPE_PRICE_ID;

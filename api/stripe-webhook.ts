@@ -2,7 +2,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { buffer } from 'micro'; // Helper to read the raw request body
 import { createClient } from '@supabase/supabase-js'; // <-- Import Supabase client creator
-import { getStripeClient } from './utils/stripeClient';
+import { getStripeClient } from './utils/stripeClient.js';
 
 // --- Configuration ---
 

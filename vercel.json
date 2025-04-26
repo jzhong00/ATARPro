@@ -1,8 +1,17 @@
 {
-  "rewrites": [
-    { 
-      "source": "/((?!api/).*)", 
-      "destination": "/index.html" 
+  "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "functions": {
+    "api/**/*": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     }
   ]
 } 
