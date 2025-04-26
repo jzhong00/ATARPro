@@ -1,22 +1,15 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import Stripe from 'stripe';
+import { getStripeClient } from './utils/stripeClient';
 
-// Ensure Stripe secret key and Price ID are loaded from environment variables
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+// Load Price ID from environment variables
 const priceId = process.env.STRIPE_PRICE_ID;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
-if (!stripeSecretKey || !priceId) {
-  console.error('Stripe secret key or price ID is missing from environment variables.');
+if (!priceId) {
+  console.error('Stripe price ID is missing from environment variables.');
   throw new Error('Server configuration error: Missing Stripe credentials.');
 }
-
-// Initialize Stripe with the secret key
-const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-03-31.basil', // Use API version expected by types
-  typescript: true,
-});
 
 export default async function handler(
   req: VercelRequest,
@@ -28,6 +21,9 @@ export default async function handler(
   }
 
   try {
+    // Get the singleton Stripe client
+    const stripe = getStripeClient();
+    
     // Extract userId from the request body sent by the frontend
     const { userId } = req.body;
 

@@ -3,13 +3,11 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { Session } from '@supabase/supabase-js';
 import PaymentPrompt from '../Billing/PaymentPrompt';
 import { UserProfile } from '../../types';
-import type { Stripe } from '@stripe/stripe-js';
 
 interface ProtectedRouteProps {
   session: Session | null;
   userProfile: UserProfile | null;
   isLoading: boolean; // Indicates if session/profile data is still loading
-  stripePromise: Promise<Stripe | null>;
 }
 
 /**
@@ -20,7 +18,7 @@ interface ProtectedRouteProps {
  * - If session exists but user is not subscribed, shows the payment prompt.
  * - If session exists and user is subscribed, renders the child routes (Outlet).
  */
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, isLoading, stripePromise }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, isLoading }) => {
 
   // Show loading indicator while session/profile data is being fetched
   if (isLoading) {
@@ -39,7 +37,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
   // If the user profile isn't loaded or the user doesn't have an active subscription,
   // show the payment prompt component instead of the intended route.
   if (!userProfile || !userProfile.is_subscribed) {
-    return <PaymentPrompt session={session} stripePromise={stripePromise} />;
+    return <PaymentPrompt session={session} />;
   }
 
   // If session exists and user is subscribed, render the intended child route

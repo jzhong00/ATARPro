@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import type { Stripe } from '@stripe/stripe-js'; // Import Stripe type
 import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
+import { useStripe } from '../../contexts/StripeContext';
 
 interface PaymentButtonProps {
   session: Session | null; // Pass session via props
-  stripePromise: Promise<Stripe | null>; // Pass stripePromise via props
 }
 
 /**
@@ -16,7 +16,8 @@ interface PaymentButtonProps {
  * - Handles loading states and displays errors.
  */
 // Explicitly type the functional component with its props
-const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise }) => {
+const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
+  const { stripePromise } = useStripe();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

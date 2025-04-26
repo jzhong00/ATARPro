@@ -18,6 +18,7 @@ import ProtectedRoute from './components/Auth/ProtectedRoute';
 import PaymentSuccess from './components/Billing/PaymentSuccess';
 import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
+import { StripeProvider } from './contexts/StripeContext';
 
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 if (!stripePublishableKey) {
@@ -189,7 +190,6 @@ const AppRoutes = () => {
             session={session}
             userProfile={userProfile}
             isLoading={isLoadingAuth}
-            stripePromise={stripePromise}
           />
         )}>
           {/* Apply Layout to all nested protected routes */}
@@ -198,7 +198,6 @@ const AppRoutes = () => {
               session={session}
               userProfile={userProfile}
               isLoadingAuth={isLoadingAuth}
-              stripePromise={stripePromise}
             /> 
           )}>
             {/* Original root path for layout children is now implicit */}
@@ -222,9 +221,11 @@ const AppRoutes = () => {
 // The main App component now just sets up the Router
 function App() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <StripeProvider stripePromise={stripePromise}>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </StripeProvider>
   );
 }
 

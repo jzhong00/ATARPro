@@ -1,35 +1,22 @@
 // api/create-customer-portal-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { getStripeClient } from './utils/stripeClient';
 
 // Ensure required environment variables are loaded
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 // Basic validation for environment variables
-if (!stripeSecretKey) {
-  console.error('Stripe secret key is missing from environment variables.');
-  throw new Error('Server configuration error: Missing Stripe credentials.');
-}
 if (!supabaseUrl || !supabaseServiceRoleKey) {
     console.error('Supabase URL or Service Role Key is missing from environment variables.');
     throw new Error('Server configuration error: Missing Supabase credentials.');
 }
 
-
-// Initialize Stripe client
-const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-03-31.basil', // Match version from other endpoints
-  typescript: true,
-});
-
 // Initialize Supabase Admin client
 // Note: Use the Service Role Key for backend operations; DO NOT expose this key client-side.
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
-
 
 export default async function handler(
   req: VercelRequest,
@@ -41,6 +28,9 @@ export default async function handler(
   }
 
   try {
+    // Get the singleton Stripe client
+    const stripe = getStripeClient();
+    
     // Extract userId from the request body (following pattern from create-checkout-session)
     // For improved security, consider validating a JWT here instead.
     const { userId } = req.body;
@@ -89,10 +79,10 @@ export default async function handler(
   } catch (error: any) {
     console.error('Error creating Stripe Customer Portal session:', error);
     // Differentiate Stripe errors from other errors if needed
-    if (error instanceof Stripe.errors.StripeError) {
-         return res.status(500).json({ error: `Stripe error: ${error.message}` });
-    } else {
+    if (error instanceof Error) {
          return res.status(500).json({ error: `Internal server error: ${error.message || error}` });
+    } else {
+         return res.status(500).json({ error: `Unknown error occurred` });
     }
   }
 } 
