@@ -7,25 +7,36 @@ export function getStripeClient(): Stripe {
   if (!stripeInstance) {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecretKey) {
+      console.error('[STRIPE] Missing Stripe secret key in environment variables');
       throw new Error('Missing Stripe secret key');
+    }
+    
+    // Validate Stripe key format (should start with sk_)
+    if (!stripeSecretKey.startsWith('sk_')) {
+      console.error('[STRIPE] Invalid Stripe secret key format - should start with sk_');
+      throw new Error('Invalid Stripe key format');
     }
     
     // Log connection count in development
     connectionCount++;
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[SERVER] Creating Stripe client instance #${connectionCount}`);
-    }
+    console.log(`[STRIPE] Creating Stripe client instance #${connectionCount}`);
     
-    stripeInstance = new Stripe(stripeSecretKey, {
-      apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
-      typescript: true,
-      appInfo: {
-        name: 'ATAR Calculator',
-        version: '1.0.0'
-      }
-    });
-  } else if (process.env.NODE_ENV === 'development') {
-    console.log('[SERVER] Reusing existing Stripe client instance');
+    try {
+      stripeInstance = new Stripe(stripeSecretKey, {
+        apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
+        typescript: true,
+        appInfo: {
+          name: 'ATAR Calculator',
+          version: '1.0.0'
+        }
+      });
+      console.log('[STRIPE] Successfully initialized Stripe client');
+    } catch (error) {
+      console.error('[STRIPE] Failed to initialize Stripe client:', error);
+      throw error;
+    }
+  } else {
+    console.log('[STRIPE] Reusing existing Stripe client instance');
   }
   
   return stripeInstance;
