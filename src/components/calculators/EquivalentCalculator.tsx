@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useEquivalentCalculator } from '../../hooks/useEquivalentCalculator';
 
 /**
@@ -10,8 +9,6 @@ import { useEquivalentCalculator } from '../../hooks/useEquivalentCalculator';
  * navigate to view the selected subjects on the scaling graphs.
  */
 const EquivalentCalculator = () => {
-  const navigate = useNavigate();
-  
   const {
     subjects,
     score,
