@@ -170,8 +170,8 @@ export const generatePDF = async ({
   }
 
   // --- Results Table ---
-  const tableHeaderSize = 10;
-  const tableBodySize = 9;
+  const tableHeaderSize = 9;
+  const tableBodySize = 8.5;
   const rowHeight = 15;
   const tableLeft = margin;
 
@@ -188,7 +188,8 @@ export const generatePDF = async ({
     numCols += 2; // Add columns for Rank and Result Range (only if not already included)
   }
   
-  const subjectColWidth = contentWidth * 0.25; // Allocate less space for subject name to accommodate extra columns
+  // Increase the subject column width to accommodate longer subject names
+  const subjectColWidth = contentWidth * 0.35; // Increased from 0.25 to 0.35 
   const resultColsWidth = contentWidth - subjectColWidth;
   const individualResultColWidth = resultColsWidth / (numCols - 1); // Divide remaining space
 
@@ -249,7 +250,18 @@ export const generatePDF = async ({
   subjectResults.forEach((result) => {
     // Only draw rows with a subject selected
     if (result.subject) {
-      page.drawText(result.subject, { x: subjectColX, y, font: font, size: tableBodySize });
+      // Handle long subject names with truncation if needed
+      let displaySubject = result.subject;
+      if (font.widthOfTextAtSize(displaySubject, tableBodySize) > subjectColWidth - 4) {
+        // Try to truncate the text if it's too long
+        let truncated = displaySubject;
+        while (font.widthOfTextAtSize(truncated + '...', tableBodySize) > subjectColWidth - 4 && truncated.length > 3) {
+          truncated = truncated.slice(0, -1);
+        }
+        displaySubject = truncated + '...';
+      }
+      
+      page.drawText(displaySubject, { x: subjectColX, y, font: font, size: tableBodySize });
 
       // Helper to center body text
       const centerBodyText = (text: string | number | null | undefined, startX: number, colWidth: number) => {
