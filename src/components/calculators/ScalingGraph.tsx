@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, LegendProps } from 'recharts';
 import { Selection, ScalingRow, DataPoint } from '../../utils/scalingDataUtils'; // Import types from utils
 import CustomTooltip from './CustomTooltip';
 
@@ -90,6 +90,41 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
   // Fixed set of colors for lines
   const colors = ['#2196F3', '#4CAF50', '#F44336', '#9C27B0', '#FF9800', '#00BCD4', '#795548', '#607D8B', '#E91E63', '#673AB7'];
 
+  // Custom scrollable legend component
+  const ScrollableLegend = (props: LegendProps) => {
+    const { payload } = props;
+    if (!payload || payload.length === 0) return null;
+    return (
+      <div
+        style={{
+          maxHeight: '300px',
+          overflowY: 'auto',
+          maxWidth: '180px',
+          paddingRight: 8,
+          background: 'rgba(255,255,255,0.95)',
+          borderRadius: 8,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        }}
+      >
+        {payload.map((entry: any) => (
+          <div key={entry.value} style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
+            <span style={{
+              display: 'inline-block',
+              width: 14,
+              height: 4,
+              backgroundColor: entry.color,
+              marginRight: 8,
+              borderRadius: 2
+            }} />
+            <span style={{ color: entry.color, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {entry.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full h-full">
       <ResponsiveContainer width="100%" height="100%">
@@ -117,13 +152,8 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
             layout="vertical" 
             align="right" 
             verticalAlign="middle"
-            wrapperStyle={{ 
-              right: 10,
-              width: 'auto',
-              maxWidth: '120px',
-              maxHeight: '300px',
-              overflowY: 'auto'
-            }}
+            content={<ScrollableLegend />}
+            wrapperStyle={{ right: 10 }}
           />
           {selections.map((selection, index) => {
             const key = `${selection.subject} (${selection.year})`;
