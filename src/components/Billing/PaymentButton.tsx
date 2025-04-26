@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import type { Stripe } from '@stripe/stripe-js'; // Import Stripe type
+import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
 
 interface PaymentButtonProps {
   session: Session | null; // Pass session via props
@@ -32,7 +33,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session, stripePromise })
 
     try {
       // 1. Call backend API to create a checkout session
-      const response = await fetch('/api/create-checkout-session', {
+      const response = await fetch(siteConfig.getApiUrl('create-checkout-session'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: userId }), // Send the logged-in user's ID

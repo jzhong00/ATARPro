@@ -3,6 +3,7 @@ import { Session } from '@supabase/supabase-js'; // Import Session type
 import { supabase } from '../../services/supabaseClient'; // Import Supabase client for logout
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import { UserProfile } from '../../types'; // Import UserProfile type
+import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
 
 // Define props type for Header
 interface HeaderProps {
@@ -60,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
     // No need to close dropdown here, page will navigate away
 
     try {
-      const response = await fetch('/api/create-customer-portal-session', {
+      const response = await fetch(siteConfig.getApiUrl('create-customer-portal-session'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

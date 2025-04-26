@@ -5,6 +5,7 @@ import Stripe from 'stripe';
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const priceId = process.env.STRIPE_PRICE_ID;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 if (!stripeSecretKey || !priceId) {
   console.error('Stripe secret key or price ID is missing from environment variables.');
@@ -35,11 +36,9 @@ export default async function handler(
       return res.status(400).json({ error: 'User ID is required' });
     }
 
-    // Define success and cancel URLs (relative to your frontend's domain)
-    // These placeholders will redirect to pages created in a later phase
-    const baseUrl = req.headers.origin || `http://${req.headers.host}`; // Vercel provides origin, fallback for local dev
-    const successUrl = `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = `${baseUrl}/payment-cancel`;
+    // Define success and cancel URLs using environment variable
+    const successUrl = `${siteUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${siteUrl}/payment-cancel`;
 
     console.log(`Creating Stripe session for user: ${userId} with price: ${priceId}`);
 
