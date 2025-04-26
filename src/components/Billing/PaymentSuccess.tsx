@@ -4,11 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 /**
  * Displays a confirmation message to the user after a successful payment.
  * This page is typically the redirect target from Stripe upon successful checkout completion.
- * It extracts the Stripe session ID from the URL for potential verification and provides a link back to the main application.
  */
 const PaymentSuccess: React.FC = () => {
   const location = useLocation();
-  // Extract session_id from URL query parameters, could be used for verification later
+  // Extract session_id from URL query parameters for backend verification
   const sessionId = new URLSearchParams(location.search).get('session_id');
 
   return (
@@ -18,13 +17,7 @@ const PaymentSuccess: React.FC = () => {
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <h2 className="text-2xl font-bold text-green-700 mb-3">Payment Successful!</h2>
-        <p className="text-gray-600 mb-6">Thank you for your purchase. Your access should be updated shortly (pending webhook confirmation).</p>
-        {/* Optionally display the session ID for debugging/confirmation */}
-        {sessionId && (
-          <p className="text-xs text-gray-400 mt-4 mb-2 break-all">
-            Session ID: {sessionId}
-          </p>
-        )}
+        <p className="text-gray-600 mb-6">Your purchase is complete! We're processing your access now.</p>
         <Link 
           to="/app" 
           className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300"
