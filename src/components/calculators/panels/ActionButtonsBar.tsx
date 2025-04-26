@@ -39,7 +39,7 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
           disabled={isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData}
           className={`px-4 py-2 text-sm font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 ${
             (isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData)
-              ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+              ? 'opacity-50 cursor-not-allowed'
               : 'bg-green-500 text-white hover:bg-green-600'
           }`}
           title={loadingError ? "Cannot print due to loading error" : (!isScalingDataLoaded ? "Scaling data not loaded" : (!hasValidData ? "Enter subject data to enable printing" : (isPrinting ? "Printing..." : (isCohortExporting ? "Cohort export running..." : "Print single report"))))}
