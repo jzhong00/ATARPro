@@ -37,10 +37,10 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
         <button
           onClick={onPrint}
           disabled={isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData}
-          className={`px-4 py-2 text-sm font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 text-white bg-green-500 ${
+          className={`px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${
             (isPrinting || isCohortExporting || !isScalingDataLoaded || loadingError !== null || !hasValidData)
               ? 'opacity-50 cursor-not-allowed'
-              : 'hover:bg-green-600'
+              : 'hover:bg-green-700'
           }`}
           title={loadingError ? "Cannot print due to loading error" : (!isScalingDataLoaded ? "Scaling data not loaded" : (!hasValidData ? "Enter subject data to enable printing" : (isPrinting ? "Printing..." : (isCohortExporting ? "Cohort export running..." : "Print single report"))))}
         >
@@ -67,8 +67,8 @@ const ActionButtonsBar: React.FC<ActionButtonsBarProps> = ({
       <button
         onClick={onClear}
         disabled={isCohortExporting || isPrinting}
-        className={`px-4 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ${
-          (isCohortExporting || isPrinting) ? 'opacity-50 cursor-not-allowed' : ''
+        className={`px-4 py-2 text-sm font-medium rounded-md shadow-sm text-white bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ${
+          (isCohortExporting || isPrinting) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-700'
         }`}
       >
         Clear
