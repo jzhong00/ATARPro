@@ -47,12 +47,10 @@ const FrontPage = () => {
         ))}
       </div>
 
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-4">Development Tools</h2>
-          <APITest />
-        </div>
-      )}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Developer Tools</h2>
+        <APITest />
+      </div>
     </div>
   );
 };
