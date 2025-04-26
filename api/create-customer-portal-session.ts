@@ -72,7 +72,7 @@ export default async function handler(
     }
 
     const customerId = user.stripe_customer_id;
-    const returnUrl = `${siteUrl}/account`; // Redirect user here after portal session
+    const returnUrl = `${siteUrl}/app`; // Redirect user here after portal session
 
     console.log(`Creating Stripe Customer Portal session for user: ${userId}, customer: ${customerId}`);
 
