@@ -13,26 +13,34 @@ interface StripeProviderProps {
   children: ReactNode;
 }
 
-// Keep track of whether we've already logged this session
-let hasLoggedInitialization = false;
+// Global variable to track if we've already logged this browser session
+let hasInitializedStripe = false;
 
 export function StripeProvider({ stripePromise, children }: StripeProviderProps) {
-  // Log Stripe initialization only once per session
+  // IMPORTANT: We only run this effect ONCE per browser session, not per component mount/unmount
   useEffect(() => {
-    if (!hasLoggedInitialization) {
-      // Log connection attempt
-      logConnectionAttempt();
-      hasLoggedInitialization = true;
+    if (!hasInitializedStripe) {
+      // Mark as initialized immediately to prevent any race conditions
+      hasInitializedStripe = true;
       
-      if (process.env.NODE_ENV === 'development') {
-        stripePromise.then(stripe => {
-          if (stripe) {
-            console.log('✅ Stripe initialized successfully');
-          }
-        });
-      }
+      // Log only once per browser session
+      console.log('[Stripe] Initializing Stripe context');
+      logConnectionAttempt();
+      
+      // Load Stripe in background but don't do anything with it yet
+      stripePromise.then(stripe => {
+        if (stripe) {
+          console.log('[Stripe] Stripe library loaded successfully');
+        } else {
+          console.warn('[Stripe] Stripe library failed to load');
+        }
+      }).catch(err => {
+        console.error('[Stripe] Error loading Stripe:', err);
+      });
     }
-  }, [stripePromise]);
+    
+    // No cleanup function - we want this to run only once
+  }, []); // Empty dependency array - only run on first mount
 
   return (
     <StripeContext.Provider value={{ stripePromise }}>

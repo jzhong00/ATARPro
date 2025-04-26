@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
 import { useStripe } from '../../contexts/StripeContext';
@@ -20,8 +20,17 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [debug, setDebug] = useState<string | null>(null);
+  // Use a ref to track if we've started the checkout process
+  const checkoutInitiatedRef = useRef(false);
 
   const handleCheckout = async () => {
+    // Prevent multiple clicks or re-renders from initiating multiple checkouts
+    if (checkoutInitiatedRef.current) {
+      console.log('[Payment] Checkout already initiated, ignoring duplicate call');
+      return;
+    }
+    
+    checkoutInitiatedRef.current = true;
     setError(null);
     setDebug(null);
     setLoading(true);
@@ -29,13 +38,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
     if (!session?.user) {
       setError('You must be logged in to make a payment.');
       setLoading(false);
+      checkoutInitiatedRef.current = false;
       return;
     }
     const userId = session.user.id;
     const apiUrl = siteConfig.getApiUrl('create-checkout-session');
     
     setDebug(`Using API URL: ${apiUrl}`);
-    console.log(`Calling API at: ${apiUrl} with userId: ${userId}`);
+    console.log(`[Payment] Calling API at: ${apiUrl} with userId: ${userId}`);
 
     try {
       // 1. Call backend API to create a checkout session
@@ -47,14 +57,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
 
       // Get response text first to debug
       const responseText = await response.text();
-      console.log('Raw API response:', responseText);
+      console.log('[Payment] Raw API response:', responseText);
       
       // Try to parse as JSON if possible
       let responseData;
       try {
         responseData = JSON.parse(responseText);
       } catch (parseError) {
-        console.error('Failed to parse response as JSON:', parseError);
+        console.error('[Payment] Failed to parse response as JSON:', parseError);
         setDebug(`API returned non-JSON response: ${responseText.substring(0, 150)}...`);
         throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 100)}`);
       }
@@ -70,6 +80,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
       }
 
       // 2. Redirect to Stripe Checkout
+      console.log('[Payment] Redirecting to Stripe checkout...');
       const stripe = await stripePromise;
       if (!stripe) {
         throw new Error('Stripe.js failed to load. Check configuration.');
@@ -82,8 +93,10 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
         setError(`Payment Error: ${stripeError.message}`);
       }
     } catch (err: any) {
-      console.error('Checkout error:', err);
+      console.error('[Payment] Checkout error:', err);
       setError(err.message || 'An unexpected error occurred during checkout.');
+      // Reset the checkout flag so the user can try again
+      checkoutInitiatedRef.current = false;
     } finally {
       setLoading(false);
     }

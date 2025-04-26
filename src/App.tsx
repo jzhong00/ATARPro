@@ -21,11 +21,27 @@ import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
 import { StripeProvider } from './contexts/StripeContext';
 
+// Initialize Stripe once at app startup, outside of any component
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-if (!stripePublishableKey) {
-  console.error('Stripe Publishable Key is missing. Check your .env file and ensure it starts with VITE_');
-}
-const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : Promise.resolve(null);
+let stripePromiseInstance: ReturnType<typeof loadStripe> | null = null;
+
+// This function ensures we only create a single Stripe instance
+const getStripePromise = (): ReturnType<typeof loadStripe> => {
+  if (!stripePromiseInstance) {
+    console.log('Creating Stripe instance for the first time');
+    if (!stripePublishableKey) {
+      console.error('Stripe Publishable Key is missing. Check your .env file');
+      stripePromiseInstance = Promise.resolve(null);
+    } else {
+      // Create the Stripe promise only once
+      stripePromiseInstance = loadStripe(stripePublishableKey);
+    }
+  }
+  return stripePromiseInstance;
+};
+
+// Use this global stripe promise throughout the app
+const stripePromise = getStripePromise();
 
 const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>) => {
   if (!user) {
