@@ -19,9 +19,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
   const { stripePromise } = useStripe();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [debug, setDebug] = useState<string | null>(null);
 
   const handleCheckout = async () => {
     setError(null);
+    setDebug(null);
     setLoading(true);
 
     if (!session?.user) {
@@ -30,16 +32,33 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
       return;
     }
     const userId = session.user.id;
+    const apiUrl = siteConfig.getApiUrl('create-checkout-session');
+    
+    setDebug(`Using API URL: ${apiUrl}`);
+    console.log(`Calling API at: ${apiUrl} with userId: ${userId}`);
 
     try {
       // 1. Call backend API to create a checkout session
-      const response = await fetch(siteConfig.getApiUrl('create-checkout-session'), {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: userId }), // Send the logged-in user's ID
       });
 
-      const responseData = await response.json();
+      // Get response text first to debug
+      const responseText = await response.text();
+      console.log('Raw API response:', responseText);
+      
+      // Try to parse as JSON if possible
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse response as JSON:', parseError);
+        setDebug(`API returned non-JSON response: ${responseText.substring(0, 150)}...`);
+        throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 100)}`);
+      }
+      
       const { sessionId, error: apiError } = responseData;
 
       if (!response.ok) {
@@ -63,6 +82,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
         setError(`Payment Error: ${stripeError.message}`);
       }
     } catch (err: any) {
+      console.error('Checkout error:', err);
       setError(err.message || 'An unexpected error occurred during checkout.');
     } finally {
       setLoading(false);
@@ -89,6 +109,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
       {error && (
         <p className="text-red-600 mt-3 text-sm bg-red-100 p-2 rounded border border-red-300">
           <span className="font-semibold">Error:</span> {error}
+        </p>
+      )}
+      {debug && (
+        <p className="text-gray-600 mt-3 text-xs bg-gray-100 p-2 rounded border border-gray-300 overflow-auto max-h-40">
+          <span className="font-semibold">Debug:</span> {debug}
         </p>
       )}
     </div>

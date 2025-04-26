@@ -20,6 +20,7 @@ import PaymentSuccess from './components/Billing/PaymentSuccess';
 import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
 import { StripeProvider } from './contexts/StripeContext';
+import APITest from './components/APITest';
 
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 if (!stripePublishableKey) {

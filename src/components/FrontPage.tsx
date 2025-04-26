@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import APITest from './APITest';
 
 const FrontPage = () => {
   const navigate = useNavigate();
@@ -45,6 +46,13 @@ const FrontPage = () => {
           </div>
         ))}
       </div>
+
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">Development Tools</h2>
+          <APITest />
+        </div>
+      )}
     </div>
   );
 };
