@@ -30,7 +30,6 @@ export async function loadScalingGraphData(): Promise<ScalingRow[]> {
   }
 
   try {
-    console.log('Fetching scaling graph data from CSV...');
     const response = await fetch('/data/Scaling_graph_data.csv');
     
     if (!response.ok) {
@@ -38,11 +37,9 @@ export async function loadScalingGraphData(): Promise<ScalingRow[]> {
     }
     
     const text = await response.text();
-    console.log('CSV data received, length:', text.length);
     
     // Parse the CSV manually
     const lines = text.split('\n').filter(line => line.trim());
-    console.log(`Found ${lines.length} lines in CSV`);
     
     if (lines.length < 2) {
       throw new Error('CSV file has no data rows');
@@ -50,9 +47,6 @@ export async function loadScalingGraphData(): Promise<ScalingRow[]> {
     
     const headerLine = lines[0];
     const headers = headerLine.split(',').map(h => h.trim());
-    
-    console.log('Headers:', headers);
-    console.log('Available column header:', headers[2]);
     
     // Process each data row
     cachedData = [];
@@ -90,14 +84,7 @@ export async function loadScalingGraphData(): Promise<ScalingRow[]> {
       
       cachedData.push(rowData);
     }
-    
-    console.log(`Processed ${cachedData.length} valid data rows`);
-    
-    if (cachedData.length > 0) {
-      console.log('First subject:', cachedData[0].Subject);
-      // console.log('First row sample:', cachedData[0]); // Keep console cleaner
-    }
-    
+        
     return cachedData;
   } catch (error) {
     console.error('Error loading scaling data:', error);
@@ -169,9 +156,7 @@ export async function getUniqueSubjects(data?: ScalingRow[]): Promise<string[]> 
   });
 
   const sortedSubjects = Array.from(subjectsWithData).sort();
-  
-  console.log('Unique subjects with available data found:', sortedSubjects.length);
-  
+    
   return sortedSubjects;
 }
 

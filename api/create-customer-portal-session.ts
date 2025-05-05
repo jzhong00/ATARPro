@@ -74,8 +74,6 @@ export default async function handler(
     const customerId = user.stripe_customer_id;
     const returnUrl = `${siteUrl}/app`; // Redirect user here after portal session
 
-    console.log(`Creating Stripe Customer Portal session for user: ${userId}, customer: ${customerId}`);
-
     // Create a Stripe Billing Portal Session
     const portalSession = await stripe.billingPortal.sessions.create({
         customer: customerId,
@@ -83,7 +81,6 @@ export default async function handler(
     });
 
     // Return the session URL to the frontend
-    console.log(`Stripe Portal session created: ${portalSession.id} for user: ${userId}`);
     res.status(200).json({ url: portalSession.url });
 
   } catch (error: any) {

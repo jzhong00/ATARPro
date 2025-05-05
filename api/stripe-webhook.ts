@@ -72,7 +72,6 @@ export default async function handler(
 
     // Verify the event signature using the raw body and the webhook secret
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret!);
-    console.log('✅ Webhook signature verified.');
 
   } catch (err: any) {
     // Signature verification failed
@@ -81,9 +80,6 @@ export default async function handler(
   }
 
   // --- Handle Specific Stripe Events ---
-
-  // Successfully handle the event
-  console.log(`Received event: ${event.type}`);
 
   // Focus on the event indicating a completed checkout session
   if (event.type === 'checkout.session.completed') {
@@ -100,11 +96,9 @@ export default async function handler(
     }
 
     if (userId) {
-      console.log(`✅ Payment successful for User ID: ${userId}. Attempting profile update...`);
-
-      // --- Include customerId in update payload ---
-      const updatePayload: { is_subscribed: boolean; stripe_customer_id?: string } = {
-          is_subscribed: true
+      // --- Include customerId and expires_at in update payload ---
+      const updatePayload: {stripe_customer_id?: string; expires_at?: string } = {
+          expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString() // 1 year from today
       };
       if (customerId) {
           updatePayload.stripe_customer_id = customerId;
@@ -114,16 +108,14 @@ export default async function handler(
         // Update the user's profile in Supabase
         const { data, error } = await supabaseAdmin
           .from('users')
-          .update(updatePayload) // Use the payload with is_subscribed and potentially stripe_customer_id
+          .update(updatePayload) // Use the payload with stripe_customer_id, and expires_at
           .eq('id', userId)
-          .select('id, is_subscribed, stripe_customer_id') // Select the updated fields
+          .select('id, stripe_customer_id, expires_at') // Select the updated fields
           .single();
 
         if (error) {
           console.error(`❌ DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
-        } else {
-          console.log(`✅ DB Success: Successfully updated profile for user ${userId}. Profile data:`, data);
-        }
+        } 
       } catch (updateError) {
         console.error(`❌ Exception during profile update for user ${userId}:`, updateError);
       }

@@ -26,7 +26,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        Loading Application...
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
       </div>
     );
   }
@@ -38,7 +40,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
 
   // If the user profile isn't loaded or the user doesn't have an active subscription,
   // show the payment prompt component instead of the intended route.
-  if (!userProfile || !userProfile.is_subscribed) {
+  if (!userProfile || !userProfile.subscription_expiry || new Date(userProfile.subscription_expiry) < new Date()) {
     return <PaymentPrompt session={session} stripePromise={stripePromise} />;
   }
 

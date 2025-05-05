@@ -23,12 +23,10 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
   };
 
   return (
-    <div className="bg-white text-gray-800 font-sans antialiased">
-      {/* Remove Header component usage - It's now handled by PublicLayout */}
-      {/* <Header session={session} showNavLinks={false} /> */}
+    <div className="">
 
       {/* Hero Section */}
-      <section className="py-16 md:py-24 px-6 sm:px-10 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-16 md:py-24 px-6 sm:px-10 bg-gradient-to-br from-blue-50 to-blue-200">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 md:pr-12">
@@ -39,7 +37,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 Fast, data-driven ATAR prediction tool specifically designed for Queensland's unique education system.
               </p>
               <p className="text-sm text-gray-500 mb-8">
-                Or, try our simplified <Link to="/guest-calculator" className="text-blue-600 hover:text-blue-800 hover:underline font-medium">Free ATAR Calculator</Link> instantly.
+                Or, try our simplified <Link to="/guest-calculator" className="text-blue-700 hover:text-blue-800 hover:underline font-medium">Free ATAR Calculator</Link> instantly.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a href="#learn-more" className="bg-white border border-blue-200 hover:bg-gray-50 text-blue-600 text-center font-medium py-3 px-8 rounded-lg transition-colors duration-300">
@@ -48,7 +46,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
               </div>
             </div>
             <div className="md:w-1/2 mt-12 md:mt-0">
-              <div className="bg-white rounded-lg shadow-md p-2 border border-gray-200">
+              <div className="bg-white rounded-lg shadow-md p-2 py-4 border border-gray-200">
                 <img 
                   src="/images/Single_Student_Screenshot.avif" 
                   alt="ATAR Calculator Interface" 
@@ -71,11 +69,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/Single_Student_Screenshot.avif" 
                   alt="Single Student Calculator" 
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/Single_Student_Screenshot.avif')}
                 />
               </div>
@@ -89,11 +87,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/CohortCalculator1.avif" 
                   alt="Cohort Calculator" 
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/CohortCalculator1.avif')}
                 />
               </div>
@@ -107,11 +105,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/SetPlanningCalculator.avif" 
                   alt="SET Planning Calculator" 
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/SetPlanningCalculator.avif')}
                 />
               </div>
@@ -125,11 +123,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/ScalingGraphs.avif" 
                   alt="Scaling Graphs" 
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/ScalingGraphs.avif')}
                 />
               </div>
@@ -143,11 +141,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/EquivalentSubjectCalculator.avif" 
                   alt="Equivalent Subject Calculator"
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/EquivalentSubjectCalculator.avif')}
                 />
               </div>
@@ -161,11 +159,11 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
             <div 
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden"
             >
-              <div className="p-2 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
+              <div className="p-2 py-4 bg-blue-50 border-b border-blue-100 h-60 flex items-center justify-center">
                 <img 
                   src="/images/Printout_example.avif" 
                   alt="PDF Export Example"
-                  className="rounded-md w-full h-full object-contain cursor-pointer"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg"
                   onClick={() => openLightbox('/images/Printout_example.avif')}
                 />
               </div>
@@ -209,7 +207,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
           <h2 className="text-3xl font-bold text-blue-800 mb-6">How It Works</h2>
           <p className="text-gray-600 mb-8">Watch this 1-minute explainer to see how ATAR Predictions QLD can help you plan your academic journey.</p>
           
-          <div className="bg-white rounded-lg shadow-md p-2 border border-gray-200">
+          <div className="bg-white rounded-lg shadow-md p-2 py-4 mb-10 border border-gray-200">
             <div className="w-full h-0 pb-[56.25%] relative bg-gray-50 rounded-md flex items-center justify-center">
               {/* Placeholder for video - in production, replace with actual video embed */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -225,7 +223,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 px-6 sm:px-10 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+      <section className="py-16 px-6 sm:px-10 bg-gradient-to-br from-blue-600 to-blue-700 text-white">
         <div className="container mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Calculate Your ATAR?</h2>
           <p className="text-blue-100 mb-8">Get accurate ATAR calculations for your entire cohort instantly.</p>
@@ -239,9 +237,9 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
       </section>
 
       {/* Footer - kept minimal */}
-      <footer className="py-8 px-6 sm:px-10 bg-gray-50 border-t border-gray-200">
+      <footer className="py-8 px-6 sm:px-10 bg-blue-800 border-t border-blue-700">
         <div className="container mx-auto">
-          <p className="text-sm text-center text-gray-500">© {new Date().getFullYear()} ATAR Predictions QLD</p>
+          <p className="text-sm text-center text-white">© {new Date().getFullYear()} ATAR Predictions QLD</p>
         </div>
       </footer>
     </div>

@@ -56,7 +56,6 @@ export const useExportModals = ({ onExecuteExport }: UseExportModalsProps) => {
   const handleCancelExport = useCallback(() => {
     setIsConfirmModalOpen(false); // Close the confirmation modal
     setPendingExportRangeMode(null); // Clear the pending choice
-    console.log("Cohort export cancelled by user at final confirmation.");
   }, []);
 
   return {

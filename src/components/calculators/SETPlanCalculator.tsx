@@ -187,16 +187,11 @@ const SETPlanCalculator = () => {
     if (isPrinting) return;
 
     setIsPrinting(true);
-    // console.log("Print process started via component..."); // Removed
 
     try {
       const pdfStudentName = '';
       const explanatoryText = "Imagine a class of 100 students from across QLD who have selected the same subject.\nWhere would you place yourself?";
       const imagePath = "/images/single_student_mock_up.avif";
-
-      // --- DEBUGGING REMOVED ---
-      // console.log('Debug PDF Data - Raw Values:', { atarRange, atar, lowerTeScore, upperTeScore, teScore }); 
-      // --- END DEBUGGING REMOVED ---
 
       // Consolidate data for the export service
       const pdfData: SetPlanPdfData = {

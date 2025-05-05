@@ -157,7 +157,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
       </div>
       <button
         onClick={onAddRow}
-        className="text-sm xl:text-base text-blue-600 hover:text-blue-800 self-start"
+        className="text-sm xl:text-base text-blue-600 hover:text-blue-800 self-start pt-4"
       >
         + Click to add extra subject
       </button>

@@ -317,7 +317,13 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
   }
 
   if (!isScalingDataLoaded) {
-    return <div>Loading scaling data...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -406,7 +412,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row gap-2 xl:gap-4">
+        <div className="flex flex-col lg:flex-row py-10 gap-2 xl:gap-4">
           <div className="lg:w-3/5 flex flex-col gap-2 xl:gap-4">
             <div className="bg-white rounded-lg shadow-sm p-2 xl:p-4 border border-gray-200 flex flex-col flex-1">
               {/* Conditionally render the Range Mode controls section */} 

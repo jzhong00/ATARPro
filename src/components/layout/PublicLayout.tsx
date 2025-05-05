@@ -14,7 +14,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ session, hideHeaderAuthButt
     <div className="flex flex-col min-h-screen">
       {/* Use the common Header, pass down the prop */}
       <Header session={session} showNavLinks={false} hideAuthButtons={hideHeaderAuthButtons} /> 
-      <main className="flex-grow container mx-auto px-4 py-4"> {/* Added basic main styling */}
+      <main className="w-full"> {/* Added basic main styling */}
         <Outlet /> {/* Renders the matched child route component (LandingPage or Guest Calculator) */}
       </main>
       {/* <Footer /> */} {/* Optional: Add a common public footer */}

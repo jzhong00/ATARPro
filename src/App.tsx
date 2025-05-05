@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import FrontPage from './components/FrontPage';
 import SingleStudentCalculator from './components/calculators/SingleStudentCalculator';
 import CohortCalculator from './components/calculators/CohortCalculator';
@@ -19,10 +18,14 @@ import PaymentSuccess from './components/Billing/PaymentSuccess';
 import PaymentCancel from './components/Billing/PaymentCancel';
 import { UserProfile } from './types';
 
+
+import { loadStripe } from '@stripe/stripe-js';
+
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 if (!stripePublishableKey) {
   console.error('Stripe Publishable Key is missing. Check your .env file and ensure it starts with VITE_');
 }
+
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : Promise.resolve(null);
 
 const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>) => {
@@ -34,7 +37,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
   try {
     const { data, error, status } = await supabase
       .from('users')
-      .select(`id, is_subscribed`)
+      .select(`id, subscription_expiry`)
       .eq('id', user.id)
       .single();
 
@@ -137,23 +140,14 @@ const AppRoutes = () => {
   // Loading state for the entire app
   if (isLoadingApp) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center text-xl">
-        Loading application data...
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
       </div>
     );
   }
 
-  // Stripe key check (can remain here as it's a prerequisite)
-  if (!stripePublishableKey) {
-    return (
-      <div className="min-h-screen bg-red-100 flex flex-col items-center justify-center text-red-800 p-4">
-        <h1 className="text-2xl font-bold mb-4">Configuration Error</h1>
-        <p>The Stripe Publishable Key is missing.</p>
-        <p>Please ensure VITE_STRIPE_PUBLISHABLE_KEY is set correctly in your .env file.</p>
-        <p className="mt-2 text-sm">The application cannot proceed with payment features.</p>
-      </div>
-    );
-  }
 
   // Render the actual routes
   return (

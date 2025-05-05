@@ -37,8 +37,6 @@ export const useSetPlanSubjects = () => {
         // Skip the header row
         const setPlanSubjectNames = lines.slice(1);
         
-        console.log('Extracted SET Plan subject names:', setPlanSubjectNames);
-
         // Filter allSubjects to only include subjects in the SET Plan list
         const filteredSubjects = allSubjects.filter(subject => 
           setPlanSubjectNames.some(name => 
@@ -52,7 +50,6 @@ export const useSetPlanSubjects = () => {
         setSetPlanSubjects(filteredSubjects);
         setSetPlanLoadingError(null);
 
-        console.log(`Loaded ${filteredSubjects.length} SET Plan subjects`);
       } catch (error) {
         console.error("Failed to load SET Plan subjects:", error);
         setSetPlanLoadingError(error instanceof Error ? error.message : "An error occurred loading SET Plan subjects.");

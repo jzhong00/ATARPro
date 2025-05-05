@@ -40,8 +40,6 @@ export default async function handler(
     const successUrl = `${siteUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${siteUrl}/payment-cancel`;
 
-    console.log(`Creating Stripe session for user: ${userId} with price: ${priceId}`);
-
     // Create a Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -58,7 +56,6 @@ export default async function handler(
     });
 
     // Return the session ID to the frontend
-    console.log(`Stripe session created: ${session.id}`);
     res.status(200).json({ sessionId: session.id });
 
   } catch (error: any) {

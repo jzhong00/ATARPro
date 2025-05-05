@@ -37,7 +37,6 @@ const ScalingGraphs = () => {
         try {
           // Decode and parse the JSON array of subject names
           const selectedSubjects = JSON.parse(decodeURIComponent(subjectsParam)) as string[];
-          // console.log('Received subjects from URL:', selectedSubjects); // Removed log
           
           // Check if we have subjects from URL and necessary data is loaded
           if (selectedSubjects.length > 0 && data.length > 0) {
@@ -53,7 +52,6 @@ const ScalingGraphs = () => {
             
             // Add the new selections if any are valid
             if (newSelections.length > 0) {
-              // console.log('Adding selections from URL:', newSelections); // Removed log
               setSelections(prev => {
                   // Prevent adding duplicates
                   const currentSelections = new Set(prev.map(s => `${s.subject}-${s.year}`));
@@ -80,10 +78,7 @@ const ScalingGraphs = () => {
     const loadInitialData = async () => {
       setIsLoading(true);
       try {
-        // console.log('Starting initial data loading process...'); // Removed log
-        // Fetch the raw scaling data rows
         const loadedData = await loadScalingGraphData();
-        // console.log('Initial data loaded, rows:', loadedData.length); // Removed log
         
         if (loadedData.length === 0) {
           throw new Error('No scaling data was loaded from source');
@@ -92,7 +87,6 @@ const ScalingGraphs = () => {
         
         // Extract unique subject names from the loaded data
         const loadedSubjects = await getUniqueSubjects(loadedData);
-        // console.log('Available subjects loaded:', loadedSubjects.length); // Removed log
         
         if (loadedSubjects.length === 0) {
           throw new Error('No subjects with available data were found');

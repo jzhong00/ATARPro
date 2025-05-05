@@ -67,23 +67,6 @@ export const ScaledScoreChart: React.FC<InternalChartProps> = ({
   skipMiddleValue = false 
 }) => {
 
-  // --- DEBUG LOGGING REMOVED ---
-  // useEffect(() => {
-  //   console.log("ScaledScoreChart Mounted");
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("ScaledScoreChart Props Updated:", 
-  //     { 
-  //       dataLength: chartData?.length,
-  //       rangeMode: rangeMode, 
-  //       xAxisMin: xAxisMin, 
-  //       xAxisMax: xAxisMax,
-  //       skipMiddleValue: skipMiddleValue
-  //     }
-  //   );
-  // }, [chartData, rangeMode, xAxisMin, xAxisMax, skipMiddleValue]);
-  // --- END DEBUG LOGGING REMOVED ---
 
   // Generate ticks for the X-axis based on xAxisMin and xAxisMax
   const xAxisTicks = React.useMemo(() => {
