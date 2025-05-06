@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 // ATAR Calculator – Greenfield architecture: follow utils/services/components separation and avoid legacy patterns.
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, lazy } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../store';
 
@@ -20,14 +20,14 @@ import { useTeAtarCalculator } from '../../hooks/useTeAtarCalculator';
 import { useSubjectMappingLoader } from '../../hooks/useSubjectMappingLoader';
 
 // UI Components
-import { ScaledScoreChart } from './ScaledScoreChart';
-import ScaledScoreChartContainer from './ScaledScoreChartContainer';
-import ConfirmationModal from '../common/ConfirmationModal';
-import ActionButtonsBar from './panels/ActionButtonsBar';
+const ScaledScoreChart = lazy(() => import('./ScaledScoreChart'));
+const ScaledScoreChartContainer = lazy(() => import('./ScaledScoreChartContainer'));
+const ConfirmationModal = lazy(() => import('../common/ConfirmationModal'));
+const ActionButtonsBar = lazy(() => import('./panels/ActionButtonsBar'));
 // import ControlsPanel from './panels/ControlsPanel'; // Removed unused ControlsPanel
-import SubjectTable from './panels/SubjectTable';
+const SubjectTable = lazy(() => import('./panels/SubjectTable'));
 // import ResultsPanel from './panels/ResultsPanel'; // Removed unused ResultsPanel
-import ProgressDisplay from '../common/ProgressDisplay';
+const ProgressDisplay = lazy(() => import('../common/ProgressDisplay'));
 
 /**
  * Single Student Calculator component
@@ -327,7 +327,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="pt-5 pb-10">
       <div className="container mx-auto p-2 xl:p-4">
         {exportProgressMessage && (
           <>
@@ -412,7 +412,7 @@ const SingleStudentCalculator = ({ isGuestMode = false }: { isGuestMode?: boolea
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row py-10 gap-2 xl:gap-4">
+        <div className="flex flex-col lg:flex-row pt-1 pb-10 gap-2 xl:gap-4">
           <div className="lg:w-3/5 flex flex-col gap-2 xl:gap-4">
             <div className="bg-white rounded-lg shadow-sm p-2 xl:p-4 border border-gray-200 flex flex-col flex-1">
               {/* Conditionally render the Range Mode controls section */} 

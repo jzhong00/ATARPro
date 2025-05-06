@@ -48,52 +48,53 @@ const AuthPage = () => {
         </button>
       </div>
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-            {(() => {
-              const [authView, setAuthView] = React.useState('Sign In');
+        {(() => {
+          const [authView, setAuthView] = React.useState('Sign In');
 
-              React.useEffect(() => {
-              const interval = setInterval(() => {
-                const signInElement = document.getElementById('auth-sign-in');
-                const signUpElement = document.getElementById('auth-sign-up');
+          React.useEffect(() => {
+          const interval = setInterval(() => {
+            const signInElement = document.getElementById('auth-sign-in');
+            const signUpElement = document.getElementById('auth-sign-up');
 
-                if (signInElement) {
-                setAuthView('Sign In');
-                } else if (signUpElement) {
-                setAuthView('Sign Up');
-                } else {
-                setAuthView('Forgot Password');
-                }
-              }, 100);
+            if (signInElement) {
+            setAuthView('Sign In');
+            } else if (signUpElement) {
+            setAuthView('Sign Up');
+            } else {
+            setAuthView('Forgot Password');
+            }
+          }, 100);
 
-              return () => clearInterval(interval); // Cleanup interval on unmount
-              }, []);
+          return () => clearInterval(interval); // Cleanup interval on unmount
+          }, []);
 
-              return authView;
-            })()}
+          return authView;
+        })()}
         </h2>
         <Auth
           supabaseClient={supabase}
           appearance={{
-            theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: '#1C4ED8',          // Primary color
-                  brandAccent: '#1C4ED8',    // Hover/active color
-                  inputBorder: '#e5e7eb',    // Tailwind gray-200
-                  inputText: '#1f2937',      // Tailwind gray-800
-                  messageText: '#dc2626',    // Error message red
-                  anchorTextColor: '#555' // Link color
-                },
-                radii: {
-                  borderRadiusButton: '0.5rem',  // Rounded buttons (e.g., Tailwind rounded-md/lg)
-                  inputBorderRadius: '0.5rem'
-                },
-                fonts: {
-                  bodyFontFamily: 'Inter, sans-serif'
-                }
-              }
+        theme: ThemeSupa,
+        variables: {
+          default: {
+            colors: {
+          brand: '#1C4ED8',          // Primary color
+          brandAccent: '#1C4ED8',    // Hover/active color
+          inputBorder: '#e5e7eb',    // Tailwind gray-200
+          inputText: '#1f2937',      // Tailwind gray-800
+          messageTextDanger: '#dc2626', // Error message text color
+          messageBorderDanger: '#f87171', // Error message border color (Tailwind red-400)
+          anchorTextColor: '#555' // Link color
+            },
+            radii: {
+          borderRadiusButton: '0.5rem',  // Rounded buttons (e.g., Tailwind rounded-md/lg)
+          inputBorderRadius: '0.5rem'
+            },
+            fonts: {
+          bodyFontFamily: 'Inter, sans-serif'
             }
+          }
+        }
           }}
           view={initialView}
           providers={[]}

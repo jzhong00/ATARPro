@@ -16,10 +16,12 @@ import { useTeAtarCalculator } from '../../hooks/useTeAtarCalculator';
 import { useSetPlanSubjects } from '../../hooks/useSetPlanSubjects';
 import { useSetPlanData } from '../../hooks/useSetPlanData';
 
-// UI Components
-import ScaledScoreChartContainer from './ScaledScoreChartContainer';
-import SETPlanSubjectTable from './panels/SETPlanSubjectTable';
-import ActionButtonsBar from './panels/ActionButtonsBar';
+// UI Components (lazy-loaded)
+import { lazy } from 'react';
+
+const ScaledScoreChartContainer = lazy(() => import('./ScaledScoreChartContainer'));
+const SETPlanSubjectTable = lazy(() => import('./panels/SETPlanSubjectTable'));
+const ActionButtonsBar = lazy(() => import('./panels/ActionButtonsBar'));
 
 /**
  * SET Plan Calculator component
@@ -238,7 +240,7 @@ const SETPlanCalculator = () => {
   }, [subjectRows]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="pt-5 pb-10">
       <div className="container mx-auto p-4">
         {loadingError && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -294,7 +296,7 @@ const SETPlanCalculator = () => {
 
           <div className="lg:w-2/5 flex flex-col gap-4">
             {(teScore !== null || atar !== null) && (
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+              <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">TE Range:</span>
@@ -329,7 +331,7 @@ const SETPlanCalculator = () => {
               </div>
             )}
             
-            <div className="bg-white rounded-lg shadow-sm p-2 border border-gray-200">
+            <div className="bg-white rounded-lg shadow-sm p-1.5 xl:p-3 border border-gray-200 flex flex-col flex-1">
               <ScaledScoreChartContainer
                 subjectRows={subjectRows}
                 rangeMode={true}

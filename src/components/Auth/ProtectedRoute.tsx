@@ -3,13 +3,11 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { Session } from '@supabase/supabase-js';
 import PaymentPrompt from '../Billing/PaymentPrompt';
 import { UserProfile } from '../../types';
-import type { Stripe } from '@stripe/stripe-js';
 
 interface ProtectedRouteProps {
   session: Session | null;
   userProfile: UserProfile | null;
   isLoading: boolean; // Indicates if session/profile data is still loading
-  stripePromise: Promise<Stripe | null>;
 }
 
 /**
@@ -20,10 +18,12 @@ interface ProtectedRouteProps {
  * - If session exists but user is not subscribed, shows the payment prompt.
  * - If session exists and user is subscribed, renders the child routes (Outlet).
  */
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, isLoading, stripePromise }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, isLoading }) => {
+
+  const isProfileLoading = session && userProfile === null;
 
   // Show loading indicator while session/profile data is being fetched
-  if (isLoading) {
+  if (isLoading || isProfileLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex flex-col items-center">
@@ -38,10 +38,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
     return <Navigate to="/auth" replace />;
   }
 
-  // If the user profile isn't loaded or the user doesn't have an active subscription,
-  // show the payment prompt component instead of the intended route.
-  if (!userProfile || !userProfile.subscription_expiry || new Date(userProfile.subscription_expiry) < new Date()) {
-    return <PaymentPrompt session={session} stripePromise={stripePromise} />;
+  const isSubscriptionExpired = !userProfile?.expires_at || new Date(userProfile.expires_at) < new Date();
+
+  if (isSubscriptionExpired) {
+    return <PaymentPrompt session={session} />;
   }
 
   // If session exists and user is subscribed, render the intended child route

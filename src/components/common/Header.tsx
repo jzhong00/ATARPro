@@ -4,6 +4,7 @@ import { supabase } from '../../services/supabaseClient'; // Import Supabase cli
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import { UserProfile } from '../../types'; // Import UserProfile type
 import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
+import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 // Define props type for Header
 interface HeaderProps {
@@ -38,14 +39,6 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDropdownOpen]);
-
-  const handleLogout = async () => {
-    setIsDropdownOpen(false); // Close dropdown on action
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Error logging out:', error);
-    } 
-  };
 
   const handleManageSubscription = async () => {
     if (!session?.user?.id) {
@@ -88,6 +81,15 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
     }
   };
 
+  const handleLogout = async () => {    
+        localStorage.clear();
+        window.location.reload();
+        const { error } = await supabase.auth.signOut().catch((err) => {
+          console.error('SignOut failed unexpectedly:', err);
+          return { error: err };
+        });
+    }
+
   const calculatorItems = [
     { path: '/student', label: 'Single Student Calculator' },
     { path: '/cohort', label: 'Cohort Calculator' },
@@ -117,55 +119,6 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
               ATAR <span className="text-blue-700">Predictions</span> <span className="text-blue-800">QLD</span>
             </NavLink>
 
-          {/* Main Navigation Links - Conditionally Rendered */}
-          {showNavLinks && (
-            <nav className="hidden md:flex space-x-4 items-center">
-              {/* Dropdown Menu for Calculators */}
-              <div className="relative group">
-                <button className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center gap-1">
-                  <i className="fa-solid fa-calculator"></i> Calculators
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
-                  </svg>
-                </button>
-
-                {/* Dropdown */}
-                <div className="absolute z-20 mt-2 w-64 rounded-md shadow-lg bg-white border border-gray-200 hidden group-hover:block">
-                  <div className="px-4 py-2 font-semibold text-sm text-gray-700 border-b border-gray-100">
-                    ATAR Calculators
-                  </div>
-                  <div className="py-1">
-                    {calculatorItems.map(item => (
-                      <NavLink
-                        key={item.path}
-                        to={item.path}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        {item.label}
-                      </NavLink>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Regular Nav Items */}
-              {otherNavItems.map(item => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-700'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'}`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-            </nav>
-          )}
-
           {/* Auth Buttons/User Info - Conditionally render the entire block */}
           {!hideAuthButtons && (
             <div className="flex items-center space-x-3">
@@ -177,57 +130,24 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
                      <Link to="/app" className={primaryButtonStyle}>
                        Go to App
                      </Link>
-                  )}
+                    )}
 
-                  {/* User Dropdown (only shown if nav links ARE visible, usually) */}
-                  {showNavLinks && (
-                    <div className="relative" ref={dropdownRef}> 
-                      {/* Email as dropdown trigger */}
-                      <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="text-sm text-gray-600 hover:text-gray-900 focus:outline-none flex items-center"
-                      >
-                        {session.user?.email}
-                        {/* Dropdown Arrow Icon */}
-                        <svg className={`ml-1 h-4 w-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-
-                      {/* Dropdown Menu */}
-                      {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200">
-                          {/* Manage Subscription Item */}
-                          {userProfile?.subscription_expiry && (
-                            <button
-                              onClick={handleManageSubscription}
-                              disabled={manageSubscriptionLoading}
-                              className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                            >
-                              {manageSubscriptionLoading ? 'Loading...' : 'Manage Subscription'}
-                            </button>
-                          )}
-                          {/* Logout Item */}
-                          <button
-                            onClick={handleLogout}
-                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            Logout
-                          </button>
-                          {/* Error Message */}
-                          {manageSubscriptionError && (
-                              <p className="px-4 py-2 text-xs text-red-600">Error: {manageSubscriptionError}</p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {/* If nav links are hidden (Landing Page), show Logout button directly */}
-                  {!showNavLinks && (
-                    <button onClick={handleLogout} className={secondaryButtonStyle}>
-                      Logout
+                    {/* Show two buttons: Manage Subscription and Logout */}
+                    {userProfile?.expires_at && (
+                    <button
+                      onClick={handleManageSubscription}
+                      disabled={manageSubscriptionLoading}
+                      className={secondaryButtonStyle}
+                    >
+                      Manage Subscription
                     </button>
-                  )}
+                    )}
+                  <button
+                  onClick={handleLogout}
+                  className={thirdButtonStyle}
+                  >
+                  Logout
+                  </button>
                 </>
               ) : (
                 // User is not logged in
@@ -250,8 +170,47 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
           )}
         </div>
       </div>
+      
+      {/* Secondary Header for Tabs */}
+      {showNavLinks && (
+        <div className="bg-white border-t border-b border-gray-200">
+          <div className="mx-auto max-w-[1250px] px-4 py-2 flex justify-center space-x-4">
+            {calculatorItems.map((item) => (
+              <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive
+              ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-700'
+              : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+              }`
+            }
+              >
+            {item.label}
+              </NavLink>
+            ))}
+            {otherNavItems.map((item) => (
+              <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive
+              ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-700'
+              : 'text-gray-700 hover:bg-gray-200 hover:text-gray-900'
+              }`
+            }
+              >
+            {item.label}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+        )}
     </header>
   );
 };
 
 export default Header; 
+

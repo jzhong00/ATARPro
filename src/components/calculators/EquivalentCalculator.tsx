@@ -42,9 +42,9 @@ const EquivalentCalculator = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-4">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <p className="text-gray-600">Loading subjects...</p>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         </div>
       </div>
     );
@@ -54,8 +54,8 @@ const EquivalentCalculator = () => {
   const hasSelectedSubjects = selectedSubject || comparisonSubjects.some(subject => subject);
 
   return (
-    <div className="bg-gray-50">
-      <div className="container mx-auto px-4 py-4">
+    <div className="pt-10">
+      <div className="">
         
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mb-4" role="alert">
@@ -63,7 +63,7 @@ const EquivalentCalculator = () => {
           </div>
         )}
         
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-sm p-6 border">
           {/* ==== Main Input Row ==== */}
           {/* Allows selection of the source score and subject */}
           <div className="bg-white border-b border-gray-200 pb-4 mb-4">

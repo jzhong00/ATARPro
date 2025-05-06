@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
-// import Papa from 'papaparse'; // Removed unused Papa
 import { useSubjectMappingLoader } from './useSubjectMappingLoader';
-// Removed unused subjectMappingService: import subjectMappingService from '../services/subjectMappingService';
 import type { SubjectMapping } from '../services/subjectMappingService';
-// Removed unused loadScalingData: import { loadScalingData } from '../utils/scaling';
 
 /**
  * Custom hook to load SET Plan specific subject list

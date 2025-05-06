@@ -67,7 +67,7 @@ const ResultVariationInput = () => {
           max="10"
           step="1"
           // Remove border/rounding from input, add bg-transparent and focus outline none
-          className={`w-full px-2 py-1 text-center text-sm bg-transparent focus:outline-none ${ 
+          className={`w-full px-2 text-center text-sm bg-transparent focus:outline-none ${ 
             validationError ? 'text-red-600' : 'text-gray-900' // Optionally change text color on error
           }`}
           value={inputValue}

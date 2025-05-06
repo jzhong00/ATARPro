@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import type { SubjectRow } from '../../../types/calculator';
 import type { ScalingResult } from '../../../utils/scaling';
-import SubjectInput from '../../common/SubjectInput';
 import type { SubjectMapping } from '../../../services/subjectMappingService';
+
+const SubjectInput = lazy(() => import('../../common/SubjectInput'));
 
 interface ScaledScoresMap {
   get: (id: string) => {
@@ -231,7 +232,7 @@ const SETPlanSubjectTable: React.FC<SETPlanSubjectTableProps> = ({
       </div>
       <button
         onClick={onAddRow}
-        className="text-sm text-blue-600 hover:text-blue-800 self-start"
+        className="text-sm text-blue-600 hover:text-blue-800 self-start pt-4"
       >
         + Click to add extra subject
       </button>

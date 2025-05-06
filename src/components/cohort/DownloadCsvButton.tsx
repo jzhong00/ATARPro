@@ -19,7 +19,7 @@ const DownloadCsvButton: React.FC = () => {
     <button
       onClick={handleDownload}
       disabled={isDisabled}
-      className={`px-4 py-2 bg-green-600 text-white text-sm font-medium rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${isDisabled
+      className={`px-4 py-2 bg-green-600 text-white rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ml-3 ${isDisabled
           ? 'opacity-50 cursor-not-allowed'
           : 'hover:bg-green-700'
         }`}

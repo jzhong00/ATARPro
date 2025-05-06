@@ -8,6 +8,21 @@ interface LandingPageProps {
   session: Session | null;
 }
 
+if (typeof window !== 'undefined') {
+  const hash = window.location.hash;
+  if (hash.startsWith('#error=')) {
+      const params = new URLSearchParams(hash.slice(1)); // Remove '#'
+      const errorCode = params.get('error_code');
+      const description = decodeURIComponent(params.get('error_description') || 'Unknown error').replace(/\+/g, ' ');
+
+      const formattedMessage = `${description}`;
+      console.error(`${formattedMessage}`);
+
+      // Clean up hash to avoid repeat logs on reload
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
   // const navigate = useNavigate(); // No longer needed here
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -50,7 +65,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/Single_Student_Screenshot.avif" 
                   alt="ATAR Calculator Interface" 
-                  className="rounded-md w-full cursor-pointer"
+                  className="rounded-md w-full cursor-pointer" loading="eager"
                   onClick={() => openLightbox('/images/Single_Student_Screenshot.avif')}
                 />
               </div>
@@ -73,7 +88,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/Single_Student_Screenshot.avif" 
                   alt="Single Student Calculator" 
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/Single_Student_Screenshot.avif')}
                 />
               </div>
@@ -91,7 +106,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/CohortCalculator1.avif" 
                   alt="Cohort Calculator" 
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/CohortCalculator1.avif')}
                 />
               </div>
@@ -109,7 +124,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/SetPlanningCalculator.avif" 
                   alt="SET Planning Calculator" 
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/SetPlanningCalculator.avif')}
                 />
               </div>
@@ -127,7 +142,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/ScalingGraphs.avif" 
                   alt="Scaling Graphs" 
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/ScalingGraphs.avif')}
                 />
               </div>
@@ -145,7 +160,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/EquivalentSubjectCalculator.avif" 
                   alt="Equivalent Subject Calculator"
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/EquivalentSubjectCalculator.avif')}
                 />
               </div>
@@ -163,7 +178,7 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
                 <img 
                   src="/images/Printout_example.avif" 
                   alt="PDF Export Example"
-                  className="w-full h-full object-contain cursor-pointer rounded-lg"
+                  className="w-full h-full object-contain cursor-pointer rounded-lg" loading="lazy"
                   onClick={() => openLightbox('/images/Printout_example.avif')}
                 />
               </div>
@@ -180,12 +195,12 @@ const LandingPage: React.FC<LandingPageProps> = (/*{ session }*/) => {
       {lightboxImage && (
         <div 
           className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-          onClick={closeLightbox}
+          onClick={() => closeLightbox()}
         >
           <div className="relative max-w-5xl max-h-[90vh] w-full">
             <button 
               className="absolute -top-12 right-0 text-white bg-blue-700 hover:bg-blue-800 rounded-full p-2"
-              onClick={closeLightbox}
+              onClick={() => closeLightbox()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

@@ -52,7 +52,7 @@ const SubjectSelectionTable = ({
     <div className="flex flex-col lg:flex-row gap-4">
       {/* Subject Selection Column */}
       {/* Use max-width instead of fixed width, allow shrinking */}
-      <div className="flex-none lg:max-w-lg bg-white rounded-xl shadow-md p-4 flex flex-col">
+      <div className="flex-none lg:max-w-lg bg-white rounded-xl py-3 flex flex-col">
         <button 
           className="self-start mb-2 px-2 py-1 text-sm text-white bg-red-600 border border-red-700 rounded hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           onClick={onClearAll} // Use passed handler
@@ -62,7 +62,7 @@ const SubjectSelectionTable = ({
         
         {/* Loading/Error states are handled by the parent, 
             so we assume subjects array is valid if this component renders */}
-        <div className="overflow-auto flex-1">
+        <div className="overflow-auto flex-1 pe-5">
           <div className="mb-2 text-sm text-gray-500">Found {subjects.length} subjects</div>
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 bg-white z-10">

@@ -1,19 +1,21 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, lazy, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { addSelectedStudent, removeSelectedStudent, clearData } from '../../store/slices/cohortSlice';
 import CohortTabs from '../cohort/CohortTabs';
-import UploadView from '../cohort/views/UploadView';
-import ResultsTableView from '../cohort/views/ResultsTableView';
-import RangedResultsView from '../cohort/views/RangedResultsView';
-import AtarsView from '../cohort/views/AtarsView';
-import RangedAtarsView from '../cohort/views/RangedAtarsView';
-import SchoolSummaryView from '../cohort/views/SchoolSummaryView';
 import subjectMappingService from '../../services/subjectMappingService';
-import ResultVariationInput from '../cohort/ResultVariationInput';
-import DownloadCsvButton from '../cohort/DownloadCsvButton';
 import { loadScalingData } from '../../utils/scaling';
+
+
+const UploadView = lazy(() => import('../cohort/views/UploadView'));
+const ResultsTableView = lazy(() => import('../cohort/views/ResultsTableView'));
+const RangedResultsView = lazy(() => import('../cohort/views/RangedResultsView'));
+const AtarsView = lazy(() => import('../cohort/views/AtarsView'));
+const RangedAtarsView = lazy(() => import('../cohort/views/RangedAtarsView'));
+const SchoolSummaryView = lazy(() => import('../cohort/views/SchoolSummaryView'));
+const ResultVariationInput = lazy(() => import('../cohort/ResultVariationInput'));
+const DownloadCsvButton = lazy(() => import('../cohort/DownloadCsvButton'));
 
 // Placeholder components for other views - Removed unused placeholders
 // const StudentRangedResultsView = () => <div>Student Ranged Results View</div>;
@@ -219,12 +221,12 @@ const CohortCalculator = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="pb-5">
       <div className="container mx-auto p-4">
         <CohortTabs />
 
         {(showSearchBar || showVariationInput || showDownloadButton || (!location.pathname.includes('/cohort/upload') && cohortData?.students && cohortData.students.length > 0)) && (
-          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-200 mb-3">
+          <div className="bg-white rounded-lg shadow-sm p-3 border border-gray-200 mb-3 px-5">
             <div className="flex flex-wrap justify-between items-center gap-4">
               {showSearchBar ? (
                 <div className="flex items-center flex-shrink-0">
@@ -249,7 +251,7 @@ const CohortCalculator = () => {
                           value={inputValue}
                           onChange={handleInputChange}
                           onKeyDown={handleKeyDown}
-                          className="flex-grow p-1 mb-1 bg-transparent focus:outline-none focus:ring-blue-500 focus:border-blue-500 min-w-52"
+                          className="flex-grow p-1 text-sm bg-transparent focus:outline-none focus:ring-blue-500 focus:border-blue-500 min-w-52"
                           autoComplete='off'
                       />
                     </div>
@@ -271,11 +273,10 @@ const CohortCalculator = () => {
                       </ul>
                     )}
                   </div>
-                  
-                  {selectedNames.length === 1 && (
+                 {selectedNames.length === 1 && (
                     <button
                       onClick={handleViewInSingleCalculator}
-                      className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-3"
+                      className="px-4 py-2 rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-3"
                       title="Open selected student in Single Student Calculator"
                     >
                       View in Single Calculator
@@ -293,7 +294,7 @@ const CohortCalculator = () => {
                   <button
                     onClick={handleExportPdfClick}
                     disabled={!cohortData?.students?.length}
-                    className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${
+                    className={`px-4 py-2 rounded-md shadow-sm text-sm font-medium text-white bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${
                       !cohortData?.students?.length
                         ? 'opacity-50 cursor-not-allowed'
                         : 'hover:bg-green-700'
