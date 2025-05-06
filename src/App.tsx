@@ -168,9 +168,23 @@ const AppRoutes = () => {
         </Route>
 
         {/* Other Public Routes (Auth, Payment - without PublicLayout) */}
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-cancel" element={<PaymentCancel />} />
+        <Route path="/auth" element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <AuthPage />
+          </Suspense>
+        } />
+
+        <Route path="/payment-success" element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <PaymentSuccess />
+          </Suspense>
+        } />
+
+        <Route path="/payment-cancel" element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <PaymentCancel />
+          </Suspense>
+        } />
         
         {/* Protected Routes */}
         <Route element={(
