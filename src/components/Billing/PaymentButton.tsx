@@ -77,7 +77,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
         {loading ? (
           <>
               <div className="flex flex-col items-center">
-                <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+                <div className="loader animate-spin rounded-full h-5 w-5 border-t-4 border-white border-solid"></div>
               </div>
           </>
         ) : 'Upgrade to Pro'}

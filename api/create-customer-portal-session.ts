@@ -20,14 +20,14 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 
 let stripeModule: typeof import('stripe') | null = null;
 
-export const getStripe = async () => {
+export const fetchStripe = async () => {
   if (!stripeModule) {
     stripeModule = await import('stripe');
   }
   return stripeModule.default; // default is the Stripe constructor
 };
 
-const Stripe = await getStripe();
+const Stripe = await fetchStripe();
 
 // Initialize Stripe client
 const stripe = new Stripe(stripeSecretKey, {

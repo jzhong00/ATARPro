@@ -26,14 +26,14 @@ import type StripeType from 'stripe'; // ✅ only for types
 
 let stripeModule: typeof import('stripe') | null = null;
 
-export const getStripe = async () => {
+export const fetchStripe = async () => {
   if (!stripeModule) {
     stripeModule = await import('stripe');
   }
-  return stripeModule.default; // runtime class
+  return stripeModule.default; // default is the Stripe constructor
 };
 
-const Stripe = await getStripe();
+const Stripe = await fetchStripe();
 
 // Initialize the Stripe client
 const stripe = new Stripe(stripeSecretKey, {
