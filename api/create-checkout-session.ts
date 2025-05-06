@@ -1,10 +1,17 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+// --- Vercel Configuration ---
+export const config = {
+  api: {
+    bodyParser: false, // Required for custom CORS + raw body handling
+  },
+};
+
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const priceId = process.env.STRIPE_PRICE_ID;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173'; // Default for local dev
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 if (!stripeSecretKey || !priceId) {
   console.error('Stripe secret key or price ID is missing from environment variables.');
@@ -32,10 +39,22 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  // CORS preflight handling
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
 
   try {
     // Extract userId from the request body sent by the frontend

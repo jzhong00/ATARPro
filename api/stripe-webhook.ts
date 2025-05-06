@@ -118,7 +118,7 @@ export default async function handler(
 
       try {
         // Update the user's profile in Supabase
-        const { data, error } = await supabaseAdmin
+        const { error } = await supabaseAdmin
           .from('users')
           .update(updatePayload) // Use the payload with stripe_customer_id, and expires_at
           .eq('id', userId)
@@ -126,19 +126,19 @@ export default async function handler(
           .single();
 
         if (error) {
-          console.error(`❌ DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
+          console.error(`DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
         } 
       } catch (updateError) {
-        console.error(`❌ Exception during profile update for user ${userId}:`, updateError);
+        console.error(`Exception during profile update for user ${userId}:`, updateError);
       }
 
     } else {
       // Handle case where userId is missing (shouldn't happen with client_reference_id set)
-      console.warn(`⚠️ Webhook Warning: Payment successful but no userId found in client_reference_id. Session ID: ${session.id}. Cannot update profile.`);
+      console.warn(`Webhook Warning: Payment successful but no userId found in client_reference_id. Session ID: ${session.id}. Cannot update profile.`);
     }
   } else {
     // Log other unhandled events
-    console.log(`🪵 Received unhandled event type: ${event.type}`);
+    console.log(`Received unhandled event type: ${event.type}`);
   }
 
   // --- Acknowledge Receipt ---

@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173'; // Default for local dev
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 // Basic validation for environment variables
 if (!stripeSecretKey) {
