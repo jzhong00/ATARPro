@@ -169,19 +169,19 @@ const AppRoutes = () => {
 
         {/* Other Public Routes (Auth, Payment - without PublicLayout) */}
         <Route path="/auth" element={
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             <AuthPage />
           </Suspense>
         } />
 
         <Route path="/payment-success" element={
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             <PaymentSuccess />
           </Suspense>
         } />
 
         <Route path="/payment-cancel" element={
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             <PaymentCancel />
           </Suspense>
         } />
