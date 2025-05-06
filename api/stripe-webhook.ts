@@ -22,6 +22,8 @@ if (!supabaseUrl || !supabaseServiceKey) {
   throw new Error('Server configuration error: Missing Supabase admin credentials.');
 }
 
+import type Stripe from 'stripe';
+
 let stripeModule: typeof import('stripe') | null = null;
 
 export const getStripe = async () => {
@@ -31,10 +33,10 @@ export const getStripe = async () => {
   return stripeModule.default; // default is the Stripe constructor
 };
 
-const Stripe = await getStripe();
+const StripeConstructor = await getStripe();
 
 // Initialize the Stripe client
-const stripe = new Stripe(stripeSecretKey, {
+const stripe = new StripeConstructor(stripeSecretKey, {
   apiVersion: '2025-03-31.basil', // Use the specific version expected by types
   typescript: true,
 });
