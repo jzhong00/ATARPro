@@ -17,7 +17,7 @@ const PaymentCancel: React.FC = () => (
       <div className="flex justify-center space-x-4">
         <Link
           to="/app" // Assuming /app is the main dashboard or relevant page
-          className="inline-block px-12 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-300"
+          className="inline-block px-12 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-300"
         >
           Return to App
         </Link>
