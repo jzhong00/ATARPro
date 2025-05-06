@@ -1,6 +1,5 @@
 // api/create-customer-portal-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripe } from '../utils/getStripe';
 import { createClient } from '@supabase/supabase-js';
 
 // Ensure required environment variables are loaded
@@ -18,6 +17,15 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
     console.error('Supabase URL or Service Role Key is missing from environment variables.');
     throw new Error('Server configuration error: Missing Supabase credentials.');
 }
+
+let stripeModule: typeof import('stripe') | null = null;
+
+export const getStripe = async () => {
+  if (!stripeModule) {
+    stripeModule = await import('stripe');
+  }
+  return stripeModule.default; // default is the Stripe constructor
+};
 
 const Stripe = await getStripe();
 

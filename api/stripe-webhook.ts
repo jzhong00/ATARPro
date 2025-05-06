@@ -1,6 +1,5 @@
 // api/stripe-webhook.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripe } from '../utils/getStripe';
 import { buffer } from 'micro'; // Helper to read the raw request body
 import { createClient } from '@supabase/supabase-js'; // <-- Import Supabase client creator
 
@@ -22,6 +21,15 @@ if (!supabaseUrl || !supabaseServiceKey) {
   console.error('🔴 Error: Missing Supabase URL or Service Role Key in .env');
   throw new Error('Server configuration error: Missing Supabase admin credentials.');
 }
+
+let stripeModule: typeof import('stripe') | null = null;
+
+export const getStripe = async () => {
+  if (!stripeModule) {
+    stripeModule = await import('stripe');
+  }
+  return stripeModule.default; // default is the Stripe constructor
+};
 
 const Stripe = await getStripe();
 

@@ -1,6 +1,5 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripe } from '../utils/getStripe';
 
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -11,6 +10,15 @@ if (!stripeSecretKey || !priceId) {
   console.error('Stripe secret key or price ID is missing from environment variables.');
   throw new Error('Server configuration error: Missing Stripe credentials.');
 }
+
+let stripeModule: typeof import('stripe') | null = null;
+
+export const getStripe = async () => {
+  if (!stripeModule) {
+    stripeModule = await import('stripe');
+  }
+  return stripeModule.default; // default is the Stripe constructor
+};
 
 const Stripe = await getStripe();
 
