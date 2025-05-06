@@ -18,7 +18,7 @@ const PaymentPrompt: React.FC<PaymentPromptProps> = ({ session }) => {
 
   const handleLogout = async () => {
     localStorage.clear();
-    const { error } = await supabase.auth.signOut().catch((err) => {
+    await supabase.auth.signOut().catch((err) => {
       console.error('SignOut failed unexpectedly:', err);
       return { error: err };
     });

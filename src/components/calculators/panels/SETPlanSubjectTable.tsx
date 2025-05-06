@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import type { SubjectRow } from '../../../types/calculator';
 import type { ScalingResult } from '../../../utils/scaling';
 import type { SubjectMapping } from '../../../services/subjectMappingService';
