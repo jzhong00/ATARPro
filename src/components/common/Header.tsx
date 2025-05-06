@@ -16,7 +16,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = true, hideAuthButtons = false }) => {
   // const navigate = useNavigate(); // Removed unused navigate
   const [manageSubscriptionLoading, setManageSubscriptionLoading] = useState(false);
-  const [manageSubscriptionError, setManageSubscriptionError] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown visibility
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown container
 
@@ -42,12 +41,9 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
   const handleManageSubscription = async () => {
     if (!session?.user?.id) {
       console.error("User not logged in, cannot manage subscription.");
-      setManageSubscriptionError("You must be logged in.");
       return;
     }
     setManageSubscriptionLoading(true);
-    setManageSubscriptionError(null);
-    // No need to close dropdown here, page will navigate away
 
     try {
       const response = await fetch(siteConfig.getApiUrl('create-customer-portal-session'), {
@@ -73,8 +69,6 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
       }
     } catch (err: any) {
       console.error('Error creating customer portal session:', err);
-      setManageSubscriptionError(err.message || 'An unexpected error occurred.');
-      // Keep dropdown open to show error ? Or close? Let's keep it open for now.
     } finally {
       setManageSubscriptionLoading(false);
     }
