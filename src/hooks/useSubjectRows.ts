@@ -45,7 +45,6 @@ export const useSubjectRows = (initialRows: number = 6) => {
     if (inputValue === "") {
       resolvedSubjectDisplay = null;
       validationRule = null;
-      console.log('Input cleared');
     } else if (inputValue) {
       const trimmedValue = inputValue.trim();
       const foundMapping = subjectMappingService.getMappingByDisplayName(trimmedValue);
@@ -53,11 +52,9 @@ export const useSubjectRows = (initialRows: number = 6) => {
       if (foundMapping) {
         resolvedSubjectDisplay = foundMapping.Subject_display;
         validationRule = foundMapping.Validation ?? null;
-        console.log(`Input: "${inputValue}", Found Display: "${resolvedSubjectDisplay}", Rule: ${validationRule}`);
       } else {
         resolvedSubjectDisplay = trimmedValue;
         validationRule = null;
-        console.log(`Input: "${inputValue}" did not match known subject display name. Kept input, cleared rule.`);
       }
     } else {
       resolvedSubjectDisplay = null;

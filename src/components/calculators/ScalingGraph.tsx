@@ -59,7 +59,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
 
       setChartData(points);
     } catch (error) {
-      // console.error('Error processing graph data:', error); // Removed
+      console.error('Error processing graph data:', error); // Removed
       setChartData([]); // Clear data on error
     } finally {
       setIsLoading(false); // Finish loading state
@@ -75,7 +75,13 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
   
   if (isLoading) {
     // Indicates data *transformation* is happening
-    return <div className="flex items-center justify-center h-full">Processing graph data...</div>; 
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      </div>
+      ); 
   }
 
   if (selections.length === 0) {

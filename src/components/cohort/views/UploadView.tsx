@@ -43,7 +43,7 @@ const UploadView = () => {
   }, [handleFile]);
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Import Student Data</h2>
       <p className="text-gray-600 mb-6">
         Import an Excel file containing student results data.
@@ -105,7 +105,7 @@ const UploadView = () => {
       </div>
 
       {/* Privacy Information Box */}
-      <div className="mt-4 text-center text-xs text-gray-500 p-3 bg-gray-50 rounded border border-gray-200">
+      <div className="mt-4 text-center text-xs text-gray-500 p-3 bg-gray-50 rounded-lg border border-gray-200">
          <strong>Data Privacy:</strong> Good news! Your file is processed locally in your browser. 
         Student names, subjects, and results are <strong>never</strong> uploaded to our servers. 
         All calculations happen on your computer.

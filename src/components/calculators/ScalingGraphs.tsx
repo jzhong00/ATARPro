@@ -37,7 +37,6 @@ const ScalingGraphs = () => {
         try {
           // Decode and parse the JSON array of subject names
           const selectedSubjects = JSON.parse(decodeURIComponent(subjectsParam)) as string[];
-          // console.log('Received subjects from URL:', selectedSubjects); // Removed log
           
           // Check if we have subjects from URL and necessary data is loaded
           if (selectedSubjects.length > 0 && data.length > 0) {
@@ -53,7 +52,6 @@ const ScalingGraphs = () => {
             
             // Add the new selections if any are valid
             if (newSelections.length > 0) {
-              // console.log('Adding selections from URL:', newSelections); // Removed log
               setSelections(prev => {
                   // Prevent adding duplicates
                   const currentSelections = new Set(prev.map(s => `${s.subject}-${s.year}`));
@@ -63,7 +61,7 @@ const ScalingGraphs = () => {
             }
           }
         } catch (e) {
-          // console.error('Error parsing subjects from URL:', e); // Removed log
+          console.error('Error parsing subjects from URL:', e); // Removed log
           // Error parsing is handled silently, won't pre-select
         }
       }
@@ -80,10 +78,7 @@ const ScalingGraphs = () => {
     const loadInitialData = async () => {
       setIsLoading(true);
       try {
-        // console.log('Starting initial data loading process...'); // Removed log
-        // Fetch the raw scaling data rows
         const loadedData = await loadScalingGraphData();
-        // console.log('Initial data loaded, rows:', loadedData.length); // Removed log
         
         if (loadedData.length === 0) {
           throw new Error('No scaling data was loaded from source');
@@ -92,7 +87,6 @@ const ScalingGraphs = () => {
         
         // Extract unique subject names from the loaded data
         const loadedSubjects = await getUniqueSubjects(loadedData);
-        // console.log('Available subjects loaded:', loadedSubjects.length); // Removed log
         
         if (loadedSubjects.length === 0) {
           throw new Error('No subjects with available data were found');
@@ -100,7 +94,7 @@ const ScalingGraphs = () => {
         setSubjects(loadedSubjects);
         setError(null); // Clear any previous errors
       } catch (err) {
-        // console.error('Failed to load initial data:', err); // Removed log
+        console.error('Failed to load initial data:', err); // Removed log
         setError(err instanceof Error ? err.message : 'Unknown error loading data');
         setData([]);
         setSubjects([]);
@@ -182,33 +176,39 @@ const ScalingGraphs = () => {
   // --- Component Rendering --- //
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex gap-8 h-[calc(100vh-200px)]">
-        
-        {/* Sidebar/Table Area: Render based on loading/error state */}
-        {isLoading ? (
-           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4 flex items-center justify-center">Loading subject data...</div>
-        ) : error ? (
-           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
-        ) : subjects.length === 0 && !error ? (
-           <div className="flex-none max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
-        ) : (
-          // Render the selection table if data is loaded successfully
-          <SubjectSelectionTable
-            subjects={subjects}
-            allScalingData={data}
-            selections={selections}
-            onClearAll={handleClearAll} 
-            onToggleSelection={handleToggleSelection}
-            onToggleYear={handleToggleYear}
-            onToggleSubject={handleToggleSubject}
-          />
-        )}
-        
-        {/* Graph Area: Render the scaling graph component */}
-        <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[32rem] flex items-center justify-center">
-          {/* Pass the current selections and the loaded data to the graph */}
-          <ScalingGraph selections={selections} allScalingData={data} /> 
+      <div className="flex flex-col lg:flex-row gap-8 h-auto lg:h-[calc(100vh-200px)]">
+      
+      {/* Graph Area: Render the scaling graph component */}
+      <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[32rem] flex items-center justify-center">
+      {/* Pass the current selections and the loaded data to the graph */}
+      <ScalingGraph selections={selections} allScalingData={data} /> 
+      </div>
+
+      {/* Sidebar/Table Area: Render based on loading/error state */}
+      {isLoading ? (
+       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         </div>
+     </div>
+      ) : error ? (
+       <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
+      ) : subjects.length === 0 && !error ? (
+       <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
+      ) : (
+      // Render the selection table if data is loaded successfully
+      <div className="flex-none lg:max-w-lg w-full bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none" style={{ overflowX: 'hidden' }}>
+        <SubjectSelectionTable
+        subjects={subjects}
+        allScalingData={data}
+        selections={selections}
+        onClearAll={handleClearAll} 
+        onToggleSelection={handleToggleSelection}
+        onToggleYear={handleToggleYear}
+        onToggleSubject={handleToggleSubject}
+        />
+      </div>
+      )}
 
       </div>
     </div>

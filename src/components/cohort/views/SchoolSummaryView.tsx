@@ -162,16 +162,16 @@ const SchoolSummaryView = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 pb-2">
       <h2 className="text-2xl font-bold">School Summary</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gray-50 rounded-lg p-6 shadow">
-          <h3 className="text-lg font-medium text-gray-500 mb-2">ATAR Eligible Students</h3>
+        <div className="bg-gray-50 rounded-lg p-6 shadow border">
+          <h3 className="text-lg font-medium text-gray-600 mb-2">ATAR Eligible Students</h3>
           <p className="text-4xl font-bold text-blue-600">{summaryData.eligibleCount}</p>
         </div>
-        <div className="bg-gray-50 rounded-lg p-6 shadow">
-          <h3 className="text-lg font-medium text-gray-500 mb-2">Median ATAR</h3>
+        <div className="bg-gray-50 rounded-lg p-6 shadow border">
+          <h3 className="text-lg font-medium text-gray-600 mb-2">Median ATAR</h3>
           <p className="text-4xl font-bold text-blue-600">
             {summaryData.medianAtar ?? 'N/A'}
           </p>
@@ -181,17 +181,17 @@ const SchoolSummaryView = () => {
       {/* ATAR Distribution Histogram and Table side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ATAR Distribution Table */}
-        <div className="bg-white rounded-lg p-6 shadow">
-          <h3 className="text-xl font-bold mb-4">ATAR Distribution</h3>
-          <div className="overflow-x-auto">
+        <div className="bg-gray-50 rounded-lg p-6 shadow border">
+          <h3 className="text-lg font-medium text-gray-600 mb-4">ATAR Distribution</h3>
+          <div className="overflow-x-auto rounded-xl">
             <table className="min-w-full bg-white">
-              <thead className="bg-gray-100">
+              <thead className="bg-blue-600 rounded">
                 <tr>
                     {/* Use column definitions for headers */}
                     {SCHOOL_SUMMARY_DIST_COLUMNS.map((col) => (
                         <th 
                             key={col.key}
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
                         >
                             {col.header}
                         </th>
@@ -224,8 +224,8 @@ const SchoolSummaryView = () => {
         </div>
 
         {/* ATAR Distribution Histogram */}
-        <div className="bg-white rounded-lg p-6 shadow">
-          <h3 className="text-xl font-bold mb-4">ATAR Distribution Histogram</h3>
+        <div className="bg-gray-50 rounded-lg p-6 shadow border">
+          <h3 className="text-lg font-medium text-gray-600 mb-4">ATAR Distribution Histogram</h3>
           <ResponsiveContainer width="100%" height={350}>
             <BarChart
               data={summaryData.histogramData}
@@ -235,19 +235,24 @@ const SchoolSummaryView = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
-                dataKey="range" 
-                angle={-45} 
-                textAnchor="end" 
-                height={60}
-                tick={{ fontSize: 12 }}
-                label={{ value: 'ATAR', position: 'insideBottom', offset: -10, style: { textAnchor: 'middle' } }}
+          dataKey="range" 
+          angle={-45} 
+          textAnchor="end" 
+          height={60}
+          tick={{ fontSize: 12 }}
+          label={{ value: 'ATAR', position: 'insideBottom', offset: -40, style: { textAnchor: 'middle' } }}
               />
               <YAxis
-                label={{ value: 'Percentage of Students (%)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle' } }}
-                tickFormatter={(value) => `${value.toFixed(0)}%`}
+          label={{ value: 'Percentage of Students (%)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle' } }}
+          tickFormatter={(value) => `${value.toFixed(0)}%`}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="percentage" name="Percentage" fill="#1f77b4" />
+              <Bar 
+          dataKey="percentage" 
+          name="Percentage" 
+          fill="#2463EB" 
+          radius={[10, 10, 0, 0]} // Rounded top corners
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>

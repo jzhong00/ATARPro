@@ -1,29 +1,31 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import FrontPage from './components/FrontPage';
-import SingleStudentCalculator from './components/calculators/SingleStudentCalculator';
-import CohortCalculator from './components/calculators/CohortCalculator';
-import ScalingGraphs from './components/calculators/ScalingGraphs';
-import EquivalentCalculator from './components/calculators/EquivalentCalculator';
-import SETPlanCalculator from './components/calculators/SETPlanCalculator';
-import Layout from './components/layout/Layout';
-import PublicLayout from './components/layout/PublicLayout';
-import LandingPage from './components/LandingPage';
-import { loadScalingData } from './utils/scaling';
-import AuthPage from './components/Auth/AuthPage';
+import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { supabase } from './services/supabaseClient';
 import { Session, User } from '@supabase/supabase-js';
-import ProtectedRoute from './components/Auth/ProtectedRoute';
-import PaymentSuccess from './components/Billing/PaymentSuccess';
-import PaymentCancel from './components/Billing/PaymentCancel';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { overrideConsoleError } from './utils/logger';
 import { UserProfile } from './types';
 
-const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-if (!stripePublishableKey) {
-  console.error('Stripe Publishable Key is missing. Check your .env file and ensure it starts with VITE_');
-}
-const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : Promise.resolve(null);
+// Lazy-loaded components
+const FrontPage = lazy(() => import('./components/FrontPage'));
+const SingleStudentCalculator = lazy(() => import('./components/calculators/SingleStudentCalculator'));
+const CohortCalculator = lazy(() => import('./components/calculators/CohortCalculator'));
+const ScalingGraphs = lazy(() => import('./components/calculators/ScalingGraphs'));
+const EquivalentCalculator = lazy(() => import('./components/calculators/EquivalentCalculator'));
+const SETPlanCalculator = lazy(() => import('./components/calculators/SETPlanCalculator'));
+const Layout = lazy(() => import('./components/layout/Layout'));
+const PublicLayout = lazy(() => import('./components/layout/PublicLayout'));
+const LandingPage = lazy(() => import('./components/LandingPage'));
+const AuthPage = lazy(() => import('./components/Auth/AuthPage'));
+const ProtectedRoute = lazy(() => import('./components/Auth/ProtectedRoute'));
+const PaymentSuccess = lazy(() => import('./components/Billing/PaymentSuccess'));
+const PaymentCancel = lazy(() => import('./components/Billing/PaymentCancel'));
+const NotFound = lazy(() => import('./components/common/NotFound'));
+
+//--------
+
+overrideConsoleError(); // Override console.error to show toast notifications for errors
 
 const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>) => {
   if (!user) {
@@ -34,7 +36,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
   try {
     const { data, error, status } = await supabase
       .from('users')
-      .select(`id, is_subscribed`)
+      .select(`id, expires_at`)
       .eq('id', user.id)
       .single();
 
@@ -62,19 +64,6 @@ const AppRoutes = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const navigate = useNavigate();
-
-  // Effect for loading scaling data
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        await loadScalingData();
-      } catch (error) {
-        console.error('App: useEffect 1 - Failed to load scaling data:', error);
-        setScalingError('Failed to load scaling data. Some features may not work correctly.');
-      }
-    };
-    loadData();
-  }, []);
 
   // Effect for handling authentication and profile fetching (Final Cleaned Version)
   useEffect(() => {
@@ -134,26 +123,26 @@ const AppRoutes = () => {
 
   const isLoadingApp = isLoadingAuth;
 
+  // Placeholder Loading component
+  const Loading = () => (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      </div>
+  );
+
   // Loading state for the entire app
   if (isLoadingApp) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center text-xl">
-        Loading application data...
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
       </div>
     );
   }
 
-  // Stripe key check (can remain here as it's a prerequisite)
-  if (!stripePublishableKey) {
-    return (
-      <div className="min-h-screen bg-red-100 flex flex-col items-center justify-center text-red-800 p-4">
-        <h1 className="text-2xl font-bold mb-4">Configuration Error</h1>
-        <p>The Stripe Publishable Key is missing.</p>
-        <p>Please ensure VITE_STRIPE_PUBLISHABLE_KEY is set correctly in your .env file.</p>
-        <p className="mt-2 text-sm">The application cannot proceed with payment features.</p>
-      </div>
-    );
-  }
 
   // Render the actual routes
   return (
@@ -189,31 +178,83 @@ const AppRoutes = () => {
             session={session}
             userProfile={userProfile}
             isLoading={isLoadingAuth}
-            stripePromise={stripePromise}
           />
         )}>
           {/* Apply Layout to all nested protected routes */}
-          <Route element={( 
+            <Route element={( 
             <Layout 
               session={session}
               userProfile={userProfile}
               isLoadingAuth={isLoadingAuth}
-              stripePromise={stripePromise}
             /> 
-          )}>
+            )}>
             {/* Original root path for layout children is now implicit */}
             {/* Define the main app page route */}
-            <Route path="app" element={<FrontPage />} />
+            <Route 
+              path="app" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <FrontPage />
+              </Suspense>
+              } 
+            />
             {/* Other protected child routes */}
-            <Route path="student" element={<SingleStudentCalculator />} />
-            <Route path="cohort/*" element={<CohortCalculator />} />
-            <Route path="scaling-graphs" element={<ScalingGraphs />} />
-            <Route path="equivalent" element={<EquivalentCalculator />} />
-            <Route path="setplan" element={<SETPlanCalculator />} />
+            <Route 
+              path="student" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <SingleStudentCalculator />
+              </Suspense>
+              } 
+            />
+            <Route 
+              path="cohort/*" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <CohortCalculator />
+              </Suspense>
+              } 
+            />
+            <Route 
+              path="scaling-graphs" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <ScalingGraphs />
+              </Suspense>
+              } 
+            />
+            <Route 
+              path="equivalent" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <EquivalentCalculator />
+              </Suspense>
+              } 
+            />
+            <Route 
+              path="setplan" 
+              element={
+              <Suspense fallback={<Loading />}>
+                <SETPlanCalculator />
+              </Suspense>
+              } 
+            />
             {/* Add index route if needed for `/` within protected layout */}
-            <Route index element={<Navigate to="/app" replace />} /> 
-          </Route>
+            <Route 
+              index 
+              element={<Navigate to="/app" replace />} 
+            /> 
+            </Route>
         </Route>
+
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<Loading />}>
+              <NotFound />
+            </Suspense>
+          }
+        />
       </Routes>
     </div>
   );
@@ -223,6 +264,16 @@ const AppRoutes = () => {
 function App() {
   return (
     <Router>
+      <ToastContainer
+      position="top-center"
+      autoClose={10000}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      />
       <AppRoutes />
     </Router>
   );

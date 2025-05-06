@@ -135,7 +135,7 @@ const RangedAtarsView = ({ mappingsLoaded }: RangedAtarsViewProps) => {
 
   // --- Render Component --- 
   return (
-    <div className="max-w-full mx-auto">
+    <div className="max-w-full mx-auto space-y-6 px-2 pb-2">
       <h2 className="text-2xl font-bold mb-4">Ranged ATARs</h2>
 
       {/* Table Section */}

@@ -39,7 +39,6 @@ export const usePrintFunctionality = ({
     if (isPrinting) return; // Prevent multiple clicks
 
     setIsPrinting(true);
-    console.log("Print process started...");
 
     try {
       const pdfStudentName = studentName || 'Manual Entry';
@@ -57,14 +56,11 @@ export const usePrintFunctionality = ({
       
       if (!success) {
         console.error("PDF generation failed.");
-      } else {
-        console.log("PDF generated and downloaded successfully.");
-      }
+      } 
     } catch (error) {
       console.error("PDF generation or download failed:", error);
     } finally {
       setIsPrinting(false);
-      console.log("Print process finished.");
     }
   }, [
     isPrinting,

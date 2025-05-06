@@ -24,7 +24,6 @@ class SubjectMappingService {
   // Load the subject mappings from the CSV file
   public async loadMappings(): Promise<void> {
     try {
-      console.log('Loading subject mappings...');
       
       // Load subject type and general scaling data
       const subjectTypeResponse = await fetch('/data/Subject_type_and_general_scaling.csv');
@@ -45,7 +44,6 @@ class SubjectMappingService {
       }
 
       const subjectTypeData = result.data;
-      console.log('Loaded subject type and general scaling data:', subjectTypeData.length, 'subjects');
       
       // Process each subject
       subjectTypeData.forEach((row: any) => {
@@ -64,9 +62,7 @@ class SubjectMappingService {
           k: row.k === 'null' ? undefined : parseFloat(row.k)
         });
       });
-      
-      console.log('Subject mappings loaded successfully:', this.mappings.size, 'subjects');
-      
+            
     } catch (error) {
       console.error('Error loading mappings:', error);
       throw error;

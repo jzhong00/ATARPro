@@ -1,17 +1,15 @@
 import { Outlet } from 'react-router-dom';
 import Header from '../common/Header';
 import { Session } from '@supabase/supabase-js';
-import type { Stripe } from '@stripe/stripe-js';
 import { UserProfile } from '../../types';
 
 interface LayoutProps {
   session: Session | null;
-  stripePromise: Promise<Stripe | null>;
   userProfile: UserProfile | null;
   isLoadingAuth: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ session, userProfile /*, stripePromise, isLoadingAuth*/ }) => {
+const Layout: React.FC<LayoutProps> = ({ session, userProfile }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header session={session} userProfile={userProfile} />

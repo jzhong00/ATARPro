@@ -38,25 +38,23 @@ const CohortTabs = () => {
 
   // Removed useEffect for loading mappings
   // useEffect(() => { ... });
-
   const tabItems: TabItem[] = [
-    // Simplified: Removed component property from each item
     { key: 'upload', label: 'Import Data', path: '/cohort/upload' }, 
     { key: 'results', label: 'Results', path: '/cohort/results' }, 
     { key: 'ranged-results', label: 'Ranged Results', path: '/cohort/ranged-results' }, 
     { key: 'atars', label: 'ATARs', path: '/cohort/atars' },
     { key: 'ranged-atars', label: 'Ranged ATARs', path: '/cohort/ranged-atars' },
-    { key: 'summary', label: 'School Summary', path: '/cohort/summary' }, // Path kept for navigation
+    { key: 'summary', label: 'School Summary', path: '/cohort/summary' },
   ];
 
   const activeTab = tabItems.find(tab => location.pathname.startsWith(tab.path)) || tabItems[0];
-  // Removed ActiveComponent definition: const ActiveComponent = activeTab.component;
 
   return (
-    <div className="w-full">
+    <div className="pb-5 flex justify-center">
+      <div className="w-auto">
       {/* Navigation Tabs */}
-      <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto" aria-label="Tabs">
+      <div className="bg-white border-gray-200 border rounded-lg px-10">
+        <nav className="flex justify-center -mb-px space-x-4 sm:space-x-8 overflow-x-auto" aria-label="Tabs">
           {tabItems.map((tab) => (
             <button
               key={tab.key}
@@ -64,10 +62,10 @@ const CohortTabs = () => {
               className={`
                 flex-shrink-0 
                 ${activeTab.key === tab.key
-                  ? 'border-indigo-500 text-indigo-600'
+                  ? 'border-blue-500 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
-                whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
+                whitespace-nowrap py-3 px-2 border-b-2 font-medium text-sm
               `}
               aria-current={activeTab.key === tab.key ? 'page' : undefined}
             >
@@ -75,6 +73,7 @@ const CohortTabs = () => {
             </button>
           ))}
         </nav>
+      </div>
       </div>
       
       {/* Removed mappingError display */}

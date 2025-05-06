@@ -23,13 +23,17 @@ let generalScalingParams: GeneralScalingParameters[] = [];
 let appliedVetScalingMappings: AppliedVetScalingMapping[] = [];
 
 export const loadScalingData = async (): Promise<void> => {
-  const generalResponse = await fetch('/data/Subject_type_and_general_scaling.csv');
-  const generalText = await generalResponse.text();
-  generalScalingParams = parseGeneralScalingCSV(generalText);
-
-  const appliedVetResponse = await fetch('/data/applied_and_vet_scaling.csv');
-  const appliedVetText = await appliedVetResponse.text();
-  appliedVetScalingMappings = parseAppliedVetScalingCSV(appliedVetText);
+  if (generalScalingParams.length === 0) {
+    const generalResponse = await fetch('/data/Subject_type_and_general_scaling.csv');
+    const generalText = await generalResponse.text();
+    generalScalingParams = parseGeneralScalingCSV(generalText);
+  }
+  
+  if (appliedVetScalingMappings.length === 0) {
+    const appliedVetResponse = await fetch('/data/applied_and_vet_scaling.csv');
+    const appliedVetText = await appliedVetResponse.text();
+    appliedVetScalingMappings = parseAppliedVetScalingCSV(appliedVetText);
+  }
 };
 
 const parseGeneralScalingCSV = (csvText: string): GeneralScalingParameters[] => {

@@ -32,24 +32,27 @@ let appliedVetScalingMappings: AppliedVetScalingMapping[] = [];
 export const loadScalingData = async (retries = 3): Promise<void> => {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      // Load general scaling parameters
-      const generalResponse = await fetch('/data/Subject_type_and_general_scaling.csv');
-      if (!generalResponse.ok) {
-        throw new Error(`Failed to fetch general scaling data: ${generalResponse.statusText}`);
+      // Check if general scaling parameters are already loaded
+      if (generalScalingParams.length === 0) {
+        const generalResponse = await fetch('/data/Subject_type_and_general_scaling.csv');
+        if (!generalResponse.ok) {
+          throw new Error(`Failed to fetch general scaling data: ${generalResponse.statusText}`);
+        }
+        const generalText = await generalResponse.text();
+        generalScalingParams = parseGeneralScalingCSV(generalText);
       }
-      const generalText = await generalResponse.text();
-      generalScalingParams = parseGeneralScalingCSV(generalText);
 
-      // Load Applied/VET scaling mappings
-      const appliedVetResponse = await fetch('/data/applied_and_vet_scaling.csv');
-      if (!appliedVetResponse.ok) {
-        throw new Error(`Failed to fetch Applied/VET scaling data: ${appliedVetResponse.statusText}`);
+      // Check if Applied/VET scaling mappings are already loaded
+      if (appliedVetScalingMappings.length === 0) {
+        const appliedVetResponse = await fetch('/data/applied_and_vet_scaling.csv');
+        if (!appliedVetResponse.ok) {
+          throw new Error(`Failed to fetch Applied/VET scaling data: ${appliedVetResponse.statusText}`);
+        }
+        const appliedVetText = await appliedVetResponse.text();
+        appliedVetScalingMappings = parseAppliedVetScalingCSV(appliedVetText);
       }
-      const appliedVetText = await appliedVetResponse.text();
-      appliedVetScalingMappings = parseAppliedVetScalingCSV(appliedVetText);
 
       return;
-      
     } catch (err: unknown) {
       const error = err instanceof Error ? err : new Error(String(err));
       console.error(`Error loading scaling data (attempt ${attempt + 1}/${retries}):`, error);

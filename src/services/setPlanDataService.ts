@@ -34,7 +34,6 @@ class SetPlanDataService {
   // Load the SET Plan data from the CSV file
   public async loadData(): Promise<void> {
     try {
-      console.log('Loading SET Plan Calculator data...');
       
       const response = await fetch('/data/SET_Plan_Calculator_Data.csv');
       if (!response.ok) {
@@ -53,9 +52,7 @@ class SetPlanDataService {
         throw new Error(`CSV parsing errors: ${result.errors.map(e => e.message).join(', ')}`);
       }
 
-      const data = result.data;
-      console.log('Loaded SET Plan Calculator data:', data.length, 'rows');
-      
+      const data = result.data;      
       // Group data by subject
       const subjectRows: Record<string, any[]> = {};
       data.forEach((row: any) => {
@@ -93,8 +90,7 @@ class SetPlanDataService {
       });
       
       this.initialized = true;
-      console.log('SET Plan Calculator data processed successfully:', this.subjectData.size, 'subjects');
-      
+            
     } catch (error) {
       console.error('Error loading SET Plan Calculator data:', error);
       throw error;

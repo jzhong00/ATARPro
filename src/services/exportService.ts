@@ -51,7 +51,6 @@ const generateSetPlanPdf = async (data: SetPlanPdfData): Promise<boolean> => {
       }));
     
     // --- DEBUGGING: Log prepared subject data & check for NaN ---
-    console.log('Debug PDF Data - Prepared Subjects:', pdfSubjectResults);
     pdfSubjectResults.forEach((subject, index) => {
       // Check fields if they are numbers and if they are NaN
       const checkNaN = (value: any): boolean => typeof value === 'number' && isNaN(value);
@@ -101,7 +100,6 @@ const generateSetPlanPdf = async (data: SetPlanPdfData): Promise<boolean> => {
       console.error("PDF generation failed within exportService.");
       return false;
     } else {
-      console.log("PDF generated successfully via exportService.");
       return true;
     }
   } catch (error) { 

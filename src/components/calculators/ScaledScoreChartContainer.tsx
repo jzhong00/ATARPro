@@ -1,8 +1,11 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, lazy } from 'react';
 import { prepareChartData } from '../../utils/calculatorUtils';
-import { ScaledScoreChart } from './ScaledScoreChart';
 import type { SubjectRow } from '../../types/calculator';
 import type { SubjectMapping } from '../../services/subjectMappingService';
+
+const ScaledScoreChart = lazy(() =>
+  import('./ScaledScoreChart').then(module => ({ default: module.ScaledScoreChart }))
+);
 
 interface ScaledScoreChartContainerProps {
   subjectRows: SubjectRow[];
@@ -46,7 +49,7 @@ const ScaledScoreChartContainer: React.FC<ScaledScoreChartContainerProps> = ({
   // Render the chart component or error/loading states
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md p-2 min-h-96">
+      <div className="bg-white rounded-lg p-2 min-h-96">
         {/* REMOVED Title */}
         {/* <h3 className="text-base font-medium text-gray-700 mb-2 text-center">Scaled Score Distribution</h3> */}
         {loadingError || scalingDataError ? (
