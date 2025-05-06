@@ -20,7 +20,7 @@ import { useTeAtarCalculator } from '../../hooks/useTeAtarCalculator';
 import { useSubjectMappingLoader } from '../../hooks/useSubjectMappingLoader';
 
 // UI Components
-const ScaledScoreChart = lazy(() => import('./ScaledScoreChart'));
+const ScaledScoreChart = lazy(() => import('./ScaledScoreChart').then(module => ({ default: module.ScaledScoreChart })));
 const ScaledScoreChartContainer = lazy(() => import('./ScaledScoreChartContainer'));
 const ConfirmationModal = lazy(() => import('../common/ConfirmationModal'));
 const ActionButtonsBar = lazy(() => import('./panels/ActionButtonsBar'));
