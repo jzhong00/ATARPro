@@ -4,7 +4,6 @@ import { supabase } from '../../services/supabaseClient'; // Import Supabase cli
 import React, { useState, useEffect, useRef } from 'react'; // Import useState, useEffect, useRef
 import { UserProfile } from '../../types'; // Import UserProfile type
 import { siteConfig } from '../../services/siteConfig'; // Import siteConfig for API URL
-import { c } from 'vite/dist/node/types.d-aGj9QkWt';
 
 // Define props type for Header
 interface HeaderProps {
@@ -84,7 +83,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
   const handleLogout = async () => {    
         localStorage.clear();
         window.location.reload();
-        const { error } = await supabase.auth.signOut().catch((err) => {
+        await supabase.auth.signOut().catch((err) => {
           console.error('SignOut failed unexpectedly:', err);
           return { error: err };
         });

@@ -12,7 +12,6 @@ if (typeof window !== 'undefined') {
   const hash = window.location.hash;
   if (hash.startsWith('#error=')) {
       const params = new URLSearchParams(hash.slice(1)); // Remove '#'
-      const errorCode = params.get('error_code');
       const description = decodeURIComponent(params.get('error_description') || 'Unknown error').replace(/\+/g, ' ');
 
       const formattedMessage = `${description}`;

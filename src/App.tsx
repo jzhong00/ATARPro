@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'r
 import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { supabase } from './services/supabaseClient';
 import { Session, User } from '@supabase/supabase-js';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { overrideConsoleError } from './utils/logger';
 import { UserProfile } from './types';
@@ -56,7 +56,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
 
 // New component to hold the core app logic and routing
 const AppRoutes = () => {
-  const [scalingError, setScalingError] = useState<string | null>(null);
+  const [scalingError] = useState<string | null>(null);
   const authSubscriptionRef = useRef<ReturnType<typeof supabase.auth.onAuthStateChange>['data']['subscription'] | null>(null);
 
   const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
