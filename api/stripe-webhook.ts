@@ -22,7 +22,7 @@ if (!supabaseUrl || !supabaseServiceKey) {
   throw new Error('Server configuration error: Missing Supabase admin credentials.');
 }
 
-import type Stripe from 'stripe';
+import type StripeType from 'stripe'; // ✅ only for types
 
 let stripeModule: typeof import('stripe') | null = null;
 
@@ -30,13 +30,13 @@ export const getStripe = async () => {
   if (!stripeModule) {
     stripeModule = await import('stripe');
   }
-  return stripeModule.default; // default is the Stripe constructor
+  return stripeModule.default; // runtime class
 };
 
-const StripeConstructor = await getStripe();
+const Stripe = await getStripe();
 
 // Initialize the Stripe client
-const stripe = new StripeConstructor(stripeSecretKey, {
+const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-03-31.basil', // Use the specific version expected by types
   typescript: true,
 });
@@ -76,7 +76,7 @@ export default async function handler(
     return res.status(400).send('Missing stripe-signature header.');
   }
 
-  let event: Stripe.Event;
+  let event: StripeType.Event;
 
   try {
     // Read the raw request body using the 'micro' helper
@@ -95,7 +95,7 @@ export default async function handler(
 
   // Focus on the event indicating a completed checkout session
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session;
+    const session = event.data.object as StripeType.Checkout.Session;
 
     // Retrieve the user ID we stored earlier
     const userId = session.client_reference_id;
