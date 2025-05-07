@@ -38,7 +38,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
     return <Navigate to="/auth" replace />;
   }
 
-  const isSubscriptionExpired = !userProfile?.expires_at || new Date(userProfile.expires_at) < new Date();
+  const isSubscriptionExpired = !userProfile?.stripe_expiry_date || new Date(userProfile.stripe_expiry_date) < new Date();
 
   if (isSubscriptionExpired) {
     return <PaymentPrompt session={session} />;

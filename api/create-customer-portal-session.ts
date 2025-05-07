@@ -1,13 +1,13 @@
 // api/create-customer-portal-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripe } from '../utils/getStripe';
+import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 // Ensure required environment variables are loaded
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173'; // Default for local dev
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 // Basic validation for environment variables
 if (!stripeSecretKey) {
@@ -19,7 +19,6 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
     throw new Error('Server configuration error: Missing Supabase credentials.');
 }
 
-const Stripe = await getStripe();
 
 // Initialize Stripe client
 const stripe = new Stripe(stripeSecretKey, {
@@ -42,6 +41,7 @@ export default async function handler(
   }
 
   try {
+    // Extract userId from the request body (following pattern from create-checkout-session)
     // For improved security, consider validating a JWT here instead.
     const { userId } = req.body;
 
@@ -74,6 +74,8 @@ export default async function handler(
     const customerId = user.stripe_customer_id;
     const returnUrl = `${siteUrl}/app`; // Redirect user here after portal session
 
+    console.log(`Creating Stripe Customer Portal session for user: ${userId}, customer: ${customerId}`);
+
     // Create a Stripe Billing Portal Session
     const portalSession = await stripe.billingPortal.sessions.create({
         customer: customerId,
@@ -81,6 +83,7 @@ export default async function handler(
     });
 
     // Return the session URL to the frontend
+    console.log(`Stripe Portal session created: ${portalSession.id} for user: ${userId}`);
     res.status(200).json({ url: portalSession.url });
 
   } catch (error: any) {

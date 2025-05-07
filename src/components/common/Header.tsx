@@ -45,6 +45,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
     }
     setManageSubscriptionLoading(true);
 
+
     try {
       const response = await fetch(siteConfig.getApiUrl('create-customer-portal-session'), {
         method: 'POST',
@@ -69,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
       }
     } catch (err: any) {
       console.error('Error creating customer portal session:', err);
+
     } finally {
       setManageSubscriptionLoading(false);
     }
@@ -126,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
                     )}
 
                     {/* Show two buttons: Manage Subscription and Logout */}
-                    {userProfile?.expires_at && (
+                    {userProfile?.stripe_expiry_date && (
                     <button
                       onClick={handleManageSubscription}
                       disabled={manageSubscriptionLoading}

@@ -32,25 +32,22 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
     const userId = session.user.id;
 
     try {
-      // 1. Call backend API to create a checkout session
       const response = await fetch(siteConfig.getApiUrl('create-checkout-session'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: userId }), // Send the logged-in user's ID
+        body: JSON.stringify({ userId: userId }),
       });
 
       const responseData = await response.json();
       const { sessionId, error: apiError } = responseData;
 
       if (!response.ok) {
-        // Use error from API response if available, otherwise use status text
         throw new Error(apiError || responseData.message || response.statusText || 'Failed to create checkout session.');
       }
       if (!sessionId) {
         throw new Error('No session ID returned from backend.');
       }
 
-      // 2. Redirect to Stripe Checkout
       const stripe = await stripePromise;
       if (!stripe) {
         throw new Error('Stripe.js failed to load. Check configuration.');
@@ -58,7 +55,6 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
 
       const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
 
-      // This point is only reached if redirectToCheckout fails immediately (e.g., network error)
       if (stripeError) {
         setError(`Payment Error: ${stripeError.message}`);
       }
@@ -79,7 +75,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
         {loading ? (
           <>
               <div className="flex flex-col items-center">
-                <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+                <div className="loader animate-spin rounded-full h-5 w-5 border-t-4 border-white border-solid"></div>
               </div>
           </>
         ) : 'Upgrade to Pro'}

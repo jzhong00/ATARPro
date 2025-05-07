@@ -7,17 +7,17 @@ import { Link } from 'react-router-dom';
  * Provides a link back to the main application.
  */
 const PaymentCancel: React.FC = () => (
-  <div className="min-h-[60vh] flex flex-col items-center justify-center bg-gray-50 p-6">
-    <div className="bg-white p-8 rounded-lg shadow-md max-w-md text-center">
+  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="container mx-auto max-w-md p-6 bg-white rounded-xl shadow-md text-center">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-orange-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
-      <h2 className="text-2xl font-bold text-gray-800 mb-3">Checkout Incomplete</h2>
-      <p className="text-gray-600 mb-6">It looks like you navigated away from the payment page before completing your purchase. No worries, you haven't been charged.</p>
+      <h2 className="text-2xl font-bold text-gray-800 mb-5">Checkout Incomplete</h2>
+      <p className="text-gray-600 mb-7">It looks like you navigated away from the payment page before completing your purchase. No worries, you haven't been charged.</p>
       <div className="flex justify-center space-x-4">
         <Link
           to="/app" // Assuming /app is the main dashboard or relevant page
-          className="inline-block px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-300"
+          className="inline-block px-12 py-3 mb-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-300"
         >
           Return to App
         </Link>

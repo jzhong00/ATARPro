@@ -41,7 +41,7 @@ const AuthPage = () => {
           onClick={() => navigate('/')}
           className="text-gray-500 hover:underline text-sm">
           <img
-        src="/src/favicons/android-chrome-192x192.png"
+        src="/favicons/android-chrome-192x192.png"
         alt="Back"
         className="w-11 h-11 rounded-lg" // 50px is equivalent to 12 Tailwind units
           />

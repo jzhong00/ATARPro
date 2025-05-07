@@ -36,7 +36,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
   try {
     const { data, error, status } = await supabase
       .from('users')
-      .select(`id, expires_at`)
+      .select(`id, stripe_expiry_date`)
       .eq('id', user.id)
       .single();
 
@@ -168,9 +168,23 @@ const AppRoutes = () => {
         </Route>
 
         {/* Other Public Routes (Auth, Payment - without PublicLayout) */}
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-cancel" element={<PaymentCancel />} />
+        <Route path="/auth" element={
+          <Suspense fallback={<Loading />}>
+            <AuthPage />
+          </Suspense>
+        } />
+
+        <Route path="/payment-success" element={
+          <Suspense fallback={<Loading />}>
+            <PaymentSuccess />
+          </Suspense>
+        } />
+
+        <Route path="/payment-cancel" element={
+          <Suspense fallback={<Loading />}>
+            <PaymentCancel />
+          </Suspense>
+        } />
         
         {/* Protected Routes */}
         <Route element={(

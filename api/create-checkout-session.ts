@@ -1,18 +1,23 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStripe } from '../utils/getStripe';
+import Stripe from 'stripe';
+
+// --- Vercel Configuration ---
+export const config = {
+  api: {
+    bodyParser: false, // Required for custom CORS + raw body handling
+  },
+};
 
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const priceId = process.env.STRIPE_PRICE_ID;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5173'; // Default for local dev
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'; // Default for local dev
 
 if (!stripeSecretKey || !priceId) {
   console.error('Stripe secret key or price ID is missing from environment variables.');
   throw new Error('Server configuration error: Missing Stripe credentials.');
 }
-
-const Stripe = await getStripe();
 
 // Initialize Stripe with the secret key
 const stripe = new Stripe(stripeSecretKey, {
@@ -24,10 +29,22 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  // CORS preflight handling
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
 
   try {
     // Extract userId from the request body sent by the frontend
@@ -41,6 +58,7 @@ export default async function handler(
     // Define success and cancel URLs using environment variable
     const successUrl = `${siteUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${siteUrl}/payment-cancel`;
+    console.log(`Creating Stripe session for user: ${userId} with price: ${priceId}`);
 
     // Create a Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
@@ -58,6 +76,7 @@ export default async function handler(
     });
 
     // Return the session ID to the frontend
+    console.log(`Stripe session created: ${session.id}`);
     res.status(200).json({ sessionId: session.id });
 
   } catch (error: any) {
