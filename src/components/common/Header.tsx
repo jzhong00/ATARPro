@@ -128,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ session, userProfile, showNavLinks = tr
                     )}
 
                     {/* Show two buttons: Manage Subscription and Logout */}
-                    {userProfile?.expires_at && (
+                    {userProfile?.stripe_expiry_date && (
                     <button
                       onClick={handleManageSubscription}
                       disabled={manageSubscriptionLoading}

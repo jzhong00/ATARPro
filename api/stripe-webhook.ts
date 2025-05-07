@@ -100,8 +100,8 @@ export default async function handler(
     }
 
     if (userId) {
-      const updatePayload: { stripe_customer_id?: string; expires_at?: string } = {
-        expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+      const updatePayload: { stripe_customer_id?: string; stripe_expiry_date?: string } = {
+        stripe_expiry_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       };
       if (customerId) {
         updatePayload.stripe_customer_id = customerId;
@@ -113,7 +113,7 @@ export default async function handler(
           .from('users')
           .update(updatePayload) // Use the payload with is_subscribed and potentially stripe_customer_id
           .eq('id', userId)
-          .select('id, stripe_customer_id, expires_at') // Select the updated fields
+          .select('id, stripe_customer_id, stripe_expiry_date') // Select the updated fields
           .single();
 
         if (error) {

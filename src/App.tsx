@@ -36,7 +36,7 @@ const fetchUserProfile = async (user: User | null, setUserProfile: React.Dispatc
   try {
     const { data, error, status } = await supabase
       .from('users')
-      .select(`id, expires_at`)
+      .select(`id, stripe_expiry_date`)
       .eq('id', user.id)
       .single();
 
