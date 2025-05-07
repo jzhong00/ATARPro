@@ -1,5 +1,6 @@
 // api/stripe-webhook.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import Stripe from 'stripe';
 import { buffer } from 'micro'; // Helper to read the raw request body
 import { createClient } from '@supabase/supabase-js'; // <-- Import Supabase client creator
 
@@ -11,12 +12,10 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET; // The temporary one fr
 const supabaseUrl = process.env.VITE_SUPABASE_URL; // Public URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Secure Service Role Key
 
-console.log('🔧 Initializing configuration...');
-console.log('Supabase URL:', supabaseUrl ? 'Loaded' : 'Missing');
-
 // Basic validation
 if (!stripeSecretKey || !webhookSecret) {
   console.error('🔴 Error: Missing Stripe API key or Webhook Secret in .env');
+  // Don't throw detailed errors in production, but this helps debugging
   throw new Error('Server configuration error: Stripe credentials missing.');
 }
 if (!supabaseUrl || !supabaseServiceKey) {
@@ -24,36 +23,22 @@ if (!supabaseUrl || !supabaseServiceKey) {
   throw new Error('Server configuration error: Missing Supabase admin credentials.');
 }
 
-import type StripeType from 'stripe'; // ✅ only for types
-
-let stripeModule: typeof import('stripe') | null = null;
-
-export const fetchStripe = async () => {
-  if (!stripeModule) {
-    console.log('🔄 Loading Stripe module...');
-    stripeModule = await import('stripe');
-  }
-  return stripeModule.default; // default is the Stripe constructor
-};
-
-console.log('🔧 Fetching Stripe module...');
-const Stripe = await fetchStripe();
-
 // Initialize the Stripe client
-console.log('🔧 Initializing Stripe client...');
 const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-03-31.basil', // Use the specific version expected by types
   typescript: true,
 });
 
 // Initialize Supabase Admin Client
-console.log('🔧 Initializing Supabase Admin Client...');
+// IMPORTANT: Use the Service Role Key here for backend operations
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { persistSession: false } // Recommended for server-side operations
 });
 
 // --- Vercel Specific Configuration ---
 
+// Tell Vercel *not* to parse the request body automatically.
+// We need the raw body buffer to verify the Stripe signature.
 export const config = {
   api: {
     bodyParser: false,
@@ -66,83 +51,92 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  console.log('🔧 Webhook handler invoked...');
-  console.log('Request method:', req.method);
-
+  // Only allow POST requests
   if (req.method !== 'POST') {
-    console.warn('⚠️ Invalid request method:', req.method);
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
   }
 
+  // Get the signature from the request headers
   const signature = req.headers['stripe-signature'] as string;
-  console.log('Stripe signature header:', signature ? 'Present' : 'Missing');
-
   if (!signature) {
     console.warn('⚠️ Webhook received without a stripe-signature header.');
     return res.status(400).send('Missing stripe-signature header.');
   }
 
-  let event: StripeType.Event;
+  let event: Stripe.Event;
 
   try {
-    console.log('🔧 Reading raw request body...');
+    // Read the raw request body using the 'micro' helper
     const rawBody = await buffer(req);
 
-    console.log('🔧 Verifying event signature...');
+    // Verify the event signature using the raw body and the webhook secret
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret!);
-    console.log('✅ Event signature verified successfully.');
+    console.log('✅ Webhook signature verified.');
+
   } catch (err: any) {
+    // Signature verification failed
     console.error(`❌ Webhook signature verification failed:`, err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  console.log('🔧 Processing event type:', event.type);
+  // --- Handle Specific Stripe Events ---
 
+  // Successfully handle the event
+  console.log(`Received event: ${event.type}`);
+
+  // Focus on the event indicating a completed checkout session
   if (event.type === 'checkout.session.completed') {
-    console.log('✅ Handling checkout.session.completed event...');
-    const session = event.data.object as StripeType.Checkout.Session;
+    const session = event.data.object as Stripe.Checkout.Session;
 
+    // Retrieve the user ID we stored earlier
     const userId = session.client_reference_id;
-    console.log('User ID from client_reference_id:', userId);
 
+    // --- Extract Stripe Customer ID ---
     const customerId = session.customer as string;
-    console.log('Stripe Customer ID:', customerId || 'Missing');
+    if (!customerId) {
+        console.warn(`⚠️ Webhook Warning: checkout.session.completed event for user ${userId || 'UNKNOWN'} missing customer ID. Session ID: ${session.id}. Cannot store customer ID.`);
+        // Potentially handle this case differently if needed
+    }
 
     if (userId) {
-      const updatePayload: { stripe_customer_id?: string; expires_at?: string } = {
-        expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+      console.log(`✅ Payment successful for User ID: ${userId}. Attempting profile update...`);
+
+      // --- Include customerId in update payload ---
+      const updatePayload: { is_subscribed: boolean; stripe_customer_id?: string } = {
+          is_subscribed: true
       };
       if (customerId) {
-        updatePayload.stripe_customer_id = customerId;
+          updatePayload.stripe_customer_id = customerId;
       }
 
-      console.log('Update payload:', updatePayload);
-
       try {
-        console.log('🔧 Updating user profile in Supabase...');
-        const { error } = await supabaseAdmin
+        // Update the user's profile in Supabase
+        const { data, error } = await supabaseAdmin
           .from('users')
-          .update(updatePayload)
+          .update(updatePayload) // Use the payload with is_subscribed and potentially stripe_customer_id
           .eq('id', userId)
-          .select('id, stripe_customer_id, expires_at')
+          .select('id, is_subscribed, stripe_customer_id') // Select the updated fields
           .single();
 
         if (error) {
-          console.error(`DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
+          console.error(`❌ DB Error: Failed to update profile for user ${userId}. Supabase error:`, error);
         } else {
-          console.log(`✅ Successfully updated profile for user ${userId}.`);
+          console.log(`✅ DB Success: Successfully updated profile for user ${userId}. Profile data:`, data);
         }
       } catch (updateError) {
-        console.error(`Exception during profile update for user ${userId}:`, updateError);
+        console.error(`❌ Exception during profile update for user ${userId}:`, updateError);
       }
+
     } else {
+      // Handle case where userId is missing (shouldn't happen with client_reference_id set)
       console.warn(`⚠️ Webhook Warning: Payment successful but no userId found in client_reference_id. Session ID: ${session.id}. Cannot update profile.`);
     }
   } else {
-    console.log(`Received unhandled event type: ${event.type}`);
+    // Log other unhandled events
+    console.log(`🪵 Received unhandled event type: ${event.type}`);
   }
 
-  console.log('✅ Webhook processing complete.');
+  // --- Acknowledge Receipt ---
   res.status(200).end('Webhook received and processed');
 }
