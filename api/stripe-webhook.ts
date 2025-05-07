@@ -100,23 +100,20 @@ export default async function handler(
     }
 
     if (userId) {
-      console.log(`✅ Payment successful for User ID: ${userId}. Attempting profile update...`);
-
-      // --- Include customerId in update payload ---
-      const updatePayload: { is_subscribed: boolean; stripe_customer_id?: string } = {
-          is_subscribed: true
+      const updatePayload: { stripe_customer_id?: string; expires_at?: string } = {
+        expires_at: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
       };
       if (customerId) {
-          updatePayload.stripe_customer_id = customerId;
+        updatePayload.stripe_customer_id = customerId;
       }
-
+    
       try {
         // Update the user's profile in Supabase
         const { data, error } = await supabaseAdmin
           .from('users')
           .update(updatePayload) // Use the payload with is_subscribed and potentially stripe_customer_id
           .eq('id', userId)
-          .select('id, is_subscribed, stripe_customer_id') // Select the updated fields
+          .select('id, stripe_customer_id, expires_at') // Select the updated fields
           .single();
 
         if (error) {
