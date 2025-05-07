@@ -1,12 +1,6 @@
 // api/create-checkout-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-// --- Vercel Configuration ---
-export const config = {
-  api: {
-    bodyParser: false, // Required for custom CORS + raw body handling
-  },
-};
+import Stripe from 'stripe';
 
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -18,17 +12,6 @@ if (!stripeSecretKey || !priceId) {
   throw new Error('Server configuration error: Missing Stripe credentials.');
 }
 
-let stripeModule: typeof import('stripe') | null = null;
-
-export const fetchStripe = async () => {
-  if (!stripeModule) {
-    stripeModule = await import('stripe');
-  }
-  return stripeModule.default; // default is the Stripe constructor
-};
-
-const Stripe = await fetchStripe();
-
 // Initialize Stripe with the secret key
 const stripe = new Stripe(stripeSecretKey, {
   apiVersion: '2025-03-31.basil', // Use API version expected by types
@@ -39,22 +22,10 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  // CORS preflight handling
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(204).end();
-  }
-
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
   }
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
 
   try {
     // Extract userId from the request body sent by the frontend
@@ -68,6 +39,8 @@ export default async function handler(
     // Define success and cancel URLs using environment variable
     const successUrl = `${siteUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${siteUrl}/payment-cancel`;
+
+    console.log(`Creating Stripe session for user: ${userId} with price: ${priceId}`);
 
     // Create a Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
@@ -85,6 +58,7 @@ export default async function handler(
     });
 
     // Return the session ID to the frontend
+    console.log(`Stripe session created: ${session.id}`);
     res.status(200).json({ sessionId: session.id });
 
   } catch (error: any) {

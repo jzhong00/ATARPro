@@ -1,5 +1,6 @@
 // api/create-customer-portal-session.ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 // Ensure required environment variables are loaded
@@ -18,16 +19,6 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
     throw new Error('Server configuration error: Missing Supabase credentials.');
 }
 
-let stripeModule: typeof import('stripe') | null = null;
-
-export const fetchStripe = async () => {
-  if (!stripeModule) {
-    stripeModule = await import('stripe');
-  }
-  return stripeModule.default; // default is the Stripe constructor
-};
-
-const Stripe = await fetchStripe();
 
 // Initialize Stripe client
 const stripe = new Stripe(stripeSecretKey, {
@@ -50,6 +41,7 @@ export default async function handler(
   }
 
   try {
+    // Extract userId from the request body (following pattern from create-checkout-session)
     // For improved security, consider validating a JWT here instead.
     const { userId } = req.body;
 
@@ -82,6 +74,8 @@ export default async function handler(
     const customerId = user.stripe_customer_id;
     const returnUrl = `${siteUrl}/app`; // Redirect user here after portal session
 
+    console.log(`Creating Stripe Customer Portal session for user: ${userId}, customer: ${customerId}`);
+
     // Create a Stripe Billing Portal Session
     const portalSession = await stripe.billingPortal.sessions.create({
         customer: customerId,
@@ -89,6 +83,7 @@ export default async function handler(
     });
 
     // Return the session URL to the frontend
+    console.log(`Stripe Portal session created: ${portalSession.id} for user: ${userId}`);
     res.status(200).json({ url: portalSession.url });
 
   } catch (error: any) {
