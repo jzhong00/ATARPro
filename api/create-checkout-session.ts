@@ -2,6 +2,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 
+// --- Vercel Configuration ---
+export const config = {
+  api: {
+    bodyParser: false, // Required for custom CORS + raw body handling
+  },
+};
+
 // Ensure Stripe secret key and Price ID are loaded from environment variables
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 const priceId = process.env.STRIPE_PRICE_ID;
@@ -22,10 +29,22 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  // CORS preflight handling
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.status(204).end();
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).end('Method Not Allowed');
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
 
   try {
     // Extract userId from the request body sent by the frontend
@@ -39,7 +58,6 @@ export default async function handler(
     // Define success and cancel URLs using environment variable
     const successUrl = `${siteUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${siteUrl}/payment-cancel`;
-
     console.log(`Creating Stripe session for user: ${userId} with price: ${priceId}`);
 
     // Create a Stripe Checkout Session
