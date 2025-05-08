@@ -88,7 +88,7 @@ const SubjectSelectionTable = ({
             <tbody>
               {subjects.map(subject => (
                 <tr key={subject}>
-                  <td className="p-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] min-w-64 pr-4">
+                  <td className="p-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] min-w-56 pr-4">
                     <label className="flex items-center cursor-pointer gap-1.5">
                       <input
                         type="checkbox"

@@ -197,7 +197,7 @@ const ScalingGraphs = () => {
        <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
       ) : (
       // Render the selection table if data is loaded successfully
-      <div className="flex-none lg:max-w-lg w-full bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none" style={{ overflowX: 'hidden' }}>
+      <div className="flex-none lg:max-w-md w-full bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none" style={{ overflowX: 'hidden' }}>
         <SubjectSelectionTable
         subjects={subjects}
         allScalingData={data}
