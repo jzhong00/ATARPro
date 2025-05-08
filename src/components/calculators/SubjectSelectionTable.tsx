@@ -67,9 +67,9 @@ const SubjectSelectionTable = ({
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 bg-white z-10">
               <tr>
-                <th className="p-1.5 text-left font-semibold text-gray-700 border-b border-gray-200"></th>
+                <th className="px-1 py-1.5 text-left font-semibold text-gray-700 border-b border-gray-200"></th>
                 {YEARS.map(year => (
-                  <th key={year} className="p-1.5 text-center font-semibold text-gray-700 border-b border-gray-200 w-10">
+                  <th key={year} className="px-1 py-1.5 text-center font-semibold text-gray-700 border-b border-gray-200 w-8">
                     <label className="flex flex-col items-center cursor-pointer gap-1">
                       <input
                         type="checkbox"
@@ -88,7 +88,7 @@ const SubjectSelectionTable = ({
             <tbody>
               {subjects.map(subject => (
                 <tr key={subject}>
-                  <td className="p-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] min-w-48 pr-4">
+                  <td className="px-1 py-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] min-w-40 pr-4">
                     <label className="flex items-center cursor-pointer gap-1.5">
                       <input
                         type="checkbox"
@@ -102,7 +102,7 @@ const SubjectSelectionTable = ({
                   {YEARS.map(year => {
                     const hasData = hasDataForSubjectAndYear(allScalingData, subject, year);
                     return (
-                      <td key={year} className="p-1.5 text-center border-b border-gray-200 w-10 hover:bg-gray-50 transition-colors">
+                      <td key={year} className="px-1 py-1.5 text-center border-b border-gray-200 w-8 hover:bg-gray-50 transition-colors">
                         {hasData ? (
                           <input
                             type="checkbox"
