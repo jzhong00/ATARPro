@@ -24,6 +24,7 @@ const ScalingGraphs = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<ScalingRow[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
   const location = useLocation();
 
   // Effect to process subjects passed via URL query parameter ('?subjects=...')
@@ -173,42 +174,63 @@ const ScalingGraphs = () => {
       });
   };
 
+  // Toggle panel collapsed state
+  const togglePanel = () => {
+    setIsPanelCollapsed(!isPanelCollapsed);
+  };
+
   // --- Component Rendering --- //
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col lg:flex-row gap-8 h-auto lg:h-[calc(100vh-200px)]">
+      <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-200px)]">
       
       {/* Graph Area: Render the scaling graph component */}
       <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[32rem] flex items-center justify-center">
-      {/* Pass the current selections and the loaded data to the graph */}
-      <ScalingGraph selections={selections} allScalingData={data} /> 
+        {/* Pass the current selections and the loaded data to the graph */}
+        <ScalingGraph selections={selections} allScalingData={data} /> 
       </div>
 
-      {/* Sidebar/Table Area: Render based on loading/error state */}
-      {isLoading ? (
-       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="flex flex-col items-center">
-          <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
-        </div>
-     </div>
-      ) : error ? (
-       <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
-      ) : subjects.length === 0 && !error ? (
-       <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
-      ) : (
-      // Render the selection table if data is loaded successfully
-      <div className="flex-none lg:max-w-md w-full bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none">
-        <SubjectSelectionTable
-        subjects={subjects}
-        allScalingData={data}
-        selections={selections}
-        onClearAll={handleClearAll} 
-        onToggleSelection={handleToggleSelection}
-        onToggleYear={handleToggleYear}
-        onToggleSubject={handleToggleSubject}
-        />
+      {/* Toggle Button for the panel */}
+      <div className="flex items-center justify-center">
+        <button 
+          onClick={togglePanel}
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1 shadow-md lg:h-8 lg:w-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          title={isPanelCollapsed ? "Show subject selection" : "Hide subject selection"}
+          aria-label={isPanelCollapsed ? "Show subject selection" : "Hide subject selection"}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isPanelCollapsed ? "M13 5l7 7-7 7" : "M11 19l-7-7 7-7"} />
+          </svg>
+        </button>
       </div>
-      )}
+
+      {/* Sidebar/Table Area: Conditionally render based on collapsed state and loading/error state */}
+      <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? 'w-0 opacity-0 lg:w-0 overflow-hidden' : 'flex-none lg:max-w-md w-full opacity-100'}`}>
+        {isLoading ? (
+         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+          </div>
+       </div>
+        ) : error ? (
+         <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
+        ) : subjects.length === 0 && !error ? (
+         <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
+        ) : (
+        // Render the selection table if data is loaded successfully
+        <div className="bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none">
+          <SubjectSelectionTable
+          subjects={subjects}
+          allScalingData={data}
+          selections={selections}
+          onClearAll={handleClearAll} 
+          onToggleSelection={handleToggleSelection}
+          onToggleYear={handleToggleYear}
+          onToggleSubject={handleToggleSubject}
+          />
+        </div>
+        )}
+      </div>
 
       </div>
     </div>
