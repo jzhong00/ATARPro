@@ -135,7 +135,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
     <div className="w-full h-full">
       <ResponsiveContainer width="100%" height="100%">
         {/* Pass the processed chartData to the chart */}
-        <LineChart data={chartData} margin={{ top: 15, right: 60, left: 5, bottom: 15 }}> 
+        <LineChart data={chartData} margin={{ top: 15, right: 20, left: 5, bottom: 15 }}> 
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="rawScore"
@@ -148,7 +148,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
             type="number"
             domain={[0, 100]}
             ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-            label={{ value: 'Scaled Score', angle: -90, position: 'insideLeft', offset: -5 }}
+            label={{ value: 'Scaled Score', angle: -90, position: 'insideLeft', offset: 5 }}
           />
           <Tooltip
             cursor={false}
