@@ -181,11 +181,11 @@ const ScalingGraphs = () => {
 
   // --- Component Rendering --- //
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 py-8">
       <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-200px)]">
       
       {/* Graph Area: Render the scaling graph component */}
-      <div className="flex-1 bg-white rounded-xl shadow-md p-4 min-h-[32rem] flex items-center justify-center">
+      <div className="flex-1 bg-white rounded-xl shadow-md p-2 min-h-[32rem] flex items-center justify-center">
         {/* Pass the current selections and the loaded data to the graph */}
         <ScalingGraph selections={selections} allScalingData={data} /> 
       </div>

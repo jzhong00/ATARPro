@@ -106,7 +106,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
           maxHeight: '300px',
           overflowY: 'auto',
           maxWidth: '150px',
-          paddingRight: 4,
+          paddingRight: 0,
           background: 'rgba(255,255,255,0.95)',
           borderRadius: 8,
           boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
@@ -119,10 +119,10 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
               width: 14,
               height: 4,
               backgroundColor: entry.color,
-              marginRight: 4,
+              marginRight: 2,
               borderRadius: 2
             }} />
-            <span style={{ color: entry.color, fontSize: 13, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ color: entry.color, fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {entry.value}
             </span>
           </div>
@@ -135,7 +135,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
     <div className="w-full h-full">
       <ResponsiveContainer width="100%" height="100%">
         {/* Pass the processed chartData to the chart */}
-        <LineChart data={chartData} margin={{ top: 20, right: 80, left: 10, bottom: 20 }}> 
+        <LineChart data={chartData} margin={{ top: 15, right: 60, left: 5, bottom: 15 }}> 
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="rawScore"
@@ -159,7 +159,7 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
             align="right" 
             verticalAlign="middle"
             content={<ScrollableLegend />}
-            wrapperStyle={{ right: 5 }}
+            wrapperStyle={{ right: 0 }}
           />
           {selections.map((selection, index) => {
             const key = `${selection.subject} (${selection.year})`;
