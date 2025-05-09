@@ -199,7 +199,7 @@ const ScalingGraphs = () => {
           aria-label={isPanelCollapsed ? "Show subject selection" : "Hide subject selection"}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isPanelCollapsed ? "M13 5l7 7-7 7" : "M11 19l-7-7 7-7"} />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isPanelCollapsed ? "M11 19l-7-7 7-7" : "M13 5l7 7-7 7"} />
           </svg>
         </button>
       </div>
