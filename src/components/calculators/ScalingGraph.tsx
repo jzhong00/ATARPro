@@ -113,16 +113,26 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
         }}
       >
         {payload.map((entry: any) => (
-          <div key={entry.value} style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
+          <div key={entry.value} style={{ display: 'flex', marginBottom: 8 }}>
             <span style={{
               display: 'inline-block',
               width: 14,
               height: 4,
               backgroundColor: entry.color,
               marginRight: 2,
-              borderRadius: 2
+              borderRadius: 2,
+              marginTop: 8,
+              flexShrink: 0
             }} />
-            <span style={{ color: entry.color, fontSize: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ 
+              color: entry.color, 
+              fontSize: 12, 
+              lineHeight: '1.2', 
+              wordBreak: 'break-word',
+              hyphens: 'auto',
+              display: 'block',
+              paddingRight: 4
+            }}>
               {entry.value}
             </span>
           </div>
