@@ -181,11 +181,11 @@ const ScalingGraphs = () => {
 
   // --- Component Rendering --- //
   return (
-    <div className="container mx-auto px-2 py-4">
-      <div className="flex flex-col lg:flex-row gap-1 h-auto lg:h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-2 py-4 flex flex-col h-[calc(100vh-150px)]">
+      <div className="flex flex-col lg:flex-row gap-1 flex-1 overflow-hidden">
       
       {/* Graph Area: Render the scaling graph component */}
-      <div className="flex-1 bg-white rounded-xl shadow-md p-2 min-h-[32rem] flex items-center justify-center">
+      <div className="flex-1 bg-white rounded-xl shadow-md p-2 flex items-center justify-center">
         {/* Pass the current selections and the loaded data to the graph */}
         <ScalingGraph selections={selections} allScalingData={data} /> 
       </div>
@@ -205,20 +205,20 @@ const ScalingGraphs = () => {
       </div>
 
       {/* Sidebar/Table Area: Conditionally render based on collapsed state and loading/error state */}
-      <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? 'w-0 opacity-0 lg:w-0 overflow-hidden' : 'flex-none lg:max-w-sm w-full opacity-100'}`}>
+      <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? 'w-0 opacity-0 lg:w-0 overflow-hidden' : 'flex-none lg:max-w-sm w-full opacity-100 overflow-hidden'}`}>
         {isLoading ? (
-         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+         <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center">
             <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
           </div>
        </div>
         ) : error ? (
-         <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
+         <div className="flex-none bg-white rounded-xl shadow-md p-4 text-red-500">Error loading data: {error}</div>
         ) : subjects.length === 0 && !error ? (
-         <div className="flex-none md:max-w-lg w-full bg-white rounded-xl shadow-md p-4">No subjects available.</div>
+         <div className="flex-none bg-white rounded-xl shadow-md p-4">No subjects available.</div>
         ) : (
         // Render the selection table if data is loaded successfully
-        <div className="bg-white rounded-xl shadow-md px-3 overflow-y-auto sm:max-h-[400px] lg:max-h-none">
+        <div className="bg-white rounded-xl shadow-md h-full flex flex-col overflow-hidden">
           <SubjectSelectionTable
           subjects={subjects}
           allScalingData={data}

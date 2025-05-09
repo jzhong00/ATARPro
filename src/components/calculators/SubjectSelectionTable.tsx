@@ -49,21 +49,23 @@ const SubjectSelectionTable = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4">
+    <div className="flex flex-col h-full">
       {/* Subject Selection Column */}
       {/* Use max-width instead of fixed width, allow shrinking */}
-      <div className="flex-none lg:max-w-sm bg-white rounded-xl py-2 flex flex-col">
-        <button 
-          className="self-start mb-2 px-2 py-1 text-sm text-white bg-red-600 border border-red-700 rounded hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          onClick={onClearAll} // Use passed handler
-        >
-          Clear All
-        </button>
-        
-        {/* Loading/Error states are handled by the parent, 
-            so we assume subjects array is valid if this component renders */}
-        <div className="overflow-auto flex-1 pe-5">
+      <div className="flex-none bg-white rounded-xl py-2 flex flex-col h-full overflow-hidden">
+        <div className="px-2 flex-none">
+          <button 
+            className="mb-2 px-2 py-1 text-sm text-white bg-red-600 border border-red-700 rounded hover:bg-red-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            onClick={onClearAll} // Use passed handler
+          >
+            Clear All
+          </button>
+          
           <div className="mb-2 text-sm text-gray-500">Found {subjects.length} subjects</div>
+        </div>
+        
+        {/* Scrollable table container */}
+        <div className="overflow-y-auto flex-1 px-2">
           <table className="w-full border-collapse text-sm table-fixed">
             <thead className="sticky top-0 bg-white z-10">
               <tr>
