@@ -143,6 +143,8 @@ const ScalingGraph = ({ selections, allScalingData }: ScalingGraphProps) => {
             domain={[0, 100]}
             ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
             label={{ value: 'Raw Score', position: 'bottom', offset: 0 }}
+            tickMargin={5}
+            interval={0}
           />
           <YAxis
             type="number"
