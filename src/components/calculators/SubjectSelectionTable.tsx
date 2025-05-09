@@ -69,7 +69,7 @@ const SubjectSelectionTable = ({
               <tr>
                 <th className="px-1 py-1.5 text-left font-semibold text-gray-700 border-b border-gray-200"></th>
                 {YEARS.map(year => (
-                  <th key={year} className="px-1 py-1 text-center font-semibold text-gray-700 border-b border-gray-200 w-7">
+                  <th key={year} className="px-0.5 py-1 text-center font-semibold text-gray-700 border-b border-gray-200 w-6">
                     <label className="flex flex-col items-center cursor-pointer gap-0.5">
                       <input
                         type="checkbox"
@@ -88,25 +88,25 @@ const SubjectSelectionTable = ({
             <tbody>
               {subjects.map(subject => (
                 <tr key={subject}>
-                  <td className="px-1 py-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] min-w-32 pr-2">
+                  <td className="px-1 py-1.5 text-left font-medium text-gray-700 border-b border-gray-200 sticky left-0 bg-white z-[1] w-32 max-w-32 pr-1">
                     <label className="flex items-center cursor-pointer gap-1">
                       <input
                         type="checkbox"
-                        className="w-3.5 h-3.5"
+                        className="w-3 h-3 flex-shrink-0"
                         checked={isSubjectSelected(subject)}
                         onChange={() => onToggleSubject(subject)} // Use passed handler
                       />
-                      <span className="text-sm truncate">{subject || '(Unnamed Subject)'}</span>
+                      <span className="text-sm truncate block w-24 overflow-hidden">{subject || '(Unnamed Subject)'}</span>
                     </label>
                   </td>
                   {YEARS.map(year => {
                     const hasData = hasDataForSubjectAndYear(allScalingData, subject, year);
                     return (
-                      <td key={year} className="px-1 py-1.5 text-center border-b border-gray-200 w-7 hover:bg-gray-50 transition-colors">
+                      <td key={year} className="px-0.5 py-1.5 text-center border-b border-gray-200 w-6 hover:bg-gray-50 transition-colors">
                         {hasData ? (
                           <input
                             type="checkbox"
-                            className="w-3.5 h-3.5 cursor-pointer"
+                            className="w-3 h-3 cursor-pointer"
                             checked={isSelected(subject, year)}
                             onChange={() => onToggleSelection(subject, year)} // Use passed handler
                           />
