@@ -181,8 +181,8 @@ const ScalingGraphs = () => {
 
   // --- Component Rendering --- //
   return (
-    <div className="container mx-auto px-2 py-8">
-      <div className="flex flex-col lg:flex-row gap-2 h-auto lg:h-[calc(100vh-200px)]">
+    <div className="container mx-auto px-2 py-4">
+      <div className="flex flex-col lg:flex-row gap-1 h-auto lg:h-[calc(100vh-200px)]">
       
       {/* Graph Area: Render the scaling graph component */}
       <div className="flex-1 bg-white rounded-xl shadow-md p-2 min-h-[32rem] flex items-center justify-center">
@@ -194,18 +194,18 @@ const ScalingGraphs = () => {
       <div className="flex items-center justify-center">
         <button 
           onClick={togglePanel}
-          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1 shadow-md lg:h-8 lg:w-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-1 shadow-md lg:h-7 lg:w-7 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           title={isPanelCollapsed ? "Show subject selection" : "Hide subject selection"}
           aria-label={isPanelCollapsed ? "Show subject selection" : "Hide subject selection"}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isPanelCollapsed ? "M11 19l-7-7 7-7" : "M13 5l7 7-7 7"} />
           </svg>
         </button>
       </div>
 
       {/* Sidebar/Table Area: Conditionally render based on collapsed state and loading/error state */}
-      <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? 'w-0 opacity-0 lg:w-0 overflow-hidden' : 'flex-none lg:max-w-md w-full opacity-100'}`}>
+      <div className={`transition-all duration-300 ease-in-out ${isPanelCollapsed ? 'w-0 opacity-0 lg:w-0 overflow-hidden' : 'flex-none lg:max-w-sm w-full opacity-100'}`}>
         {isLoading ? (
          <div className="min-h-screen bg-gray-100 flex items-center justify-center">
           <div className="flex flex-col items-center">
