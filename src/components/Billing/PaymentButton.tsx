@@ -32,6 +32,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ session }) => {
     const userId = session.user.id;
 
     try {
+      console.log(siteConfig.getApiUrl('create-checkout-session'));
       const response = await fetch(siteConfig.getApiUrl('create-checkout-session'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

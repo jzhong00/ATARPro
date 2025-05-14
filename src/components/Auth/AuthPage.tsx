@@ -4,6 +4,7 @@ import { supabase } from '../../services/supabaseClient'; // Adjust path if serv
 import { useNavigate, useLocation } from 'react-router-dom';
 import React from 'react';
 import { useEffect } from 'react';
+import { siteConfig } from '../../services/siteConfig';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -14,20 +15,30 @@ const AuthPage = () => {
   const initialView = params.get('view') === 'sign_up' ? 'sign_up' : 'sign_in';
 
   useEffect(() => {
-    // Listen for authentication state changes (e.g., SIGNED_IN, SIGNED_OUT)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        // Navigate to the app dashboard *after* successful sign-in
-        // Using navigate inside useEffect ensures it runs after component mounts
-        // and state updates have likely propagated.
-        navigate('/app');
-      } else if (event === 'SIGNED_OUT') {
-        // Optional: Redirect to home or login page on sign out
-        // navigate('/');
+        console.log('[AuthPage] User signed in:', session);
+
+        try {
+          const res = await fetch(siteConfig.getApiUrl('set-session-code'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: session.user.id }),
+            credentials: 'include',
+          });
+
+          if (!res.ok) {
+            console.error('[AuthPage] Failed to set session code');
+          } else {
+            console.log('[AuthPage] Session code set successfully');
+          }
+        } catch (err) {
+          console.error('[AuthPage] Error setting session code:', err);
+        }
       }
+      navigate('/app');
     });
 
-    // Cleanup subscription on component unmount
     return () => {
       subscription.unsubscribe();
     };
