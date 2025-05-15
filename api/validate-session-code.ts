@@ -22,12 +22,30 @@ if (!supabaseUrl || !supabaseServiceRoleKey) {
 // Create Supabase client with service role
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+
+/**
+ * API handler that validates the session code for a user.
+ * - Checks if the session code in the cookie matches the one in the database.
+ * - Responds with a success message if they match, or an error if they don't.
+ * @param req - VercelRequest representing the incoming request
+ * @param res - VercelResponse used to send the response
+ * @returns 200 OK if the session code is valid, 401 Unauthorized if it doesn't match, or 500 Internal Server Error if there's a server error.
+ * 
+ * @throws 400 Bad Request if user_id or session_code is missing
+ * @throws 401 Unauthorized if session codes do not match
+ * @throws 404 Not Found if user is not found in the database
+ * @throws 405 Method Not Allowed if the request method is not POST
+ * 
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Set CORS headers
+  // Note: Access-Control-Allow-Origin must not be set to '*' when credentials are included
+  // which are used for cookies.
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  // CORS preflight handling
+
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
   }
@@ -37,23 +55,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).end('Method Not Allowed');
   }
 
+  // Extract cookies from request headers and user_id from request body
   const cookies = cookie.parse(req.headers.cookie || '');
   const cookieSessionCode = cookies['session_code'];
   const { user_id } = req.body;
 
-  console.log('Validate: Received cookie session code:', cookieSessionCode);
 
   if (!user_id || !cookieSessionCode) {
     return res.status(400).json({ error: 'Missing user_id or session_code' });
   }
 
+  // Fetch session_code from Supabase
   const { data: user, error } = await supabase
     .from('users')
     .select('session_code')
     .eq('id', user_id)
     .single();
 
-  console.log('Validate: session_code from DB:', user?.session_code);
 
   if (error) {
     console.error('[validate-session-code] Supabase error:', error.message);
@@ -64,6 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(404).json({ error: 'User not found' });
   }
 
+  // Session code validation
   if (user.session_code !== cookieSessionCode) {
     console.error('Session mismatch: between', user.session_code, "and ", cookieSessionCode);
     return res.status(401).json({ error: 'Session mismatch. Please re-authenticate.' });

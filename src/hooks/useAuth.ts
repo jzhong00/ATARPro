@@ -6,7 +6,20 @@ import { fetchUserProfile } from '../services/userService';
 import { UserProfile } from '../types';
 import { useNavigate } from 'react-router-dom';
 
-
+/**
+ * React hook to manage user authentication state.
+ * 
+ * It handles:
+ *  - Initial session check on mount
+ *  - Fetching user profiles on valid sessions
+ *  - Redirecting users based on authentication state
+ *  - Subscribing to and cleaning up authentication state changes
+ * 
+ * @returns An object containing:
+ *  - session: The current Supabase session
+ *  - userProfile: The current user's profile
+ *  - isLoadingAuth: A boolean indicating if the authentication state is still loading
+ */
 export const useAuth = () => {
     const [session, setSession] = useState<Session | null>(null);
     const [isLoadingAuth, setIsLoadingAuth] = useState<boolean>(true);
@@ -18,22 +31,27 @@ export const useAuth = () => {
     setIsLoadingAuth(true);
     console.log('[Auth] Starting session check');
 
+    // Check exisiting session on initial load
     supabase.auth.getSession()
       .then(async ({ data: { session: existingSession } }) => {
         console.log('[Auth] getSession result:', existingSession);
 
         if (existingSession) {
           setSession(existingSession);
+
+          // Fetch and validate user session
           const isValid = await fetchUserProfile(existingSession.user, setUserProfile);
           console.log('[Auth] fetchUserProfile (getSession) returned:', isValid);
 
           if (!isValid) {
+            // Session invalid, force sign out
             console.warn('[Auth] Invalid session, signing out...');
             await supabase.auth.signOut();
             navigate('/auth');
             return;
           }
         } else {
+          // No session found - reset state
           setSession(null);
           setUserProfile(null);
         }
@@ -45,11 +63,13 @@ export const useAuth = () => {
         setIsLoadingAuth(false);
       });
 
+    // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
       console.log('[Auth] onAuthStateChange:', _event);
 
       (async () => {
         if (_event === 'SIGNED_OUT') {
+          // Sign out - reset state and navigate to auth page
           setSession(null);
           setUserProfile(null);
           setIsLoadingAuth(false);
@@ -58,11 +78,13 @@ export const useAuth = () => {
         }
 
         if (_event === 'SIGNED_IN' && currentSession) {
+          // Sign in - set session and stop loading
           setSession(currentSession);
           setIsLoadingAuth(false);
         }
 
         if (!currentSession) {
+          // Fallback if session is lost
           setSession(null);
           setUserProfile(null);
           setIsLoadingAuth(false);
