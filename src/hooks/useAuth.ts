@@ -29,19 +29,16 @@ export const useAuth = () => {
 
     useEffect(() => {
     setIsLoadingAuth(true);
-    console.log('[Auth] Starting session check');
 
     // Check exisiting session on initial load
     supabase.auth.getSession()
       .then(async ({ data: { session: existingSession } }) => {
-        console.log('[Auth] getSession result:', existingSession);
 
         if (existingSession) {
           setSession(existingSession);
 
           // Fetch and validate user session
           const isValid = await fetchUserProfile(existingSession.user, setUserProfile);
-          console.log('[Auth] fetchUserProfile (getSession) returned:', isValid);
 
           if (!isValid) {
             // Session invalid, force sign out
@@ -65,7 +62,6 @@ export const useAuth = () => {
 
     // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
-      console.log('[Auth] onAuthStateChange:', _event);
 
       (async () => {
         if (_event === 'SIGNED_OUT') {
