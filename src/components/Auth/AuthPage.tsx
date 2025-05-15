@@ -12,7 +12,6 @@ const AuthPage = () => {
   const location = useLocation();
 
   // Determine initial view from query parameter
-  const params = new URLSearchParams(location.search);
   const initialView = getInitialAuthView(location.search);
 
   useEffect(() => {

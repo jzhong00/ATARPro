@@ -27,6 +27,7 @@ const TimeoutLoading = ({
         }, redirectDelay);
 
         return () => {
+            clearTimeout(clearStorageTimeout);
             clearTimeout(errorTimeout);
             clearTimeout(redirectTimeout);
         };
