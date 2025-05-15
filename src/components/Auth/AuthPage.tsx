@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import React from 'react';
 import { useEffect } from 'react';
 import { siteConfig } from '../../services/siteConfig';
+import { getInitialAuthView } from '../../utils/authView';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -12,13 +13,21 @@ const AuthPage = () => {
 
   // Determine initial view from query parameter
   const params = new URLSearchParams(location.search);
-  const initialView = params.get('view') === 'sign_up' ? 'sign_up' : 'sign_in';
+  const initialView = getInitialAuthView(location.search);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        console.log('[AuthPage] User signed in:', session);
 
+      // Force loading screen 
+      document.body.innerHTML = `
+      <div class="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div class="flex flex-col items-center">
+          <div class="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      </div>
+      `;
+        
         try {
           const res = await fetch(siteConfig.getApiUrl('set-session-code'), {
             method: 'POST',
@@ -29,14 +38,12 @@ const AuthPage = () => {
 
           if (!res.ok) {
             console.error('[AuthPage] Failed to set session code');
-          } else {
-            console.log('[AuthPage] Session code set successfully');
           }
         } catch (err) {
           console.error('[AuthPage] Error setting session code:', err);
         }
+        window.location.href = '/app';
       }
-      navigate('/app');
     });
 
     return () => {

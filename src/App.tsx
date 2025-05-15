@@ -3,6 +3,7 @@ import { useState, lazy, Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { overrideConsoleError } from './utils/logger';
+import TimeoutLoading from './components/common/TimeoutLoading';
 import { useAuth } from './hooks/useAuth';
 
 // Lazy-loaded components
@@ -21,22 +22,15 @@ const PaymentSuccess = lazy(() => import('./components/Billing/PaymentSuccess'))
 const PaymentCancel = lazy(() => import('./components/Billing/PaymentCancel'));
 const NotFound = lazy(() => import('./components/common/NotFound'));
 
+
 // Override console errors to toast
 overrideConsoleError();
+const Loading = () => <TimeoutLoading />;
 
 const AppRoutes = () => {
   const [scalingError] = useState<string | null>(null);
   const { session, userProfile, isLoadingAuth } = useAuth();
   const isLoadingApp = isLoadingAuth;
-
-  const Loading = () => (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="flex flex-col items-center">
-        <div className="loader animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
-      </div>
-    </div>
-  );
-
   if (isLoadingApp) return <Loading />;
 
   return (

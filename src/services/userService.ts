@@ -35,8 +35,6 @@ export const fetchUserProfile = async (
       credentials: 'include',
     });
 
-    console.log('[fetchUserProfile] validateResponse:', validateResponse);
-
     const result = await validateResponse.json();
     return result.success === true;
   } catch (err: any) {
