@@ -35,7 +35,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ session, userProfile, i
 
   // If no active session exists, redirect the user to the login page
   if (!session) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
 
   const isSubscriptionExpired = !userProfile?.stripe_expiry_date || new Date(userProfile.stripe_expiry_date) < new Date();

@@ -44,7 +44,7 @@ export const useAuth = () => {
             // Session invalid, force sign out
             console.warn('[Auth] Invalid session, signing out...');
             await supabase.auth.signOut();
-            navigate('/auth');
+            navigate('/');
             return;
           }
         } else {
