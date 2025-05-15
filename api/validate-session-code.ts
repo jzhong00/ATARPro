@@ -13,6 +13,7 @@ export const config = {
 // Load environment variables
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const ORIGIN_URL = process.env.ORIGIN_URL || 'http://localhost:5173';
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   console.error('Supabase URL or Service Role Key is missing from environment variables.');
@@ -41,7 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   // Note: Access-Control-Allow-Origin must not be set to '*' when credentials are included
   // which are used for cookies.
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Origin', ORIGIN_URL);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
